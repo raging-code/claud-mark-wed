@@ -1,0 +1,8 @@
+{
+  "name": "claud-mark-wedding",
+  "version": "1.0.0",
+  "description": "Wedding website with RSVP using Netlify Functions and Supabase",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

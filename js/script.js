@@ -270,8 +270,9 @@ audio.addEventListener('ended', () => {
     });
 })();
 
-// ========== RSVP DROPDOWN & FORM HANDLER ==========
+// ========== RSVP DROPDOWN & FORM HANDLER (Supabase + Netlify Function) ==========
 (function() {
+    // Dropdown logic (unchanged)
     const dropdown = document.getElementById('attendingDropdown');
     if (dropdown) {
         const selectedDiv = dropdown.querySelector('.dropdown-selected');
@@ -308,6 +309,7 @@ audio.addEventListener('ended', () => {
         });
     }
 
+    // Form submission to Netlify Function
     const rsvpForm = document.getElementById('rsvpForm');
     if (rsvpForm) {
         rsvpForm.addEventListener('submit', async function(e) {
@@ -317,17 +319,19 @@ audio.addEventListener('ended', () => {
                 document.getElementById('rsvpMessage').innerHTML = '<div class="alert alert-danger">Please select an attendance option.</div>';
                 return;
             }
-            const formData = new FormData(this);
+            const formData = new FormData(rsvpForm);
+            const data = new URLSearchParams(formData);
             try {
-                const response = await fetch('rsvp/save_rsvp.php', {
+                const response = await fetch('/.netlify/functions/rsvp', {
                     method: 'POST',
-                    body: formData
+                    body: data,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 });
                 const result = await response.json();
                 const msgDiv = document.getElementById('rsvpMessage');
                 if (result.success) {
                     msgDiv.innerHTML = '<div class="alert alert-success">Thank you! Your RSVP has been saved.</div>';
-                    this.reset();
+                    rsvpForm.reset();
                     const selectedDiv = document.querySelector('.dropdown-selected');
                     if (selectedDiv) selectedDiv.innerText = 'Select an option';
                     const hiddenAttend = document.getElementById('attending');
