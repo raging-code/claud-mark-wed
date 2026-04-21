@@ -1,3 +1,10 @@
+# Your local ignores (example)
 node_modules
-.env
 .DS_Store
+
+# wrangler files (from remote)
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
