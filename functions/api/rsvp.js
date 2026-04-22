@@ -1,10 +1,4 @@
-// functions/api/rsvp.js
-import { createClient } from '@supabase/supabase-js';
-
-// Simple in-memory rate limiter (resets on function cold start)
-const rateLimitMap = new Map();
-const RATE_LIMIT = 5;          // max 5 requests
-const WINDOW_MS = 60 * 1000;   // per minute
+// functions/api/rsvp.js – No external dependencies, uses native fetch
 
 function sanitize(str) {
     if (!str) return '';
@@ -21,7 +15,7 @@ function isValidEmail(email) {
 export async function onRequest(context) {
     const { request, env } = context;
 
-    // Only accept POST
+    // Only POST
     if (request.method !== 'POST') {
         return new Response(JSON.stringify({ error: 'Method Not Allowed' }), {
             status: 405,
@@ -29,10 +23,9 @@ export async function onRequest(context) {
         });
     }
 
-    // Parse form data
     const formData = await request.formData();
 
-    // Honeypot check
+    // Honeypot
     if (formData.get('website')) {
         return new Response(JSON.stringify({ error: 'Invalid submission' }), {
             status: 400,
@@ -40,12 +33,16 @@ export async function onRequest(context) {
         });
     }
 
-    // Rate limiting by IP (Cloudflare provides CF-Connecting-IP)
-    const ip = request.headers.get('CF-Connecting-IP') || 
-               request.headers.get('X-Forwarded-For')?.split(',')[0] || 
+    // Rate limiting (simple in-memory)
+    const ip = request.headers.get('CF-Connecting-IP') ||
+               request.headers.get('X-Forwarded-For')?.split(',')[0] ||
                'unknown';
     const now = Date.now();
-    const record = rateLimitMap.get(ip) || { count: 0, firstRequest: now };
+    const RATE_LIMIT = 5;
+    const WINDOW_MS = 60 * 1000;
+    const rateMap = globalThis.__rateMap || new Map();
+    globalThis.__rateMap = rateMap;
+    const record = rateMap.get(ip) || { count: 0, firstRequest: now };
     if (now - record.firstRequest < WINDOW_MS) {
         if (record.count >= RATE_LIMIT) {
             return new Response(JSON.stringify({ error: 'Too many requests. Please wait a minute.' }), {
@@ -58,17 +55,9 @@ export async function onRequest(context) {
         record.count = 1;
         record.firstRequest = now;
     }
-    rateLimitMap.set(ip, record);
+    rateMap.set(ip, record);
 
-    // Clean up old entries occasionally
-    if (Math.random() < 0.01) {
-        const expiry = now - WINDOW_MS;
-        for (const [key, val] of rateLimitMap.entries()) {
-            if (val.firstRequest < expiry) rateLimitMap.delete(key);
-        }
-    }
-
-    // Extract and sanitize fields
+    // Get fields
     const name = sanitize(formData.get('name'));
     const email = sanitize(formData.get('email'));
     const phone = sanitize(formData.get('phone') || '');
@@ -82,14 +71,12 @@ export async function onRequest(context) {
             headers: { 'Content-Type': 'application/json' }
         });
     }
-
     if (!isValidEmail(email)) {
         return new Response(JSON.stringify({ error: 'Please provide a valid email address.' }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
         });
     }
-
     if (attending !== 'yes' && attending !== 'no') {
         return new Response(JSON.stringify({ error: 'Invalid attendance selection.' }), {
             status: 400,
@@ -97,26 +84,38 @@ export async function onRequest(context) {
         });
     }
 
-    // Supabase insert (use SERVICE_ROLE key for server-side)
+    // Supabase REST API (no client library)
     const supabaseUrl = env.SUPABASE_URL;
     const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY;
-
     if (!supabaseUrl || !supabaseKey) {
-        console.error('Missing Supabase environment variables');
+        console.error('Missing Supabase env vars');
         return new Response(JSON.stringify({ error: 'Server configuration error' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const insertData = {
+        name,
+        email,
+        phone,
+        message,
+        attending: attending === 'yes'
+    };
 
-    const { error } = await supabase
-        .from('rsvp')
-        .insert([{ name, email, phone, message, attending: attending === 'yes' }]);
+    const response = await fetch(`${supabaseUrl}/rest/v1/rsvp`, {
+        method: 'POST',
+        headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(insertData)
+    });
 
-    if (error) {
-        console.error('Supabase insert error:', error);
+    if (!response.ok) {
+        console.error('Supabase insert failed:', response.status, await response.text());
         return new Response(JSON.stringify({ error: 'Failed to save RSVP. Please try again later.' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
