@@ -65,21 +65,16 @@ audio.addEventListener('ended', () => {
     isPlaying = false;
 });
 
-// ========== LIQUID MORPH GALLERY (1:1 SQUARE, 1365x1365 optimized) ==========
+// ========== LIQUID MORPH GALLERY (USING gallery-X.webp) ==========
 (function() {
-    // Array of high-res square images (1:1) – replace with your own 1365x1365 images
-    // Auto-detects local gallery-1.jpg, gallery-2.jpg, etc. up to 10
-    let slides = [];
-    
-    // Try to load local square images (assets/images/gallery-1.jpg, etc.)
-    // Fallback to beautiful unsplash square placeholders if none found
+    // Try to load gallery-1.webp, gallery-2.webp, etc.
     function loadImageSet() {
         return new Promise((resolve) => {
             let testIndex = 1;
             let foundImages = [];
             
             function tryNext() {
-                const imgPath = `assets/images/gallery-${testIndex}.jpg`;
+                const imgPath = `assets/images/gallery-${testIndex}.webp`;
                 const imgTest = new Image();
                 imgTest.onload = () => {
                     foundImages.push(imgPath);
@@ -87,15 +82,15 @@ audio.addEventListener('ended', () => {
                     tryNext();
                 };
                 imgTest.onerror = () => {
+                    // Stop when a file is missing
                     if (foundImages.length === 0) {
-                        // Fallback square placeholders (1:1)
+                        // Fallback to placeholders if no gallery images found
                         resolve([
                             'https://picsum.photos/id/104/1365/1365',
                             'https://picsum.photos/id/30/1365/1365',
                             'https://picsum.photos/id/58/1365/1365',
                             'https://picsum.photos/id/26/1365/1365',
-                            'https://picsum.photos/id/42/1365/1365',
-                            'https://picsum.photos/id/20/1365/1365'
+                            'https://picsum.photos/id/42/1365/1365'
                         ]);
                     } else {
                         resolve(foundImages);
@@ -270,9 +265,9 @@ audio.addEventListener('ended', () => {
     });
 })();
 
-// ========== RSVP DROPDOWN & FORM HANDLER (Supabase + Netlify Function) ==========
+// ========== RSVP DROPDOWN & FORM HANDLER (SECURE) ==========
 (function() {
-    // Dropdown logic (unchanged)
+    // Dropdown logic
     const dropdown = document.getElementById('attendingDropdown');
     if (dropdown) {
         const selectedDiv = dropdown.querySelector('.dropdown-selected');
@@ -309,45 +304,85 @@ audio.addEventListener('ended', () => {
         });
     }
 
-    // Form submission to Netlify Function
+    // Form submission with validation and button disable
     const rsvpForm = document.getElementById('rsvpForm');
+    const submitBtn = document.getElementById('rsvpSubmitBtn');
+    const msgDiv = document.getElementById('rsvpMessage');
+
     if (rsvpForm) {
         rsvpForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const attendingValue = document.getElementById('attending')?.value || '';
-            if (!attendingValue) {
-                document.getElementById('rsvpMessage').innerHTML = '<div class="alert alert-danger">Please select an attendance option.</div>';
+
+            // Get form fields
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const attendingInput = document.getElementById('attending');
+            const honeypot = document.getElementById('website');
+
+            // Clear previous messages
+            if (msgDiv) msgDiv.innerHTML = '';
+
+            // Basic client-side validation
+            let error = '';
+            if (!nameInput.value.trim()) {
+                error = 'Please enter your name.';
+            } else if (!emailInput.value.trim()) {
+                error = 'Please enter your email address.';
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                error = 'Please enter a valid email address.';
+            } else if (!attendingInput.value) {
+                error = 'Please select whether you are attending.';
+            }
+
+            if (error) {
+                msgDiv.innerHTML = `<div class="alert alert-danger">${error}</div>`;
                 return;
             }
+
+            // Disable submit button to prevent double submissions
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Prepare form data
             const formData = new FormData(rsvpForm);
+            // Convert to URLSearchParams for proper encoding
             const data = new URLSearchParams(formData);
+
             try {
                 const response = await fetch('/.netlify/functions/rsvp', {
                     method: 'POST',
                     body: data,
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 });
+
                 const result = await response.json();
-                const msgDiv = document.getElementById('rsvpMessage');
+
                 if (result.success) {
                     msgDiv.innerHTML = '<div class="alert alert-success">Thank you! Your RSVP has been saved.</div>';
                     rsvpForm.reset();
+                    // Reset dropdown display
                     const selectedDiv = document.querySelector('.dropdown-selected');
                     if (selectedDiv) selectedDiv.innerText = 'Select an option';
                     const hiddenAttend = document.getElementById('attending');
                     if (hiddenAttend) hiddenAttend.value = '';
                     document.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
                 } else {
-                    msgDiv.innerHTML = '<div class="alert alert-danger">Error: ' + (result.error || 'Something went wrong') + '</div>';
+                    msgDiv.innerHTML = `<div class="alert alert-danger">${result.error || 'Something went wrong. Please try again.'}</div>`;
                 }
             } catch (err) {
-                document.getElementById('rsvpMessage').innerHTML = '<div class="alert alert-danger">Network error. Please try again.</div>';
+                console.error('RSVP error:', err);
+                msgDiv.innerHTML = '<div class="alert alert-danger">Network error. Please check your connection and try again.</div>';
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
             }
         });
     }
 })();
 
-// ========== SAKURA PETALS ANIMATION (preserved) ==========
+// ========== SAKURA PETALS ANIMATION (USING WEBP) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
@@ -355,10 +390,11 @@ audio.addEventListener('ended', () => {
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 0.4 : 1.0;
     
+    // Use WebP versions (you have both PNG and WebP)
     const petalImages = [
-        'assets/images/sakura-petal.png',
-        'assets/images/sakura-petal1.png',
-        'assets/images/sakura-petal2.png'
+        'assets/images/sakura-petal.webp',
+        'assets/images/sakura-petal1.webp',
+        'assets/images/sakura-petal2.webp'
     ];
     const petalCount = 45;
     
@@ -405,7 +441,9 @@ audio.addEventListener('ended', () => {
     }
 })();
 
-// ========== LOVE STORY LIGHTBOX (FULLSCREEN) ==========
+// ========== LOVE STORY LIGHTBOX (USES EXISTING IMAGE SRC) ==========
+// This lightbox works with the image paths defined in your HTML (e.g., love-story/coffee.webp, etc.)
+// It does NOT require renaming files to story-1.webp unless you prefer that.
 (function() {
     const lightbox = document.getElementById('loveLightbox');
     const lightboxImg = document.getElementById('lightboxImg');
@@ -426,6 +464,8 @@ audio.addEventListener('ended', () => {
         const title = card.querySelector('.love-caption h4')?.innerText || '';
         const date = card.querySelector('.love-date')?.innerText || '';
         const fullCaption = `${title} — ${date}`;
+        
+        // Use the actual src from the HTML (which already points to your WebP/JPG)
         imagesArray.push(img.src);
         captionsArray.push(fullCaption);
         
@@ -446,7 +486,7 @@ audio.addEventListener('ended', () => {
         currentImageIndex = index;
         updateLightboxImage();
         lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; // prevent scrolling
+        document.body.style.overflow = 'hidden';
     }
     
     function updateLightboxImage() {
@@ -475,19 +515,16 @@ audio.addEventListener('ended', () => {
         updateLightboxImage();
     }
     
-    // Event listeners
     if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
     if (nextBtn) nextBtn.addEventListener('click', nextImage);
     if (prevBtn) prevBtn.addEventListener('click', prevImage);
     
-    // Close lightbox when clicking outside the image
     if (lightbox) {
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox) closeLightbox();
         });
     }
     
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (!lightbox || !lightbox.classList.contains('active')) return;
         if (e.key === 'Escape') closeLightbox();
