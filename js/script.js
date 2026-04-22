@@ -310,7 +310,7 @@ audio.addEventListener('ended', () => {
             const data = new URLSearchParams(formData);
 
             try {
-                const response = await fetch('/.netlify/functions/rsvp', {
+                const response = await fetch('/api/rsvp', {
                     method: 'POST',
                     body: data,
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
