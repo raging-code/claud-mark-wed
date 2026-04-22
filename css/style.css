@@ -26,6 +26,8 @@ body {
     color: var(--dark-charcoal);
     overflow-x: hidden;
     position: relative;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -48,9 +50,10 @@ h1, h2, h3, h4, h5, h6,
     color: var(--sakura-pink) !important;
 }
 
+/* Hero Section – reduced top spacing by 10px */
 .hero-section {
     width: 100%;
-    margin-bottom: 0;
+    margin-bottom: -10px;
     height: auto;
     position: relative;
     z-index: 1;
@@ -79,7 +82,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .wedding-logo {
-    margin-bottom: 15px;  /* 15px space between logo and text */
+    margin-bottom: 15px;
 }
 .wedding-logo img {
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
@@ -167,7 +170,7 @@ h1, h2, h3, h4, h5, h6,
 .love-story-section {
     background: transparent !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 .polaroid-card {
     background: white;
@@ -216,13 +219,13 @@ h1, h2, h3, h4, h5, h6,
     border-radius: 40px;
 }
 
-/* ===== VIDEO SECTION ===== */
+/* ===== VIDEO SECTION – moved down 30px ===== */
 .video-section {
     background: transparent !important;
     padding-top: 5px !important;
     margin-top: -19px !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 .video-frame-wrapper {
     max-width: 320px;
@@ -268,11 +271,13 @@ h1, h2, h3, h4, h5, h6,
     margin-top: 3px;
 }
 
-/* ===== VENUE SECTION ===== */
+/* ===== VENUE SECTION – moved up 30px ===== */
 .venue-section {
     background: transparent !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
+    padding-top: 1rem;
+    margin-top: -1rem;
 }
 .cinematic-venue {
     position: relative;
@@ -364,55 +369,113 @@ h1, h2, h3, h4, h5, h6,
     transform: translateY(-2px);
 }
 
-/* ===== REFINED ACCORDION ===== */
+/* ===== ENHANCED FAQ SECTION – moved up 30px ===== */
 .faq-section {
-    background: transparent !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
+    padding-top: 1rem;
+    margin-top: -1rem;
 }
-.faq-card {
+.faq-section .faq-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 32px;
     transition: all 0.2s;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.02);
-}
-.wedding-accent {
-    color: #c2835e;
-}
-.design-title {
-    font-weight: 600;
-    font-size: 1.6rem;
-    letter-spacing: -0.3px;
-    color: #3b2a25;
-    font-family: 'EB Garamond', serif;
-}
-.accordion-item .accordion-button {
-    font-family: 'Inter', sans-serif;
-    padding: 1rem 1.25rem;
-}
-.accordion-item .accordion-button:not(.collapsed) {
-    background-color: #fef4ef;
-    color: #9b5e3c;
-    box-shadow: none;
-}
-.accordion-item .accordion-button:focus {
-    box-shadow: none;
-    border-color: rgba(0,0,0,0.125);
-}
-.accordion-body {
-    padding: 1rem 1.25rem;
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
-}
-.rounded-3 {
-    border-radius: 12px !important;
+    box-shadow: 0 20px 35px rgba(60, 30, 20, 0.08);
 }
 
-/* ===== RSVP SECTION ===== */
+.faq-header {
+    text-align: center;
+}
+
+.faq-badge {
+    display: inline-block;
+    background: #fef4ef;
+    color: #a55a3a;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 0.4rem 1.2rem;
+    border-radius: 60px;
+    margin-bottom: 1rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.faq-badge i {
+    margin-right: 6px;
+    font-size: 0.85rem;
+}
+
+.faq-divider {
+    margin: 0.8rem auto 0.5rem;
+    gap: 10px;
+}
+
+.faq-divider i {
+    font-size: 0.7rem;
+    color: #dbbd9b;
+}
+
+.accordion-item {
+    border-radius: 20px !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.accordion-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px rgba(80, 50, 30, 0.12) !important;
+}
+
+.accordion-button {
+    font-size: clamp(1rem, 4vw, 1.2rem) !important;
+    font-weight: 600 !important;
+    padding: 1.2rem 1.5rem !important;
+    background-color: #fffcf9 !important;
+    color: #3f2c21 !important;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    gap: 8px;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #fff7f0 !important;
+    color: #a55a3a !important;
+    border-bottom: 1px solid #fae2d4;
+}
+
+.accordion-button .faq-question-text {
+    flex: 1;
+    text-align: left;
+    letter-spacing: -0.2px;
+}
+
+.accordion-button i.fa-fw {
+    width: 1.8rem;
+    font-size: 1.3rem;
+}
+
+.accordion-body {
+    font-size: clamp(0.9rem, 3.8vw, 1rem) !important;
+    padding: 1.2rem 1.8rem !important;
+    line-height: 1.55;
+    color: #5e4b3c;
+    background: #ffffff;
+    border-top: 1px solid #fae8df;
+}
+
+.accordion-body .text-pink {
+    color: #c2835e;
+}
+
+.accordion-collapse {
+    transition: height 0.3s ease-in-out;
+}
+
+/* ===== RSVP SECTION – moved up 30px ===== */
 .rsvp-section {
     background: transparent !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
+    padding-top: 0.5rem;
+    margin-top: -1rem;
 }
 .rsvp-card {
     max-width: 600px;
@@ -562,7 +625,7 @@ h1, h2, h3, h4, h5, h6,
     border-top: 1px solid #000000;
     border-bottom: 1px solid #ffe0e0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 .sakura-fullwidth-wrapper .container {
     max-width: 1140px;
@@ -570,7 +633,7 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
 }
 
-/* ===== FIXED SAKURA PETALS – LAYERED BEHIND CARDS BUT OVER PINK BACKGROUND ===== */
+/* ===== FIXED SAKURA PETALS – ABOVE BACKGROUNDS, BELOW CONTENT ===== */
 .sakura-petals {
     position: fixed;
     top: 0;
@@ -578,7 +641,7 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
     height: 100vh;
     pointer-events: none;
-    z-index: 1;
+    z-index: 1;  /* above most backgrounds (which are at 0), below content with z-index 2+ */
     overflow: hidden;
     background: transparent;
 }
@@ -588,170 +651,250 @@ footer {
     color: #9b6b6b;
     border-top: 1px solid #ffd9d9;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
-/* ===== LIQUID MORPH GALLERY - 1:1 SQUARE ===== */
+/* ===== GALLERY STYLES ===== */
 .prenup-gallery-section {
-    background: transparent !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
+    padding-top: 0.5rem;
+    margin-top: -1rem;
 }
-.prenup-widget.liquid-morph-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 28px;
-    padding: 25px 20px 30px;
-    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2);
-}
-.liquid-stage-wrapper {
+.gallery-wrap {
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
     position: relative;
-    width: 100%;
-    border-radius: 24px;
-    overflow: hidden;
-    background: #f5efe8;
+    z-index: 1;
 }
-.liquid-stage {
+
+.gallery-box {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #2c241f;
-    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(200,168,118,0.3);
+    box-shadow: 0 2px 0 rgba(200,168,118,0.15), 0 20px 60px rgba(58,40,40,0.1), 0 4px 16px rgba(58,40,40,0.06);
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    user-select: none;
 }
-.liquid-layer {
+
+.gallery-box::before,
+.gallery-box::after {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    will-change: opacity;
-    border-radius: 24px;
-    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    z-index: 10;
+    pointer-events: none;
 }
-.liquid-img {
+.gallery-box::before {
+    top: 10px;
+    left: 10px;
+    border-top: 1.5px solid #c8a876;
+    border-left: 1.5px solid #c8a876;
+}
+.gallery-box::after {
+    bottom: 10px;
+    right: 10px;
+    border-bottom: 1.5px solid #c8a876;
+    border-right: 1.5px solid #c8a876;
+}
+
+.img-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: #f0d9d0;
+    cursor: grab;
+}
+.img-stage:active {
+    cursor: grabbing;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1), opacity 0.45s ease;
+    will-change: transform, opacity;
+}
+.slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 24px;
-    transition: transform 0.4s ease;
+    pointer-events: none;
 }
-.liquid-layer.active .liquid-img {
-    transform: scale(1.02);
+.slide.active {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 2;
 }
-.photo-overlay {
+.slide.prev {
+    transform: translateX(-100%);
+    opacity: 0.4;
+    z-index: 1;
+    filter: blur(1px);
+}
+.slide.next {
+    transform: translateX(100%);
+    opacity: 0.4;
+    z-index: 1;
+    filter: blur(1px);
+}
+.slide.hidden {
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 0;
+}
+
+.slide.active img {
+    animation: gentlePop 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+@keyframes gentlePop {
+    0% { transform: scale(0.96); opacity: 0.92; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.img-stage::after {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.1) 100%);
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(253,248,243,0.15) 0%, transparent 30%, transparent 70%, rgba(253,248,243,0.25) 100%);
     pointer-events: none;
     z-index: 3;
-    border-radius: 24px;
 }
-.liquid-controls {
+
+.external-nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between !important;
     align-items: center;
-    gap: 28px;
-    margin-top: 20px;
-    margin-bottom: 16px;
+    gap: 20px;
+    padding: 20px 24px 12px;
+    background: #fff;
 }
-.liquid-nav {
-    background: white;
-    border: 1px solid #e2d4c8;
+
+.gallery-counter {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    background: rgba(200,168,118,0.12);
+    padding: 6px 16px;
+    border-radius: 40px;
+    color: #3a2828;
+    border: 1px solid rgba(200,168,118,0.3);
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+.gallery-counter strong {
+    font-style: normal;
+    font-weight: 600;
+    color: #c9897a;
+    font-size: 1.1rem;
+}
+
+.nav-btn-ext {
     width: 52px;
     height: 52px;
-    border-radius: 60px;
-    font-size: 1.3rem;
-    color: #a55a3a;
-    transition: all 0.2s;
+    background: linear-gradient(135deg, #fff8f5, #fff);
+    border: 1px solid #d4af37;
+    border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-.liquid-nav:hover {
-    background: #a55a3a;
-    color: white;
-    transform: translateY(-3px);
+.nav-btn-ext:hover {
+    background: linear-gradient(135deg, #ffb7c5, #ff9aac);
+    border-color: #c9897a;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(201,137,122,0.3);
 }
-.liquid-counter {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    background: rgba(255,255,240,0.9);
-    padding: 8px 18px;
-    border-radius: 40px;
-    color: #3f2c21;
-    letter-spacing: 1px;
+.nav-btn-ext svg {
+    width: 22px;
+    height: 22px;
+    stroke: #9a6a6a;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.2s, transform 0.2s;
 }
-.timeline-container {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-.timeline-dot {
-    width: 8px;
-    height: 8px;
-    background: #d4b6a8;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-.timeline-dot.active {
-    background: #a55a3a;
-    width: 28px;
+.nav-btn-ext:hover svg {
+    stroke: #fff;
+    transform: scale(1.1);
 }
 
-/* ===== ENHANCED LOVE STORY SECTION ===== */
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 0 22px;
+    background: #fff;
+    border-top: 1px solid rgba(200,168,118,0.12);
+}
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f0d9d0;
+    border: 1px solid #c8a876;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    padding: 0;
+    margin: 0;
+}
+.dot.active {
+    background: #c8a876;
+    transform: scale(1.5);
+}
+
+.swipe-hint {
+    text-align: center;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #a08878;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+    animation: fadeHint 3s ease 2s forwards;
+}
+@keyframes fadeHint {
+    to { opacity: 0; }
+}
+
+/* ===== ENHANCED LOVE STORY SECTION – NO Z-INDEX ON PARENT, SO PETALS INTERLEAVE ===== */
 .love-story-section-new {
     background-color: transparent;
     position: relative;
-    z-index: auto;
-    padding: 3.5rem 0;
-    margin: 0;
+    /* NO z-index here – allows petals (z-index 1) to sit between background (0) and content (2) */
+    padding: 0.5rem 0 2.5rem;
+    margin: -80px 0 0 0;
 }
-
-/* Pink background layer */
+/* Pink background – sits below petals */
 .love-story-section-new::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 50px;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 50px);
     background-color: #fff0f1;
     z-index: 0;
     pointer-events: none;
 }
 
-/* New title styling */
 .love-story-title-wrapper {
     position: relative;
     z-index: 2;
-    margin-bottom: 3rem;
-}
-
-.love-story-subtitle {
-    font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #b28b7a;
-    background: rgba(255,255,240,0.8);
-    display: inline-block;
-    padding: 0.2rem 1rem;
-    border-radius: 40px;
-    backdrop-filter: blur(2px);
+    margin-bottom: 1.2rem;
 }
 
 .love-story-main-title {
@@ -759,7 +902,7 @@ footer {
     font-size: 3rem;
     font-weight: 700;
     color: #4e3b32;
-    margin: 0.8rem 0 0.5rem;
+    margin: 0.3rem 0 0.2rem;
     letter-spacing: 1px;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.03);
 }
@@ -767,12 +910,11 @@ footer {
 .sakura-divider {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin: 1rem 0;
+    gap: 4px;
+    margin: 0.2rem 0;
     color: #e0a890;
     font-size: 0.8rem;
 }
-
 .sakura-divider i {
     font-size: 0.7rem;
     opacity: 0.7;
@@ -783,10 +925,9 @@ footer {
     font-size: 1.1rem;
     font-style: italic;
     color: #8c7568;
-    margin-top: 0.5rem;
+    margin-top: 0.1rem;
 }
 
-/* Grid container */
 .love-grid-3x2 {
     position: relative;
     z-index: 2;
@@ -797,7 +938,6 @@ footer {
     margin: 0 auto;
 }
 
-/* Enhanced love cards */
 .love-card {
     position: relative;
     z-index: 2;
@@ -811,7 +951,6 @@ footer {
     flex-direction: column;
     cursor: pointer;
 }
-
 .love-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 28px 42px -16px rgba(80, 40, 20, 0.25);
@@ -823,7 +962,6 @@ footer {
     overflow: hidden;
     position: relative;
 }
-
 .love-img img {
     width: 100%;
     height: 100%;
@@ -832,7 +970,6 @@ footer {
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
 }
-
 .love-card:hover .love-img img {
     transform: scale(1.08);
 }
@@ -851,13 +988,11 @@ footer {
     transition: opacity 0.3s;
     pointer-events: none;
 }
-
 .love-card-overlay i {
     color: white;
     font-size: 2rem;
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
-
 .love-card:hover .love-card-overlay {
     opacity: 1;
 }
@@ -868,7 +1003,6 @@ footer {
     background: white;
     border-top: 1px solid #f9e8e0;
 }
-
 .love-caption h4 {
     font-family: 'EB Garamond', serif;
     font-size: 1.5rem;
@@ -876,14 +1010,12 @@ footer {
     color: #4e3b32;
     margin-bottom: 6px;
 }
-
 .love-caption p {
     font-size: 0.9rem;
     color: #8c7568;
     letter-spacing: 0.3px;
     line-height: 1.4;
 }
-
 .love-date {
     display: inline-block;
     margin-top: 10px;
@@ -896,7 +1028,6 @@ footer {
     padding: 0.2rem 0.8rem;
     border-radius: 40px;
 }
-
 .love-date i {
     font-size: 0.7rem;
     margin-right: 4px;
@@ -917,11 +1048,9 @@ footer {
     justify-content: center;
     flex-direction: column;
 }
-
 .love-lightbox.active {
     display: flex;
 }
-
 .lightbox-img {
     max-width: 90%;
     max-height: 85%;
@@ -929,8 +1058,8 @@ footer {
     border-radius: 8px;
     box-shadow: 0 0 30px rgba(0,0,0,0.5);
     cursor: default;
+    background: #1a1a1a;
 }
-
 .lightbox-caption {
     position: absolute;
     bottom: 30px;
@@ -949,7 +1078,6 @@ footer {
     backdrop-filter: blur(5px);
     pointer-events: none;
 }
-
 .lightbox-close {
     position: absolute;
     top: 20px;
@@ -961,12 +1089,10 @@ footer {
     z-index: 10000;
     font-weight: 300;
 }
-
 .lightbox-close:hover {
     color: #ffb7c5;
     transform: scale(1.1);
 }
-
 .lightbox-prev,
 .lightbox-next {
     position: absolute;
@@ -985,49 +1111,23 @@ footer {
     transition: all 0.2s;
     z-index: 10000;
 }
-
 .lightbox-prev {
     left: 20px;
 }
-
 .lightbox-next {
     right: 20px;
 }
-
 .lightbox-prev:hover,
 .lightbox-next:hover {
     background: #ffb7c5;
     color: #31231a;
 }
 
-/* Responsive lightbox */
-@media (max-width: 768px) {
-    .lightbox-prev,
-    .lightbox-next {
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-    }
-    .lightbox-close {
-        top: 15px;
-        right: 20px;
-        font-size: 30px;
-    }
-    .lightbox-caption {
-        font-size: 0.9rem;
-        bottom: 20px;
-    }
-}
-
-/* ===== MOBILE LOGO ADJUSTMENT (30% smaller on mobile) ===== */
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 768px) {
     .wedding-logo img {
-        max-height: 147px !important;  /* 210px * 0.7 = 147px */
+        max-height: 147px !important;
     }
-}
-
-/* ===== GLOBAL RESPONSIVE ===== */
-@media (max-width: 768px) {
     .main-title {
         font-size: 1.2rem;
         letter-spacing: 2px;
@@ -1036,7 +1136,7 @@ footer {
         font-size: 1.8rem;
     }
     .video-section .section-title {
-        font-size: 2.16rem;
+        font-size: 1.85rem !important;
     }
     .proposal-video {
         width: 260px;
@@ -1051,7 +1151,6 @@ footer {
     .btn-submit {
         padding: 10px 32px;
     }
-    
     .audio-card {
         flex-wrap: nowrap;
         gap: 8px;
@@ -1072,32 +1171,6 @@ footer {
         align-items: center;
         justify-content: center;
     }
-    
-    .prenup-widget.liquid-morph-container {
-        padding: 15px 12px 20px;
-        margin: 0 12px;
-        border-radius: 20px;
-    }
-    .liquid-stage {
-        border-radius: 18px;
-    }
-    .liquid-nav {
-        width: 44px;
-        height: 44px;
-        font-size: 1.1rem;
-    }
-    .liquid-counter {
-        font-size: 1rem;
-        padding: 5px 14px;
-    }
-    .timeline-dot {
-        width: 6px;
-        height: 6px;
-    }
-    .timeline-dot.active {
-        width: 22px;
-    }
-    
     .faq-card {
         padding: 1.5rem !important;
         border-radius: 16px;
@@ -1113,15 +1186,12 @@ footer {
         font-size: 0.85rem;
         padding: 0.8rem 1rem;
     }
-    
     .polaroid-card {
         padding: 12px 12px 20px;
     }
     .polaroid-caption h4 {
         font-size: 1rem;
     }
-
-    /* venue mobile */
     .cinematic-venue img {
         height: 400px;
     }
@@ -1153,34 +1223,85 @@ footer {
         font-size: 0.6rem;
         white-space: nowrap;
     }
-
-    /* love story mobile */
     .love-grid-3x2 {
         gap: 20px;
         padding: 0 12px;
     }
+    .love-caption {
+        padding: 0.8rem 0.8rem 1.2rem;
+    }
     .love-caption h4 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
     }
     .love-caption p {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+    }
+    .love-date {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.6rem;
+    }
+    .love-story-title-wrapper {
+        margin-bottom: 1rem;
     }
     .love-story-main-title {
-        font-size: 2.2rem;
+        font-size: 2rem;
+        margin: 0.2rem 0 0.1rem;
     }
     .love-story-quote {
+        font-size: 0.9rem;
+        margin-top: 0;
+    }
+    .external-nav {
+        gap: 15px;
+        padding: 15px 16px 10px;
+    }
+    .gallery-counter {
+        font-size: 0.85rem;
+        padding: 4px 12px;
+    }
+    .gallery-counter strong {
         font-size: 0.95rem;
     }
-}
-
-@media (min-width: 1200px) {
-    .prenup-widget.liquid-morph-container {
-        max-width: 900px;
+    .nav-btn-ext {
+        width: 44px;
+        height: 44px;
+    }
+    .nav-btn-ext svg {
+        width: 18px;
+        height: 18px;
+    }
+    .swipe-hint {
+        font-size: 0.5rem;
+    }
+    .gallery-wrapper {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+    .prenup-gallery-section .text-center {
+        margin-bottom: 0.5rem !important;
+    }
+    .lightbox-prev,
+    .lightbox-next {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+    .lightbox-close {
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+    }
+    .lightbox-caption {
+        font-size: 0.9rem;
+        bottom: 20px;
     }
 }
 
-/* remove conflicts */
-.prenup-widget .floating-lightbox-wrapper,
-.prenup-widget .floating-lightbox {
-    all: unset;
+.elegant-divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c8a876, #e8cfa0, #c8a876, transparent);
+    border-radius: 2px;
 }

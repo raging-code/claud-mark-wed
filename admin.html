@@ -38,12 +38,13 @@
 <div id="root"></div>
 
 <script>
-    // ==================== 🔧 REPLACE WITH YOUR SUPABASE CREDENTIALS ====================
-    const SUPABASE_URL = 'https://uziyzioqazqznjsvhxky.supabase.co';   // <-- CHANGE THIS
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6aXl6aW9xYXpxem5qc3ZoeGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzYyNzgsImV4cCI6MjA5MjM1MjI3OH0.w57BWU-mUK8qBrqJODNv3OZdvZa57_Ql4iz-P3KbUZQ';                    // <-- CHANGE THIS
-    // =================================================================================
+    // ==================== YOUR SUPABASE CREDENTIALS ====================
+    const SUPABASE_URL = 'https://uziyzioqazqznjsvhxky.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6aXl6aW9xYXpxem5qc3ZoeGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzYyNzgsImV4cCI6MjA5MjM1MjI3OH0.w57BWU-mUK8qBrqJODNv3OZdvZa57_Ql4iz-P3KbUZQ';
+    // ====================================================================
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Use 'var' to avoid redeclaration errors if script runs twice
+    var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Helper: escape HTML to prevent injection
     function escapeHtml(str) {
@@ -126,16 +127,13 @@
             </div>
         `;
 
-        // Load data
         await loadRsvps();
 
-        // Logout
         document.getElementById('logoutBtn').onclick = async () => {
             await supabase.auth.signOut();
             checkSession();
         };
 
-        // Add RSVP
         document.getElementById('addRsvpBtn').onclick = async () => {
             const name = document.getElementById('addName').value.trim();
             const email = document.getElementById('addEmail').value.trim();
@@ -201,7 +199,6 @@
             tbody.appendChild(tr);
         }
 
-        // Attach delete handlers
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.onclick = async () => {
                 const id = parseInt(btn.dataset.id);
@@ -227,7 +224,7 @@
         }
     }
 
-    // Start
+    // Start the app
     checkSession();
 </script>
 </body>
