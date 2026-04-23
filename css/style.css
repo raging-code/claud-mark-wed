@@ -1,4 +1,4 @@
-/* ===== SAKURA THEME ===== */
+/* ===== SAKURA THEME (existing) ===== */
 :root {
     --sakura-pink: #ffb7c5;
     --sakura-dark: #ffb7c5;
@@ -50,13 +50,13 @@ h1, h2, h3, h4, h5, h6,
     color: var(--sakura-pink) !important;
 }
 
-/* Hero Section – reduced top spacing by 10px */
+/* Hero Section - ensure it sits above petals */
 .hero-section {
     width: 100%;
     margin-bottom: -10px;
     height: auto;
     position: relative;
-    z-index: 1;
+    z-index: 2;  /* above petals */
 }
 
 .hero-image-wrapper {
@@ -81,25 +81,20 @@ h1, h2, h3, h4, h5, h6,
     pointer-events: none;
 }
 
-.wedding-logo {
-    margin-bottom: 15px;
-}
-.wedding-logo img {
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
+/* NEW BANNER IMAGE STYLES (replaces old logo section) */
+.wedding-banner {
+    width: 100%;
+    line-height: 0;
+    position: relative;
+    z-index: 2;  /* above petals */
+    background: #fff0f1; /* fallback */
 }
 
-.main-title {
-    font-size: 1.4rem;
-    letter-spacing: 4px;
-    color: #31231a;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.05);
-    margin-top: 0 !important;
-    margin-bottom: 0;
-    word-break: keep-all;
+.wedding-banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
 }
 
 /* Audio Card */
@@ -166,7 +161,7 @@ h1, h2, h3, h4, h5, h6,
     background: var(--japan-red);
 }
 
-/* ===== LOVE STORY (old polaroid – kept for compatibility) ===== */
+/* Love Story (old) */
 .love-story-section {
     background: transparent !important;
     position: relative;
@@ -219,7 +214,7 @@ h1, h2, h3, h4, h5, h6,
     border-radius: 40px;
 }
 
-/* ===== VIDEO SECTION ===== */
+/* Video Section */
 .video-section {
     background: transparent !important;
     padding-top: 5px !important;
@@ -271,7 +266,7 @@ h1, h2, h3, h4, h5, h6,
     margin-top: 3px;
 }
 
-/* ===== VENUE SECTION ===== */
+/* Venue Section */
 .venue-section {
     background: transparent !important;
     position: relative;
@@ -369,7 +364,7 @@ h1, h2, h3, h4, h5, h6,
     transform: translateY(-2px);
 }
 
-/* ===== FAQ SECTION ===== */
+/* FAQ Section */
 .faq-section {
     position: relative;
     z-index: 1;
@@ -469,7 +464,7 @@ h1, h2, h3, h4, h5, h6,
     transition: height 0.3s ease-in-out;
 }
 
-/* ===== RSVP SECTION – TIGHTER SPACING ===== */
+/* RSVP Section */
 .rsvp-section {
     background: transparent !important;
     position: relative;
@@ -553,7 +548,7 @@ h1, h2, h3, h4, h5, h6,
     transform: translateY(0);
 }
 
-/* ===== CUSTOM DROPDOWN ===== */
+/* Custom Dropdown */
 .custom-dropdown {
     position: relative;
     width: 100%;
@@ -619,23 +614,7 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
 }
 
-/* Sakura Full Width Wrapper */
-.sakura-fullwidth-wrapper {
-    background-color: white !important;
-    width: 100%;
-    padding: 1px 0;
-    border-top: 1px solid #000000;
-    border-bottom: 1px solid #ffe0e0;
-    position: relative;
-    z-index: 1;
-}
-.sakura-fullwidth-wrapper .container {
-    max-width: 1140px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* ===== FIXED SAKURA PETALS – ABOVE BACKGROUNDS, BELOW CONTENT ===== */
+/* Fixed Sakura Petals - stays behind hero and banner */
 .sakura-petals {
     position: fixed;
     top: 0;
@@ -643,7 +622,7 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
     height: 100vh;
     pointer-events: none;
-    z-index: 1;
+    z-index: 1;  /* lower than hero/banner */
     overflow: hidden;
     background: transparent;
 }
@@ -656,7 +635,7 @@ footer {
     z-index: 1;
 }
 
-/* ===== GALLERY STYLES ===== */
+/* Gallery Styles */
 .prenup-gallery-section {
     position: relative;
     z-index: 1;
@@ -1179,9 +1158,10 @@ footer {
         font-size: 1.4rem;
     }
     .accordion-button {
-        font-size: 0.9rem;
-        padding: 0.8rem 1rem;
-    }
+    font-size: clamp(0.85rem, 3.5vw, 1rem) !important;
+    font-weight: 600 !important;
+    padding: 1rem 1.2rem !important;
+}
     .accordion-body {
         font-size: 0.85rem;
         padding: 0.8rem 1rem;
@@ -1297,6 +1277,10 @@ footer {
         font-size: 0.9rem;
         bottom: 20px;
     }
+    .accordion-button {
+    font-size: 0.85rem !important;
+    padding: 0.8rem 1rem !important;
+}
 }
 
 .elegant-divider {
@@ -1306,14 +1290,13 @@ footer {
     border-radius: 2px;
 }
 
-/* ===== ATTIRE GUIDE (SIMPLIFIED – NO OUTER BG / DASH, TIGHTER SPACING) ===== */
+/* ===== ATTIRE GUIDE (existing) ===== */
 .attire-guide-section {
     position: relative;
     z-index: 1;
     background: transparent;
 }
 
-/* white card only – no outer background or dash */
 .attire-card-c {
     position: relative;
     z-index: 2;
@@ -1325,7 +1308,6 @@ footer {
     margin: 0 auto;
 }
 
-/* inner padding – tighter */
 .attire-inner-bg {
     background: #ffffff;
     padding: 20px 30px;
@@ -1337,7 +1319,6 @@ footer {
     width: 100%;
 }
 
-/* top elements – smaller margins, tighter */
 .attire-ornament {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.75rem;
@@ -1366,15 +1347,13 @@ footer {
     transform: translateY(-15px);
 }
 
-/* photo container – aspect ratio 1408:768 */
 .attire-photo {
     width: 100%;
     aspect-ratio: 1408 / 768;
     margin: 0 auto 12px;
-    background: #ffffff;           /* plain white background */
+    background: #ffffff;
     border-radius: 12px;
     overflow: hidden;
-    /* border removed */
     opacity: 0;
     transform: translateX(-20px);
 }
@@ -1391,13 +1370,12 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #ffffff;           /* was #fefcf9 */
+    background: #ffffff;
     color: #bba898;
     font-size: 0.7rem;
     text-align: center;
 }
 
-/* palette row – tighter gap, closer to line */
 .attire-palette-row {
     display: flex;
     justify-content: space-between;
@@ -1408,8 +1386,7 @@ footer {
     flex: 1;
     text-align: center;
     opacity: 0;
-    transform: scaleX(0);
-    transform-origin: center;
+    transform: translateY(10px);
 }
 .attire-palette-label {
     font-size: 0.6rem;
@@ -1420,10 +1397,11 @@ footer {
     color: #7a6a60;
 }
 .attire-palette-swatch {
-    width: 100%;
+    width: 80%;
+    max-width: 120px;
     height: 28px;
     border-radius: 8px;
-    margin-bottom: 4px;
+    margin: 0 auto 4px auto;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 .attire-palette-hex {
@@ -1432,13 +1410,11 @@ footer {
     color: #b09888;
 }
 
-/* divider – smaller margin top/bottom */
 .attire-divider {
     margin: 8px 0 12px;
     opacity: 0.3;
 }
 
-/* columns – tighter spacing */
 .attire-col {
     opacity: 0;
 }
@@ -1488,7 +1464,7 @@ footer {
 .attire-col.him ul li { --x-offset: -12px; }
 .attire-col.her ul li { --x-offset: 12px; }
 
-/* entrance animations (once) – slower (+0.5s) */
+/* entrance animations */
 .attire-card-c.animate-entrance .attire-ornament,
 .attire-card-c.animate-entrance .attire-title,
 .attire-card-c.animate-entrance .attire-subtitle {
@@ -1504,13 +1480,13 @@ footer {
 }
 
 .attire-card-c.animate-entrance .attire-palette-item {
-    animation: attireUnfoldX 0.8s ease forwards;
+    animation: attireFadeUp 2s ease forwards;
 }
 .attire-card-c.animate-entrance .attire-palette-item:first-child { animation-delay: 0.35s; }
 .attire-card-c.animate-entrance .attire-palette-item:last-child { animation-delay: 0.4s; }
 
 .attire-card-c.animate-entrance .attire-col.him {
-    animation: attireSlideFromLeft 0.8s ease forwards;
+    animation: attireSlideFromLeft 2s ease forwards;
     animation-delay: 0.48s;
 }
 .attire-card-c.animate-entrance .attire-col.him ul li {
@@ -1522,7 +1498,7 @@ footer {
 .attire-card-c.animate-entrance .attire-col.him ul li:nth-child(4) { animation-delay: 0.7s; }
 
 .attire-card-c.animate-entrance .attire-col.her {
-    animation: attireSlideFromRight 0.8s ease forwards;
+    animation: attireSlideFromRight 2s ease forwards;
     animation-delay: 0.48s;
 }
 .attire-card-c.animate-entrance .attire-col.her ul li {
@@ -1541,10 +1517,6 @@ footer {
     0% { opacity: 0; transform: translateX(-20px); }
     100% { opacity: 1; transform: translateX(0); }
 }
-@keyframes attireUnfoldX {
-    0% { opacity: 0; transform: scaleX(0); }
-    100% { opacity: 1; transform: scaleX(1); }
-}
 @keyframes attireSlideFromLeft {
     0% { opacity: 0; transform: translateX(-15px); }
     100% { opacity: 1; transform: translateX(0); }
@@ -1553,13 +1525,370 @@ footer {
     0% { opacity: 0; transform: translateX(15px); }
     100% { opacity: 1; transform: translateX(0); }
 }
+@keyframes attireFadeUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
 
-/* responsive for attire guide */
 @media (max-width: 768px) {
     .attire-inner-bg {
         padding: 16px 20px;
     }
     .attire-title {
         font-size: 1.5rem;
+    }
+}
+
+/* Share moment block animations */
+.share-moment-wrapper {
+    border-top: 1px solid rgba(200,168,118,0.2);
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+.icon-row-custom span {
+    font-size: 1rem;
+    color: #bea885;
+}
+.tagline-share {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    font-weight: 500;
+    color: #2c2a29;
+    letter-spacing: -0.2px;
+    margin-top: 0.5rem;
+}
+.custom-divider-short {
+    width: 60px;
+    height: 2px;
+    background: #d4c5b0;
+    margin: 0.6rem auto 0.8rem;
+}
+.hashtag-eb-share {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #31231a;
+    background: transparent;
+    display: inline-block;
+    padding: 0;
+    border: none;
+    letter-spacing: 0.3px;
+    margin-top: 0;
+}
+
+.share-moment-wrapper:not(.animate-share) .share-icons-group {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+.share-moment-wrapper:not(.animate-share) .share-tagline {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+.share-moment-wrapper:not(.animate-share) .share-hashtag {
+    opacity: 0;
+    transform: translateX(40px);
+}
+.share-moment-wrapper.animate-share .share-icons-group {
+    animation: slideDownFade 2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+.share-moment-wrapper.animate-share .share-tagline {
+    animation: slideLeftIn 2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+.share-moment-wrapper.animate-share .share-hashtag {
+    animation: slideRightIn 2s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+@keyframes slideDownFade {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideLeftIn {
+    0% { opacity: 0; transform: translateX(-40px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideRightIn {
+    0% { opacity: 0; transform: translateX(40px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 550px) {
+    .tagline-share {
+        font-size: 1.2rem;
+        line-height: 1.25;
+    }
+    .hashtag-eb-share {
+        font-size: 1.3rem;
+    }
+}
+
+/* ========== CHARCOAL EMBER · PINK GLOW CARD (SHORTER HEIGHT – NO SPACING CHANGES) ========== */
+.charcoal-ember-card {
+    max-width: 420px;
+    width: 100%;
+    aspect-ratio: 1 / 0.75;
+    margin: 28px auto 12px auto;
+    background: linear-gradient(145deg, #31231a 0%, #4b3528 100%);
+    border-radius: 0.875rem;
+    border-bottom: 5px solid #ffb7c5;
+    box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.charcoal-ember-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 28px 36px -14px rgba(0, 0, 0, 0.4);
+}
+
+.ember-inner {
+    padding: 0.8rem 1.2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+    color: #fff0f1;
+    width: 100%;
+    height: 100%;
+}
+
+.stars-3d,
+.ember-title,
+.ember-line,
+.ember-gift {
+    opacity: 0;
+}
+
+.charcoal-ember-card.animate-ember .stars-3d {
+    animation: slideFromTop 2s ease forwards;
+}
+.charcoal-ember-card.animate-ember .ember-title {
+    animation: slideFromTop 2s ease forwards;
+    animation-delay: 0.1s;
+}
+.charcoal-ember-card.animate-ember .ember-line {
+    animation: slideFromRight 2s ease forwards;
+}
+.charcoal-ember-card.animate-ember .ember-line:nth-child(1) { animation-delay: 0.2s; }
+.charcoal-ember-card.animate-ember .ember-line:nth-child(2) { animation-delay: 0.3s; }
+.charcoal-ember-card.animate-ember .ember-line:nth-child(3) { animation-delay: 0.4s; }
+.charcoal-ember-card.animate-ember .ember-gift {
+    animation: slideFromBottom 2s ease forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes slideFromTop {
+    0% { opacity: 0; transform: translateY(-40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideFromRight {
+    0% { opacity: 0; transform: translateX(60px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideFromBottom {
+    0% { opacity: 0; transform: translateY(60px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.stars-3d {
+    font-size: 1.8rem;
+    letter-spacing: 8px;
+    margin-bottom: 0.2rem;
+    color: #ffb7c5;
+    text-shadow: 0 1px 0px rgba(255,255,255,0.4), 0 2px 0px rgba(0,0,0,0.2), 0 3px 5px rgba(0,0,0,0.3), 0 0 6px rgba(255,183,197,0.7);
+}
+
+.ember-title {
+    font-family: 'EB Garamond', serif;
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: -0.3px;
+    margin-bottom: 0.4rem;
+    border-bottom: 2px solid rgba(255, 183, 197, 0.6);
+    display: inline-block;
+    padding-bottom: 0.2rem;
+    color: #fff0f1;
+}
+
+.ember-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0.3rem 0;
+}
+
+.ember-line {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.35;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    color: #fff0f1;
+}
+
+.ember-icon {
+    color: #ffb7c5;
+    font-size: 0.9rem;
+    width: 1.3rem;
+}
+
+.ember-gift {
+    margin-top: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    background: rgba(255, 183, 197, 0.18);
+    backdrop-filter: blur(3px);
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    border-radius: 60px;
+    border: 1px solid rgba(255, 183, 197, 0.55);
+    color: #fff0f1;
+    letter-spacing: 0.2px;
+}
+
+@media (max-width: 550px) {
+    .charcoal-ember-card {
+        max-width: 95%;
+        aspect-ratio: 1 / 0.75;
+    }
+    .ember-inner {
+        padding: 0.6rem 1rem;
+    }
+    .ember-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+    }
+    .ember-line {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+    .ember-gift {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        margin-top: 0.2rem;
+        white-space: normal;
+    }
+    .stars-3d {
+        font-size: 1.4rem;
+        letter-spacing: 4px;
+    }
+    .ember-icon {
+        font-size: 0.7rem;
+        width: 1rem;
+    }
+}
+
+/* ========== WEDDING COUNTDOWN BANNER (fixed for desktop) ========== */
+.countdown-banner {
+    width: 100%;
+    background: #31231a;
+    border-top: 1px solid rgba(255,240,241,0.1);
+    border-bottom: 1px solid rgba(255,240,241,0.1);
+    position: relative;
+    z-index: 2;
+}
+
+.countdown-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.8rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+}
+
+.countdown-top-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.countdown-rule {
+    width: 40px;
+    height: 1px;
+    background: rgba(255,240,241,0.2);
+}
+
+.countdown-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,240,241,0.4);
+}
+
+.countdown-phrase {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1rem;
+    color: rgba(255,240,241,0.85);
+}
+
+.countdown-units {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.countdown-unit {
+    padding: 0 0.8rem;
+    text-align: center;
+    border-left: 1px solid rgba(255,240,241,0.1);
+}
+.countdown-unit:first-child {
+    border-left: none;
+}
+
+.countdown-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #fff0f1;
+    display: block;
+    line-height: 1;
+}
+
+.countdown-lbl {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,240,241,0.35);
+    display: block;
+    margin-top: 0.2rem;
+}
+
+/* Make header banner image larger (zoomed) on mobile */
+@media (max-width: 768px) {
+    .wedding-banner-img {
+        height: 140px;
+        object-fit: cover;
+        object-position: center 30%;
+    }
+    /* Countdown on mobile – keep as is (already fine) */
+    .countdown-inner {
+        padding: 1.2rem 1rem;
+    }
+    .countdown-num {
+        font-size: 2rem;
+    }
+    .countdown-lbl {
+        font-size: 0.5rem;
+    }
+    .countdown-phrase {
+        font-size: 0.85rem;
     }
 }

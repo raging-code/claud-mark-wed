@@ -340,7 +340,7 @@ audio.addEventListener('ended', () => {
     }
 })();
 
-// ========== SAKURA PETALS ANIMATION (single global set) ==========
+// ========== SAKURA PETALS ANIMATION ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
@@ -398,7 +398,7 @@ audio.addEventListener('ended', () => {
     }
 })();
 
-// ========== LOVE STORY LIGHTBOX (with WebP fallback) ==========
+// ========== LOVE STORY LIGHTBOX ==========
 (function() {
     const lightbox = document.getElementById('loveLightbox');
     const lightboxImg = document.getElementById('lightboxImg');
@@ -444,7 +444,6 @@ audio.addEventListener('ended', () => {
         if (lightboxImg && imagesArray[currentImageIndex]) {
             const originalSrc = imagesArray[currentImageIndex];
             lightboxImg.src = originalSrc;
-            // Fallback: if WebP fails, try .jpg
             lightboxImg.onerror = function() {
                 if (originalSrc.endsWith('.webp')) {
                     this.src = originalSrc.replace('.webp', '.jpg');
@@ -489,4 +488,75 @@ audio.addEventListener('ended', () => {
         if (e.key === 'ArrowRight') nextImage();
         if (e.key === 'ArrowLeft') prevImage();
     });
+})();
+
+// ========== ATTIRE CARD ENTRANCE ANIMATION ==========
+(function() {
+    function startAttireAnimation() {
+        const attireCard = document.querySelector('.attire-card-c');
+        if (!attireCard) return;
+        if (attireCard.classList.contains('animate-entrance')) return;
+        attireCard.classList.add('animate-entrance');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startAttireAnimation();
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    
+    const target = document.querySelector('.attire-card-c');
+    if (target) {
+        observer.observe(target);
+        if (target.getBoundingClientRect().top < window.innerHeight - 100) {
+            startAttireAnimation();
+        }
+    }
+})();
+
+// ========== SHARE MOMENT BLOCK ANIMATION ==========
+(function() {
+    const shareBlock = document.getElementById('shareMomentBlock');
+    if (!shareBlock) return;
+    
+    const shareObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                shareBlock.classList.add('animate-share');
+                shareObserver.unobserve(shareBlock);
+            }
+        });
+    }, { threshold: 0.2, rootMargin: "0px 0px -20px 0px" });
+    
+    shareObserver.observe(shareBlock);
+    if (shareBlock.getBoundingClientRect().top < window.innerHeight - 100) {
+        shareBlock.classList.add('animate-share');
+        shareObserver.unobserve(shareBlock);
+    }
+})();
+
+// ========== CHARCOAL EMBER CARD SCROLL ANIMATION (NEW) ==========
+(function() {
+    const emberCard = document.getElementById('charcoalEmberCard');
+    if (!emberCard) return;
+
+    const emberObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                emberCard.classList.add('animate-ember');
+                emberObserver.unobserve(emberCard); // only animate once
+            }
+        });
+    }, { threshold: 0.3, rootMargin: "0px 0px -20px 0px" }); // trigger when 30% visible
+
+    emberObserver.observe(emberCard);
+
+    // fallback if already visible
+    if (emberCard.getBoundingClientRect().top < window.innerHeight - 100) {
+        emberCard.classList.add('animate-ember');
+        emberObserver.unobserve(emberCard);
+    }
 })();
