@@ -1,4 +1,4 @@
-/* ===== SAKURA THEME (existing) ===== */
+/* ===== SAKURA THEME ===== */
 :root {
     --sakura-pink: #ffb7c5;
     --sakura-dark: #ffb7c5;
@@ -50,13 +50,13 @@ h1, h2, h3, h4, h5, h6,
     color: var(--sakura-pink) !important;
 }
 
-/* Hero Section - ensure it sits above petals */
+/* Hero Section - above petals */
 .hero-section {
     width: 100%;
     margin-bottom: -10px;
     height: auto;
     position: relative;
-    z-index: 2;  /* above petals */
+    z-index: 20;
 }
 
 .hero-image-wrapper {
@@ -86,8 +86,8 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
     line-height: 0;
     position: relative;
-    z-index: 2;  /* above petals */
-    background: #fff0f1; /* fallback */
+    z-index: 20;
+    background: #fff0f1;
 }
 
 .wedding-banner-img {
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, h6,
     max-width: 500px;
     width: 100%;
     position: relative;
-    z-index: 10;
+    z-index: 20;
     border-radius: 16px !important;
 }
 
@@ -161,7 +161,7 @@ h1, h2, h3, h4, h5, h6,
     background: var(--japan-red);
 }
 
-/* Love Story (old) */
+/* Love Story (old) – not used but kept */
 .love-story-section {
     background: transparent !important;
     position: relative;
@@ -220,7 +220,7 @@ h1, h2, h3, h4, h5, h6,
     padding-top: 5px !important;
     margin-top: -19px !important;
     position: relative;
-    z-index: 1;
+    z-index: 20;
 }
 .video-frame-wrapper {
     max-width: 320px;
@@ -266,108 +266,10 @@ h1, h2, h3, h4, h5, h6,
     margin-top: 3px;
 }
 
-/* Venue Section */
-.venue-section {
-    background: transparent !important;
-    position: relative;
-    z-index: 1;
-    padding-top: 1rem;
-    margin-top: -1rem;
-}
-.cinematic-venue {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 25px 40px rgba(0,0,0,0.12);
-    max-width: 1100px;
-    margin: 0 auto;
-}
-.cinematic-venue img {
-    width: 100%;
-    height: 500px;
-    object-fit: cover;
-    transition: transform 0.5s;
-    display: block;
-}
-.cinematic-venue:hover img {
-    transform: scale(1.02);
-}
-.cinematic-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-    padding: 1.5rem 2rem;
-    text-align: center;
-}
-.venue-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: stretch;
-}
-.venue-item {
-    flex: 1;
-    max-width: 280px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: white;
-    text-shadow: 1px 0 0 rgba(0,0,0,0.8), -1px 0 0 rgba(0,0,0,0.8), 0 1px 0 rgba(0,0,0,0.8), 0 -1px 0 rgba(0,0,0,0.8);
-}
-.venue-details {
-    height: 130px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-.venue-details h4,
-.venue-details p {
-    margin: 0;
-    line-height: 1.3;
-}
-.venue-details h4 {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    font-weight: 600;
-}
-.venue-details p {
-    font-size: 1.1rem;
-}
-.venue-details .small-line {
-    font-size: 1rem;
-}
-.map-btn-venue {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.9);
-    color: #2c241f;
-    padding: 6px 18px;
-    border-radius: 40px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: all 0.2s;
-    margin-top: 12px;
-    text-shadow: none;
-    align-self: center;
-}
-.map-btn-venue:hover {
-    background: #ffb7c5;
-    color: #2c241f;
-    transform: translateY(-2px);
-}
-
 /* FAQ Section */
 .faq-section {
     position: relative;
-    z-index: 1;
+    z-index: 20;
     padding-top: 1rem;
     margin-top: -1rem;
 }
@@ -430,6 +332,12 @@ h1, h2, h3, h4, h5, h6,
     gap: 8px;
 }
 
+@media (min-width: 992px) {
+    .accordion-button .faq-question-text {
+        font-size: 0.9rem !important;
+    }
+}
+
 .accordion-button:not(.collapsed) {
     background-color: #fff7f0 !important;
     color: #a55a3a !important;
@@ -468,7 +376,7 @@ h1, h2, h3, h4, h5, h6,
 .rsvp-section {
     background: transparent !important;
     position: relative;
-    z-index: 1;
+    z-index: 20;
     padding-top: 0.5rem;
     margin-top: -1rem;
 }
@@ -614,7 +522,7 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
 }
 
-/* Fixed Sakura Petals - stays behind hero and banner */
+/* ========== GLOBAL SAKURA PETALS – ABOVE BACKGROUNDS, BELOW CONTENT ========== */
 .sakura-petals {
     position: fixed;
     top: 0;
@@ -622,7 +530,7 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
     height: 100vh;
     pointer-events: none;
-    z-index: 1;  /* lower than hero/banner */
+    z-index: 10;
     overflow: hidden;
     background: transparent;
 }
@@ -632,13 +540,13 @@ footer {
     color: #9b6b6b;
     border-top: 1px solid #ffd9d9;
     position: relative;
-    z-index: 1;
+    z-index: 20;
 }
 
 /* Gallery Styles */
 .prenup-gallery-section {
     position: relative;
-    z-index: 1;
+    z-index: 20;
     padding-top: 0.5rem;
     margin-top: -1rem;
 }
@@ -647,7 +555,7 @@ footer {
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    z-index: 1;
+    z-index: 20;
 }
 
 .gallery-box {
@@ -866,13 +774,12 @@ footer {
     width: 100%;
     height: calc(100% - 50px);
     background-color: #fff0f1;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
 }
-
 .love-story-title-wrapper {
     position: relative;
-    z-index: 2;
+    z-index: 20;
     margin-bottom: 1.2rem;
 }
 
@@ -909,7 +816,7 @@ footer {
 
 .love-grid-3x2 {
     position: relative;
-    z-index: 2;
+    z-index: 20;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
@@ -919,7 +826,7 @@ footer {
 
 .love-card {
     position: relative;
-    z-index: 2;
+    z-index: 20;
     background: white;
     border-radius: 28px;
     overflow: hidden;
@@ -1158,10 +1065,10 @@ footer {
         font-size: 1.4rem;
     }
     .accordion-button {
-    font-size: clamp(0.85rem, 3.5vw, 1rem) !important;
-    font-weight: 600 !important;
-    padding: 1rem 1.2rem !important;
-}
+        font-size: clamp(0.85rem, 3.5vw, 1rem) !important;
+        font-weight: 600 !important;
+        padding: 1rem 1.2rem !important;
+    }
     .accordion-body {
         font-size: 0.85rem;
         padding: 0.8rem 1rem;
@@ -1171,37 +1078,6 @@ footer {
     }
     .polaroid-caption h4 {
         font-size: 1rem;
-    }
-    .cinematic-venue img {
-        height: 400px;
-    }
-    .cinematic-overlay {
-        padding: 1rem;
-    }
-    .venue-buttons {
-        gap: 12px;
-    }
-    .venue-item {
-        min-width: 130px;
-        max-width: 200px;
-    }
-    .venue-details {
-        height: 100px;
-    }
-    .venue-details h4 {
-        font-size: 1rem;
-    }
-    .venue-details p {
-        font-size: 0.7rem;
-    }
-    .venue-details .small-line {
-        font-size: 0.65rem;
-    }
-    .map-btn-venue {
-        margin-top: 8px;
-        padding: 4px 8px;
-        font-size: 0.6rem;
-        white-space: nowrap;
     }
     .love-grid-3x2 {
         gap: 20px;
@@ -1278,9 +1154,9 @@ footer {
         bottom: 20px;
     }
     .accordion-button {
-    font-size: 0.85rem !important;
-    padding: 0.8rem 1rem !important;
-}
+        font-size: 0.85rem !important;
+        padding: 0.8rem 1rem !important;
+    }
 }
 
 .elegant-divider {
@@ -1290,16 +1166,16 @@ footer {
     border-radius: 2px;
 }
 
-/* ===== ATTIRE GUIDE (existing) ===== */
+/* ===== ATTIRE GUIDE ===== */
 .attire-guide-section {
     position: relative;
-    z-index: 1;
+    z-index: 20;
     background: transparent;
 }
 
 .attire-card-c {
     position: relative;
-    z-index: 2;
+    z-index: 20;
     background: #fff;
     border: 5px solid #fff;
     box-shadow: 0 20px 50px rgba(49,35,26,0.1);
@@ -1464,7 +1340,7 @@ footer {
 .attire-col.him ul li { --x-offset: -12px; }
 .attire-col.her ul li { --x-offset: 12px; }
 
-/* entrance animations */
+/* Entrance animations */
 .attire-card-c.animate-entrance .attire-ornament,
 .attire-card-c.animate-entrance .attire-title,
 .attire-card-c.animate-entrance .attire-subtitle {
@@ -1621,7 +1497,7 @@ footer {
     }
 }
 
-/* ========== CHARCOAL EMBER · PINK GLOW CARD (SHORTER HEIGHT – NO SPACING CHANGES) ========== */
+/* ========== CHARCOAL EMBER CARD ========== */
 .charcoal-ember-card {
     max-width: 420px;
     width: 100%;
@@ -1636,6 +1512,8 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    z-index: 20;
 }
 .charcoal-ember-card:hover {
     transform: translateY(-5px);
@@ -1654,6 +1532,19 @@ footer {
     height: 100%;
 }
 
+.heart-3d {
+    color: #ffb7c5;
+    text-shadow: 0 1px 0px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.4), 0 0 8px rgba(255,183,197,0.7);
+    margin: 0 4px;
+    font-size: 1.2rem;
+    display: inline-block;
+    transform: scale(1);
+    transition: transform 0.2s;
+}
+.ember-title:hover .heart-3d {
+    transform: scale(1.1);
+}
+
 .stars-3d,
 .ember-title,
 .ember-line,
@@ -1661,9 +1552,6 @@ footer {
     opacity: 0;
 }
 
-.charcoal-ember-card.animate-ember .stars-3d {
-    animation: slideFromTop 2s ease forwards;
-}
 .charcoal-ember-card.animate-ember .ember-title {
     animation: slideFromTop 2s ease forwards;
     animation-delay: 0.1s;
@@ -1690,14 +1578,6 @@ footer {
 @keyframes slideFromBottom {
     0% { opacity: 0; transform: translateY(60px); }
     100% { opacity: 1; transform: translateY(0); }
-}
-
-.stars-3d {
-    font-size: 1.8rem;
-    letter-spacing: 8px;
-    margin-bottom: 0.2rem;
-    color: #ffb7c5;
-    text-shadow: 0 1px 0px rgba(255,255,255,0.4), 0 2px 0px rgba(0,0,0,0.2), 0 3px 5px rgba(0,0,0,0.3), 0 0 6px rgba(255,183,197,0.7);
 }
 
 .ember-title {
@@ -1751,46 +1631,55 @@ footer {
     letter-spacing: 0.2px;
 }
 
+/* Mobile fixes for ember card */
 @media (max-width: 550px) {
     .charcoal-ember-card {
         max-width: 95%;
-        aspect-ratio: 1 / 0.75;
+        aspect-ratio: auto;
+        min-height: 280px;
+        margin: 20px auto 12px auto;
     }
     .ember-inner {
-        padding: 0.6rem 1rem;
+        padding: 1rem 0.8rem;
+        gap: 0.5rem;
     }
     .ember-title {
-        font-size: 1.4rem;
-        margin-bottom: 0.2rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+    }
+    .heart-3d {
+        font-size: 1rem;
+        margin: 0 2px;
     }
     .ember-line {
-        font-size: 0.8rem;
-        gap: 4px;
+        font-size: 0.85rem;
+        gap: 6px;
     }
     .ember-gift {
-        font-size: 0.75rem;
-        padding: 0.2rem 0.5rem;
-        margin-top: 0.2rem;
+        font-size: 0.8rem;
+        padding: 0.35rem 0.8rem;
+        margin-top: 0.4rem;
         white-space: normal;
     }
-    .stars-3d {
-        font-size: 1.4rem;
-        letter-spacing: 4px;
-    }
     .ember-icon {
-        font-size: 0.7rem;
-        width: 1rem;
+        font-size: 0.75rem;
+        width: 1.1rem;
     }
 }
 
-/* ========== WEDDING COUNTDOWN BANNER (fixed for desktop) ========== */
+/* ========== WEDDING COUNTDOWN BANNER ========== */
 .countdown-banner {
     width: 100%;
     background: #31231a;
     border-top: 1px solid rgba(255,240,241,0.1);
     border-bottom: 1px solid rgba(255,240,241,0.1);
     position: relative;
-    z-index: 2;
+    z-index: 20;
 }
 
 .countdown-inner {
@@ -1802,29 +1691,6 @@ footer {
     align-items: center;
     gap: 0.3rem;
     text-align: center;
-}
-
-.countdown-top-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.countdown-rule {
-    width: 40px;
-    height: 1px;
-    background: rgba(255,240,241,0.2);
-}
-
-.countdown-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-weight: 200;
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: rgba(255,240,241,0.4);
 }
 
 .countdown-phrase {
@@ -1871,14 +1737,12 @@ footer {
     margin-top: 0.2rem;
 }
 
-/* Make header banner image larger (zoomed) on mobile */
 @media (max-width: 768px) {
     .wedding-banner-img {
         height: 140px;
         object-fit: cover;
         object-position: center 30%;
     }
-    /* Countdown on mobile – keep as is (already fine) */
     .countdown-inner {
         padding: 1.2rem 1rem;
     }
@@ -1891,4 +1755,380 @@ footer {
     .countdown-phrase {
         font-size: 0.85rem;
     }
+}
+
+/* ========== VENUE SECTION ========== */
+.venue-section {
+    width: 100%;
+    padding: 2rem 0;
+    position: relative;
+    background: transparent;
+}
+
+.venue-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #31231a;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.content-container {
+    position: relative;
+    z-index: 20;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.section-heading {
+    font-size: 32px;
+    font-weight: 500;
+    color: #fff0f1;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: -0.2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'EB Garamond', serif;
+}
+
+.heading-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.divider-line {
+    width: 55px;
+    height: 1px;
+    background: #ffb7c5;
+    opacity: 0.7;
+}
+
+.divider-line.thin {
+    width: 25px;
+    opacity: 0.4;
+}
+
+.divider-diamond {
+    width: 5px;
+    height: 5px;
+    background: #ffb7c5;
+    transform: rotate(45deg);
+    display: inline-block;
+}
+
+.venue-card {
+    background: #4a2e22;
+    border: 0.5px solid #5e3a2a;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    height: 100%;
+    position: relative;
+    z-index: 20;
+}
+
+.venue-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.3);
+}
+
+.venue-img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    display: block;
+    background-color: #fff0f1;
+}
+
+.venue-body {
+    padding: 0.8rem 1rem 1rem;
+}
+
+.venue-tag {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #ffb7c5;
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-family: 'EB Garamond', serif;
+}
+
+.venue-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff0f1;
+    margin-bottom: 4px;
+    line-height: 1.2;
+    font-family: 'EB Garamond', serif;
+}
+
+.venue-addr {
+    font-size: 11px;
+    color: #e2c7bd;
+    margin-bottom: 10px;
+    line-height: 1.35;
+}
+
+/* ===== WHITE BUTTON – KEEP ORIGINAL SVG MAP ICON ===== */
+.map-btn {
+    background: white !important;
+    color: #31231a !important;
+    border: 1px solid #d4af37 !important;
+    border-radius: 12px !important;      /* less rounded than 40px */
+    padding: 6px 14px !important;
+    font-size: 12px;
+    width: auto !important;              /* not full width – shrinks to content */
+    min-width: 160px;                   /* optional: ensures reasonable click area */
+    cursor: pointer;
+    display: inline-flex;               /* allows width: auto + centering */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    margin: 0 auto;                     /* centers the button in the card */
+}
+.map-btn:hover {
+    background: #ffb7c5 !important;
+    color: #31231a !important;
+    border-color: #ffb7c5 !important;
+    transform: translateY(-2px);
+}
+
+.map-icon {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* ensure two columns side-by-side on all screen sizes */
+.row.g-3 {
+    --bs-gutter-y: 0.8rem;
+    --bs-gutter-x: 0.8rem;
+}
+.col-6 {
+    flex: 0 0 auto;
+    width: 50%;
+}
+
+/* mobile fine-tuning */
+@media (max-width: 768px) {
+    .venue-section {
+        padding: 1.5rem 0;
+    }
+    .section-heading {
+        font-size: 28px;
+        margin-bottom: 16px;
+    }
+    .venue-name {
+        font-size: 0.9rem;
+    }
+    .venue-addr {
+        font-size: 10px;
+    }
+    .map-btn {
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+    .content-container {
+        padding: 0 0.75rem;
+    }
+    .venue-tag {
+        font-size: 9px;
+    }
+    .venue-body {
+    text-align: center;   /* ensures inline-flex button is centered */
+}
+}
+
+/* ========== NEW SAVE THE DATE COMPONENT STYLES ========== */
+/* ========== SAVE THE DATE – TIGHTER SPACING, LINES VISIBLE ========== */
+.std-section {
+    position: relative;
+    z-index: 20;
+    background: transparent;
+    padding: 0.5rem 1rem 0.5rem;
+}
+.std-card {
+    background: #fff0f1;
+    border: 1px solid #31231a;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem;
+    position: relative;
+}
+.std-card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 0.5px solid #ffb7c5;
+    pointer-events: none;
+}
+.std-heading {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 24px;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: 0.2em;
+    color: #31231a;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+    animation: fadeUpHeadingStd 1.2s ease 0s forwards;
+}
+/* ORNAMENT LINES – ensure they are visible */
+.ornament-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0.5rem 0 !important;   /* override Bootstrap mb-4/mt-4 */
+}
+.ornament-line .line-seg {
+    flex: 1;
+    height: 1px;                   /* from 0.5px to 1px for visibility */
+    background: #31231a;
+    opacity: 0.35;
+}
+.ornament-line .orn-center {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+}
+.orn-diamond {
+    width: 6px;
+    height: 6px;
+    background: #ffb7c5;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+.orn-diamond.sm {
+    width: 4px;
+    height: 4px;
+    background: transparent;
+    border: 0.5px solid #f0a0b2;
+}
+.photos-row {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.photos-sep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    align-self: center;
+    opacity: 0;
+    animation: fadeInStd 1s ease 1.5s forwards;
+}
+.sep-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffb7c5;
+}
+.photo-unit {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.photo-box {
+    width: 100%;
+    aspect-ratio: 2046 / 2730;
+    background: #f9dde3;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+/* animations (unchanged but keep keyframes unique) */
+.photo-unit.from-left {
+    opacity: 0;
+    transform: translateX(-80px);
+    animation: slideFromLeftStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+.photo-unit.from-bottom {
+    opacity: 0;
+    transform: translateY(80px);
+    animation: slideFromBottomStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+.photo-unit.from-right {
+    opacity: 0;
+    transform: translateX(80px);
+    animation: slideFromRightStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+@keyframes slideFromLeftStd {
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideFromBottomStd {
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideFromRightStd {
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeUpHeadingStd {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 0.85; transform: translateY(0); }
+}
+.ornament-line:first-of-type {
+    opacity: 0;
+    animation: fadeUpStd 1.2s ease 0.15s forwards;
+}
+@keyframes fadeUpStd {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 0.75; transform: translateY(0); }
+}
+.ornament-line:last-of-type {
+    animation: fadeUpLastStd 1.2s ease 2.4s forwards;
+    opacity: 0;
+}
+@keyframes fadeUpLastStd {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInStd {
+    to { opacity: 1; }
+}
+@media (max-width: 520px) {
+    .std-card {
+        padding: 1rem;
+    }
+    .std-heading {
+        font-size: 18px;
+        letter-spacing: 0.15em;
+    }
+    .photos-row {
+        gap: 0.2rem;
+    }
+    .ornament-line {
+        margin: 0.25rem 0 !important;
+    }
+}
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Sakura Wedding | Forever Begins</title>
+    <title>Claudine and Mark Wedding</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +16,164 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- TYPOGRAPHY OVERRIDE: HEADING = EB Garamond, BODY = Inter -->
+    <style>
+        /* ----- GLOBAL RESET: BODY TEXT (INTER) ----- */
+        body, 
+        p, 
+        span:not(.countdown-num):not(.countdown-lbl):not(.love-card-overlay i),
+        li, 
+        div:not(.countdown-unit):not(.countdown-inner):not(.gallery-counter):not(.lightbox-caption),
+        .form-label, 
+        .form-control, 
+        .accordion-body, 
+        .faq-question-text,
+        .btn-submit,
+        .dropdown-selected,
+        .dropdown-option,
+        .instruction-text,
+        .share-tagline,
+        .tagline-share,
+        .hashtag-eb-share,
+        .small-line,
+        .countdown-phrase,
+        .countdown-lbl,
+        .countdown-num,
+        .love-date,
+        .venue-details p,
+        .map-btn-venue,
+        .attire-col ul li,
+        .ember-line span,
+        .ember-gift,
+        .audio-card .small,
+        .swipe-hint,
+        .proposal-date,
+        .custom-dropdown *,
+        #rsvpMessage,
+        footer p,
+        .cinematic-overlay .venue-details h4,
+        .attire-palette-hex,
+        .attire-palette-label,
+        .attire-subtitle,
+        .love-caption p,
+        .love-story-quote,
+        .countdown-eyebrow {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* specific numeric counters inside gallery should also be Inter but preserve design */
+        .gallery-counter strong,
+        .gallery-counter span {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* ----- ALL HEADINGS: EB Garamond (serif elegance) ----- */
+        h1, h2, h3, h4, h5, h6,
+        .serif,
+        .section-title,
+        .love-story-main-title,
+        .design-title,
+        .ember-title,
+        .attire-title,
+        .midnight-header h2,
+        .love-card h4,
+        .attire-col h4,
+        .venue-details h4,
+        .cinematic-overlay .venue-details h4,
+        .charcoal-ember-card .ember-title,
+        .faq-header h2,
+        .countdown-eyebrow,
+        .countdown-phrase,
+        .attire-title,
+        .attire-subtitle,
+        .share-hashtag .hashtag-eb-share,
+        .love-story-main-title,
+        .love-story-quote,
+        .attire-palette-label,
+        .attire-col-tag,
+        .ember-title,
+        .attire-ornament,
+        .wedding-banner *,
+        .rsvp-card .section-title,
+        .love-story-title-wrapper h2 {
+            font-family: 'EB Garamond', serif !important;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        /* specific heading weights */
+        h1, h2, .section-title, .love-story-main-title {
+            font-weight: 600 !important;
+        }
+        
+        .love-card h4, .attire-col h4 {
+            font-weight: 600 !important;
+            letter-spacing: 0.01em;
+        }
+        
+        .countdown-eyebrow, .attire-col-tag {
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        
+        .ember-title {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        /* Hashtag specific: bold EB Garamond */
+        .hashtag-eb-share {
+            font-weight: 800 !important;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+        }
+        
+        /* maintain button text & inputs not heading */
+        button, .btn, .nav-btn-ext, .map-btn-venue, .btn-submit {
+            font-family: 'Inter', sans-serif !important;
+        }
+        
+        /* ensure audio progress & slider text */
+        .progress-container span, #currentTime, #duration {
+            font-family: 'Inter', sans-serif !important;
+        }
+        
+        /* keep sakura petals & special icons */
+        .sakura-petals, .fas, .far, .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", system-ui, sans-serif;
+        }
+        
+        /* preserve some elegance for quote */
+        .love-story-quote {
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        /* countdown numbers get extra boldness but still Inter */
+        .countdown-num {
+            font-weight: 700 !important;
+            font-size: 2.2rem;
+        }
+        
+        /* avoid overriding lightbox close & arrows font icons */
+        .lightbox-close, .lightbox-prev, .lightbox-next {
+            font-family: system-ui, sans-serif;
+        }
+        
+        /* small adjustment for venue buttons */
+        .venue-buttons .map-btn-venue {
+            font-weight: 500;
+        }
+        
+        /* ensure rsvp form labels are clean */
+        .form-label {
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
 
@@ -31,19 +189,13 @@
         </div>
     </section>
 
-    <!-- NEW BANNER IMAGE (replaces the old logo + "WE'RE GETTING MARRIED" section) -->
     <div class="wedding-banner">
         <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager">
     </div>
 
-    <!-- ========== WEDDING COUNTDOWN (touching the banner) ========== -->
+    <!-- ========== WEDDING COUNTDOWN ========== -->
     <div class="countdown-banner">
         <div class="countdown-inner">
-            <div class="countdown-top-row">
-                <div class="countdown-rule"></div>
-                <span class="countdown-eyebrow">until forever begins</span>
-                <div class="countdown-rule"></div>
-            </div>
             <span class="countdown-phrase">The beginning of forever starts in...</span>
             <div class="countdown-units">
                 <div class="countdown-unit"><span class="countdown-num" id="days">—</span><span class="countdown-lbl">Days</span></div>
@@ -54,6 +206,7 @@
         </div>
     </div>
 
+    <!-- ========== THEME SONG / AUDIO CARD ========== -->
     <div class="container mt-4 mb-5">
         <div class="audio-card shadow-sm rounded-3 mx-auto">
             <div class="audio-controls d-flex gap-2">
@@ -68,6 +221,60 @@
             <audio id="themeAudio" src="assets/audio/theme-song.mp3" preload="auto"></audio>
         </div>
     </div>
+
+    <!-- ========== NEW: SAVE THE DATE COMPONENT ========== -->
+    <section class="std-section">
+        <div class="std-card">
+            <p class="std-heading">Please Save the Date</p>
+            <div class="ornament-line mb-4">
+                <div class="line-seg"></div>
+                <div class="orn-center">
+                    <div class="orn-diamond sm"></div>
+                    <div class="orn-diamond"></div>
+                    <div class="orn-diamond sm"></div>
+                </div>
+                <div class="line-seg"></div>
+            </div>
+
+            <div class="photos-row">
+                <div class="photo-unit from-left">
+                    <div class="photo-box">
+                        <img src="assets/images/06.webp" alt="Save the date left" loading="lazy">
+                    </div>
+                </div>
+                <div class="photos-sep">
+                    <div class="sep-dot"></div>
+                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
+                    <div class="sep-dot"></div>
+                </div>
+                <div class="photo-unit from-bottom">
+                    <div class="photo-box">
+                        <img src="assets/images/25.webp" alt="Save the date center" loading="lazy">
+                    </div>
+                </div>
+                <div class="photos-sep">
+                    <div class="sep-dot"></div>
+                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
+                    <div class="sep-dot"></div>
+                </div>
+                <div class="photo-unit from-right">
+                    <div class="photo-box">
+                        <img src="assets/images/26.webp" alt="Save the date right" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ornament-line mt-4">
+                <div class="line-seg"></div>
+                <div class="orn-center">
+                    <div class="orn-diamond sm"></div>
+                    <div class="orn-diamond"></div>
+                    <div class="orn-diamond sm"></div>
+                </div>
+                <div class="line-seg"></div>
+            </div>
+        </div>
+    </section>
 
     <!-- ========== PRENUP GALLERY ========== -->
     <section class="prenup-gallery-section py-4">
@@ -217,46 +424,63 @@
         </div>
     </section>
 
-    <section class="venue-section py-5">
-        <div class="container">
-            <div class="text-center mb-2">
-                <h2 class="serif fs-2 mt-2" style="color: #3f2c21;">The Venue</h2>
-                <div class="mx-auto my-2" style="width: 60px; height: 2px; background: #e1cfc0;"></div>
-            </div>
-            <div class="cinematic-venue">
-                <picture>
-                    <source srcset="assets/images/venue.webp" type="image/webp">
-                    <img src="assets/images/venue.jpg" alt="Wedding Venue" loading="lazy" width="1200" height="600">
-                </picture>
-                <div class="cinematic-overlay">
-                    <div class="venue-buttons">
-                        <div class="venue-item">
-                            <div class="venue-details">
-                                <h4><i class="fas fa-church me-2"></i> Ceremony</h4>
-                                <p><i class="fas fa-map-marker-alt me-2"></i> Hall of Justice Makati City</p>
-                                <p class="small-line">6th Floor RTC Branch 236</p>
-                            </div>
-                            <a href="https://maps.app.goo.gl/VeGL5a7kaaZ6rQ2K6" target="_blank" rel="noopener noreferrer" class="map-btn-venue">
-                                <i class="fas fa-map-marked-alt me-2"></i> Open in Google Maps
-                            </a>
+    <!-- ========== VENUE SECTION ========== -->
+    <div class="venue-section">
+        <div class="content-container">
+            <h2 class="section-heading">
+                Where Love Unfolds
+                <span class="heading-divider">
+                    <span class="divider-line thin"></span>
+                    <span class="divider-line"></span>
+                    <span class="divider-diamond"></span>
+                    <span class="divider-line"></span>
+                    <span class="divider-line thin"></span>
+                </span>
+            </h2>
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="venue-card">
+                        <img class="venue-img" src="assets/images/ceremony.webp" alt="Ceremony venue: Hall of Justice Makati">
+                        <div class="venue-body">
+                            <div class="venue-tag">— Ceremony —</div>
+                            <div class="venue-name">Hall of Justice Makati City</div>
+                            <div class="venue-addr">6th Floor RTC Branch 236, Makati, Metro Manila</div>
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/6DVMnTif36NG1L827', '_blank')">
+                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                    <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
+                                    <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
+                                </svg>
+                                Open in Google Maps
+                            </button>
                         </div>
-                        <div class="venue-item">
-                            <div class="venue-details">
-                                <h4><i class="fas fa-utensils me-2"></i> Reception</h4>
-                                <p><i class="fas fa-map-marker-alt me-2"></i> City Garden GRAND Hotel Makati</p>
-                                <p class="small-line">8008 Makati Ave, Kalayaan Ave, Makati City</p>
-                            </div>
-                            <a href="https://maps.app.goo.gl/9XTBrPhUSVMTCx1n6" target="_blank" rel="noopener noreferrer" class="map-btn-venue">
-                                <i class="fas fa-map-marked-alt me-2"></i> Open in Google Maps
-                            </a>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="venue-card">
+                        <img class="venue-img" src="assets/images/reception.webp" alt="Reception venue: City Garden GRAND Hotel Makati">
+                        <div class="venue-body">
+                            <div class="venue-tag">— Reception —</div>
+                            <div class="venue-name">City Garden GRAND Hotel Makati</div>
+                            <div class="venue-addr">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</div>
+                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/NYs9tP5MVKtoPbb9A', '_blank')">
+                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                    <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
+                                    <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
+                                </svg>
+                                Open in Google Maps
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- ========== ATTIRE GUIDE (with new charcoal ember card) ========== -->
+    <!-- ========== ATTIRE GUIDE ========== -->
     <section class="attire-guide-section py-4">
         <div class="container">
             <div class="attire-card-c">
@@ -265,7 +489,6 @@
                         <div class="attire-ornament text-center">✦  ✦  ✦</div>
                         <div class="attire-title text-center">Attire Guide</div>
                         <div class="attire-subtitle text-center">Please dress to celebrate with us</div>
-
                         <div class="attire-photo" id="attirePhotoContainer">
                             <img src="assets/images/dresscode.webp" alt="Dress Code" class="attire-img"
                                  onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
@@ -279,7 +502,6 @@
                                 <span style="font-size:0.6rem; margin-top:4px;">(transparent bg)</span>
                             </div>
                         </div>
-
                         <div class="attire-palette-row">
                             <div class="attire-palette-item">
                                 <div class="attire-palette-label">LADIES</div>
@@ -292,9 +514,7 @@
                                 <div class="attire-palette-hex">#A48459</div>
                             </div>
                         </div>
-
                         <hr class="attire-divider">
-
                         <div class="row g-2">
                             <div class="col-6 text-center">
                                 <div class="attire-col her">
@@ -321,8 +541,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- SHARE MOMENT BLOCK -->
                         <div class="share-moment-wrapper mt-3 pt-2" id="shareMomentBlock">
                             <hr class="attire-divider">
                             <div class="text-center">
@@ -334,7 +552,7 @@
                                         <span>✦</span>
                                         <span>📸</span>
                                     </div>
-                                    <div class="instruction-text" style="font-family: 'Inter', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #b6a588; margin-top: 6px;">share your perspective</div>
+                                    <div class="instruction-text">share your perspective</div>
                                 </div>
                                 <div class="share-tagline">
                                     <div class="tagline-share">
@@ -349,12 +567,15 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- CHARCOAL EMBER CARD -->
                         <div class="charcoal-ember-card" id="charcoalEmberCard">
                             <div class="ember-inner">
-                                <div class="stars-3d">✦ ✦ ✦</div>
-                                <h3 class="ember-title">A Little Note</h3>
+                                <h3 class="ember-title">
+                                    <i class="fas fa-heart heart-3d"></i>
+                                    <i class="fas fa-heart heart-3d"></i>
+                                    A Little Note
+                                    <i class="fas fa-heart heart-3d"></i>
+                                    <i class="fas fa-heart heart-3d"></i>
+                                </h3>
                                 <div class="ember-lines">
                                     <div class="ember-line"><i class="fas fa-fire ember-icon"></i> <span>Please arrive when the day begins</span></div>
                                     <div class="ember-line"><i class="fas fa-mug-hot ember-icon"></i> <span>Stay with us through every moment</span></div>
@@ -363,7 +584,6 @@
                                 <div class="ember-gift">✨ Your presence is the greatest gift ✨</div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -508,7 +728,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="js/script.js" defer></script>
     <script>
-        // Countdown script – updated to JUNE 25, 2026 @ 3:00 PM
         const WEDDING = new Date('2026-06-25T15:00:00');
         const pad = n => String(n).padStart(2, '0');
         function updateCountdown() {
