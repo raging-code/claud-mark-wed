@@ -1,197 +1,223 @@
 💍 Claudine & Mark Wedding Website
-HTML5 CSS3 JavaScript License: MIT
 
 A fully responsive single‑page wedding invitation website built with vanilla HTML, CSS, and JavaScript.
 Features a dynamic image gallery, love story timeline, countdown timer, RSVP form with Supabase backend, and an admin panel for guest management – all wrapped in a soft Sakura theme.
 
 📑 Table of Contents
 ✨ Features
+
 🛠 Tech Stack
+
 📁 Repository Structure
+
 🚀 Getting Started
+
 ⚙️ Configuration
+
 🔧 Backend Setup (RSVP & Admin)
+
 🎨 Customization
+
 🚢 Deployment
+
 ⚠️ Important Notes
+
 📄 License
+
 ✨ Features
 🎎 Hero image with animated floating Sakura petals
-⏳ Countdown timer to the big day (June 25, 2026)
+⏳ Countdown timer to the wedding day (June 25, 2026)
 🎵 Background music player with play/pause, mute, and seek
 📸 Prenup gallery – dynamic Swiper carousel auto‑loading images
 💕 Love story cards with lightbox image viewer
 🎥 Proposal video in a decorative frame
 📍 Venue cards with Google Maps links
-👗 Dress code & color palette guide
+👗 Dress code & colour palette guide
 📝 FAQ accordion for common wedding questions
 ✉️ RSVP form (submits to Supabase or a custom API)
 🔐 Admin panel (login‑protected) to view and manage RSVPs
 🌀 Scroll‑triggered animations throughout the page
 📱 Fully responsive – mobile‑first design with special breakpoints
+
 🛠 Tech Stack
 Layer	Technology
-Frontend	HTML5, CSS3, Vanilla ES6+
+Frontend	HTML5, CSS3, Vanilla JavaScript (ES6+)
 Libraries	Bootstrap 5.3 (accordion, grid), Swiper 11 (gallery)
 Icons	Bootstrap Icons, Font Awesome 6
-Fonts	Google Fonts (Inter, EB Garamond, Cormorant Garamond, Playfair Display…)
-Backend	Supabase (PostgreSQL, Auth, Row Level Security)
-Deployment	Fully static – works with Netlify, Vercel, GitHub Pages, or any web server
+Fonts	Google Fonts (Inter, EB Garamond, Cormorant Garamond, Playfair Display)
+Backend	Supabase – PostgreSQL, Auth, Row Level Security
+Hosting	Fully static – works with Netlify, Vercel, GitHub Pages, or any server
 📁 Repository Structure
-.
-├── index.html                # Main invitation page
+Folder layout of the project:
+
+text
+wedding-website/
+├── index.html                Main invitation page
 ├── css/
-│   └── style.css             # All custom styles (1400+ lines)
+│   └── style.css             All custom styles (1400+ lines)
 ├── js/
-│   └── script.js             # Audio player, Swiper, RSVP logic, animations
-├── admin.html                # Admin panel (login + RSVP manager)
+│   └── script.js             Audio player, Swiper, RSVP logic, animations
+├── admin.html                Admin panel (login + RSVP manager)
 ├── assets/
-│   ├── images/               # All images (hero, banner, gallery, love story…)
+│   ├── images/               All images (hero, banner, gallery, love story…)
 │   ├── videos/
-│   │   └── proposal.mp4      # Portrait video
+│   │   └── proposal.mp4      Portrait video
 │   └── audio/
-│       └── theme-song.mp3    # Background music
-├── setup.sql                 # Supabase database setup script (optional)
-└── README.md                 # You are here
-Note: The rsvp.js snippet provided in the original project is actually CSS for the map buttons. It is recommended to add those styles directly to css/style.css (they are already included there). If you have a separate rsvp.js file, verify its content – it should not contain CSS.
+│       └── theme-song.mp3    Background music
+├── setup.sql                 Supabase database setup script (optional)
+└── README.md                 You are here
+Note: The file rsvp.js originally provided contains only CSS for map buttons. Those styles are already in css/style.css. Double‑check any separate rsvp.js file – it should contain JavaScript, not CSS.
+
 🚀 Getting Started
 Prerequisites
-A modern web browser
-(Optional) Node.js to run a local server
-A Supabase account and project if you want a working RSVP backend
+✔ A modern web browser
+✔ (Optional) Node.js to run a local server
+✔ A Supabase account and project if you need the RSVP system
+
 Local Development
+
 Clone the repository
-git clone https://github.com/your-username/your-wedding-repo.git
-cd your-wedding-repo
+Run git clone https://github.com/your-username/your-wedding-repo.git and then cd your-wedding-repo.
+
 Add your assets
-Place all image, video, and audio files into the correct folders inside assets/. See Customization for specific filenames.
-Open in browser
-You can open index.html directly, but the RSVP form won’t work without a backend. For a proper local test, serve the folder using a simple HTTP server:
-npx serve .
-# OR
-python -m http.server 8000
-Set up the backend – go to Backend Setup.
+Place all image, video, and audio files into the correct folders inside assets/.
+Refer to the Customization section for exact file names.
+
+Launch a local server
+Opening index.html directly works, but the RSVP form requires a backend.
+Use a simple HTTP server for full testing:
+npx serve . or python -m http.server 8000.
+
+Configure the backend
+Proceed to Backend Setup to enable RSVP submissions and the admin panel.
+
 ⚙️ Configuration
-Most settings are edited directly inside the HTML and JavaScript files.
+Edit the following values directly in the source files.
 
 Wedding Date
-In index.html (near the bottom), change the date string:
-
+Find the script near the bottom of index.html and change the date:
 const WEDDING = new Date('2026-06-25T15:00:00');
+
 Supabase Credentials
-Open admin.html and replace the placeholder values:
-
+In admin.html, replace the placeholder lines:
 const SUPABASE_URL = 'https://<your-project-id>.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJh...'; // your public anon key
+const SUPABASE_ANON_KEY = 'eyJh...'; (your public anon key)
+
 Map Links
-Update the onclick URLs for the “Open in Maps” buttons:
+Update the onclick attributes of the “Open in Maps” buttons in index.html:
+onclick="window.open('https://maps.app.goo.gl/YOUR_LINK', '_blank')"
 
-<button class="map-btn" onclick="window.open('https://maps.app.goo.gl/YOUR_LINK', '_blank')">
 Countdown Phrase
-You can modify the countdown banner text directly in index.html:
-
+Inside the countdown banner (index.html) you can edit the line:
 <span class="countdown-phrase">The beginning of forever starts in...</span>
+
 🔧 Backend Setup (RSVP & Admin)
-The RSVP form and admin panel rely on a Supabase PostgreSQL database. Follow these steps:
+The RSVP system and admin panel use Supabase (PostgreSQL + Auth). Follow these steps to set it up.
 
-1. Create a Supabase Project
-Sign up at supabase.com, create a new project, and note your Project URL and anon public key.
+1. Create a Supabase project
+Go to supabase.com, create a new project, and note down the Project URL and anon (public) key.
 
-2. Set up the Database
-In your Supabase SQL Editor, run the script from setup.sql (or paste the following):
+2. Set up the database table
+In the Supabase SQL Editor, execute the following statements (or use the file setup.sql):
 
--- Create rsvp table if it doesn't exist
-CREATE TABLE IF NOT EXISTS rsvp (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  phone TEXT,
-  message TEXT,
-  attending BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
+Create the rsvp table, enable Row Level Security, create policies for anonymous inserts and authenticated access, and add an index.
 
--- Enable Row Level Security
+CREATE TABLE IF NOT EXISTS rsvp ( ... );
+
 ALTER TABLE rsvp ENABLE ROW LEVEL SECURITY;
 
--- Allow anonymous inserts (for the public form)
 CREATE POLICY "anon_insert" ON rsvp FOR INSERT WITH CHECK (true);
 
--- Allow authenticated users to view, update, delete
 CREATE POLICY "auth_select" ON rsvp FOR SELECT USING (auth.role() = 'authenticated');
+
 CREATE POLICY "auth_delete" ON rsvp FOR DELETE USING (auth.role() = 'authenticated');
+
 CREATE POLICY "auth_update" ON rsvp FOR UPDATE USING (auth.role() = 'authenticated');
 
--- Create an index for ordering
 CREATE INDEX IF NOT EXISTS idx_rsvp_created_at ON rsvp (created_at DESC);
-3. Create an Admin User
-Go to your Supabase project Authentication → Users and add a new user.
-Use this email and password to log into the admin panel (admin.html).
-4. Choose RSVP Submission Method
-The current script.js sends the form data to /api/rsvp. You have two options:
 
-Option A: Use Supabase Edge Function (Recommended)
-Create a Supabase Edge Function that inserts into the rsvp table, then update the fetch URL in script.js to your function’s endpoint. This keeps the database logic secure.
+3. Create an admin user
+In your Supabase dashboard, go to Authentication → Users and add a new user. Use these credentials to log into admin.html.
+
+4. Decide how RSVP data will be submitted
+
+The frontend currently sends data to /api/rsvp. You have two options:
+
+Option A (Recommended): Supabase Edge Function
+Write a small serverless function that inserts into the rsvp table, then update the fetch URL in js/script.js to point to that function.
 
 Option B: Insert directly from the frontend
-Modify index.html to include the Supabase client library (@supabase/supabase-js) and change the RSVP handler to call:
-
-await supabase.from('rsvp').insert([{ name, email, phone, message, attending }]);
-Make sure the “anon_insert” RLS policy is active. This method exposes your anon key for writes, but RLS will protect the table.
+Include the Supabase client library (@supabase/supabase-js) in index.html and change the RSVP handler to call
+await supabase.from('rsvp').insert([{ name, email, phone, message, attending }]);.
+Ensure the anon_insert policy is active. This exposes your anon key for writes, but Row Level Security keeps the table protected.
 
 🎨 Customization
 Images & Media
-Element	Replace / Create
-Hero image	assets/images/hero-couple.jpg and .webp
-Wedding banner	assets/images/header-banner.webp
-Portfolio gallery	Portrait: prenupp.webp, prenupp1.webp … (up to 15)
-Landscape: prenupl.webp, prenupl1.webp … (up to 15)
-Love story	Six images: story-1.jpg … story-6.jpg (inside love-story/ folder)
-Save the Date	06.webp, 25.webp, 26.webp
-Dress code	dresscode.webp
-Venue photos	ceremony.webp, reception.webp
-Proposal video	assets/videos/proposal.mp4 (portrait orientation)
-Theme song	assets/audio/theme-song.mp3
-All images should be provided in WebP format for faster loading; the code includes fallbacks to .jpg where needed.
 
-Typography & Colors
-The color scheme is defined in css/style.css at the top:
+Replace the following files inside assets/ with your own media:
 
-:root {
-    --sakura-pink: #ffb7c5;
-    --soft-cream: #fff0f1;
-    --dark-charcoal: #31231a;
-    /* … other variables */
-}
-Modify these to match your wedding theme.
-The main page (index.html) includes a large <style> block that enforces Inter for body text and EB Garamond for headings. You can adjust or remove these rules.
+Hero image → hero-couple.jpg and its .webp version
+
+Wedding banner → header-banner.webp
+
+Gallery images → Portrait: prenupp.webp, prenupp1.webp … (up to index 15)
+Landscape: prenupl.webp, prenupl1.webp … (up to index 15)
+
+Love story images → story-1.jpg through story-6.jpg (inside love-story/ folder)
+
+Save‑the‑date photos → 06.webp, 25.webp, 26.webp
+
+Dress code illustration → dresscode.webp
+
+Venue photos → ceremony.webp, reception.webp
+
+Proposal video → proposal.mp4 (portrait orientation)
+
+Theme song → theme-song.mp3
+
+All images should be in WebP format for faster loading; fallback to .jpg is handled automatically.
+
+Typography & Colours
+The colour scheme is defined in css/style.css at the top using CSS variables.
+You can modify --sakura-pink, --soft-cream, --dark-charcoal and others to match your theme.
+The page also includes an inline <style> block in index.html that enforces Inter for body text and EB Garamond for headings – you may adjust or remove those rules.
 
 FAQ
-Edit the FAQ items directly in index.html (look for the <div class="accordion">). Each question is a button inside an .accordion-header.
+Edit the FAQ items directly in index.html – look for the <div class="accordion"> section. Each question is a button with class accordion-button.
 
 Attire Guide
-Change the recommended dress and color swatches in the Attire Guide section of index.html (inside .attire-card-c).
+The recommended dress and colour swatches live inside .attire-card-c in index.html. Update the text and palette hex codes there.
 
 🚢 Deployment
-This is a 100% static site – no server required for the frontend.
+This is a 100% static site, so no special hosting is required.
 
 Upload the entire project folder to any static host.
-Set up redirects if necessary (e.g., for a custom domain).
-If you chose the Edge Function method for RSVPs, deploy the function separately to Supabase.
+
+Set up redirects if you use a custom domain.
+
+If you opted for a Supabase Edge Function, deploy that separately to your Supabase project.
+
 Popular hosting options:
 
-GitHub Pages – push to main branch and enable Pages in the repo settings.
+GitHub Pages – push to main branch and enable Pages in repo settings.
+
 Netlify / Vercel – drag‑and‑drop or connect a Git repository.
+
 FTP – upload files to your web hosting space.
+
 ⚠️ Important Notes
-Supabase Anon Key: Safe to be in client‑side code only because Row Level Security is enabled. Your admin credentials are managed by Supabase Auth.
-RSVP Form: The default script.js expects a backend endpoint /api/rsvp. You must either implement that endpoint or switch to direct Supabase inserts (see Backend Setup).
-Attending Column Type: After running the SQL script, the attending column is BOOLEAN. In admin.html, you may need to update the display logic from row.attending === 'yes' to row.attending ? '✅ Yes' : '❌ No'. The provided admin.html already handles 'yes'/'no'; after migration, adjust accordingly.
-Performance: Compress all images and serve WebP format. The gallery script tries to load up to 30 images; ensure they are optimized.
-Swiper Gallery: The script automatically looks for prenupp*.webp (portrait) and prenupl*.webp (landscape) up to index 15. If no images are found, it falls back to placeholder picsum images.
-Custom Domain: Add your domain to the Supabase project if using Supabase Auth (for admin) to avoid CORS issues.
+Supabase Anon Key: Safe to expose in client‑side code only because Row Level Security is enabled. Admin credentials are managed via Supabase Auth.
+
+RSVP Form: The default script.js expects a backend endpoint /api/rsvp. You must implement it or switch to direct Supabase inserts (see Backend Setup).
+
+Attending Column: After running the SQL script, the attending column becomes BOOLEAN. If you migrate from an earlier version that used text ('yes'/'no'), update the admin panel logic in admin.html from row.attending === 'yes' to row.attending ? '✅ Yes' : '❌ No'.
+
+Performance: Compress all images and serve WebP. The gallery script attempts to load up to 30 images – keep file sizes small.
+
+Swiper Gallery: The script auto‑detects prenupp*.webp and prenupl*.webp (up to index 15). If none are found, it uses placeholder picsum images.
+
+Custom Domain: If you use your own domain, add it to the Supabase project’s allowed URLs to avoid CORS errors during admin login.
+
 📄 License
 This project is open‑source under the MIT License. Feel free to use, modify, and share it for your own wedding. Attribution is appreciated but not required.
 
-Congratulations, Claudine & Mark! 🎉
-Built with love (and a lot of CSS).
