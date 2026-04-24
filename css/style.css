@@ -50,7 +50,7 @@ h1, h2, h3, h4, h5, h6,
     color: var(--sakura-pink) !important;
 }
 
-/* Hero Section - above petals */
+/* Hero Section */
 .hero-section {
     width: 100%;
     margin-bottom: -10px;
@@ -58,19 +58,16 @@ h1, h2, h3, h4, h5, h6,
     position: relative;
     z-index: 20;
 }
-
 .hero-image-wrapper {
     width: 100%;
     line-height: 0;
 }
-
 .hero-img {
     width: 100%;
     height: auto;
     display: block;
     filter: brightness(0.85) saturate(1.05);
 }
-
 .sakura-overlay {
     position: absolute;
     top: 0;
@@ -81,7 +78,7 @@ h1, h2, h3, h4, h5, h6,
     pointer-events: none;
 }
 
-/* NEW BANNER IMAGE STYLES (replaces old logo section) */
+/* Banner */
 .wedding-banner {
     width: 100%;
     line-height: 0;
@@ -89,7 +86,6 @@ h1, h2, h3, h4, h5, h6,
     z-index: 20;
     background: #fff0f1;
 }
-
 .wedding-banner-img {
     width: 100%;
     height: auto;
@@ -113,14 +109,12 @@ h1, h2, h3, h4, h5, h6,
     z-index: 20;
     border-radius: 16px !important;
 }
-
 .audio-card .audio-controls {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
 }
-
 .progress-container {
     flex: 1;
     min-width: 180px;
@@ -128,18 +122,15 @@ h1, h2, h3, h4, h5, h6,
     align-items: center;
     gap: 10px;
 }
-
 .progress-container .form-range {
     flex: 1;
     min-width: 80px;
     margin: 0;
 }
-
 .progress-container .small {
     white-space: nowrap;
     font-size: 0.75rem;
 }
-
 .btn-outline-pink {
     border: 1px solid var(--sakura-pink);
     color: #b57777;
@@ -147,13 +138,11 @@ h1, h2, h3, h4, h5, h6,
     transition: all 0.3s ease;
     border-radius: 40px;
 }
-
 .btn-outline-pink:hover {
     background-color: var(--sakura-pink);
     color: white;
     border-color: var(--sakura-pink);
 }
-
 .form-range::-webkit-slider-thumb {
     background: var(--sakura-dark);
 }
@@ -161,7 +150,7 @@ h1, h2, h3, h4, h5, h6,
     background: var(--japan-red);
 }
 
-/* Love Story (old) – not used but kept */
+/* Love Story (old) */
 .love-story-section {
     background: transparent !important;
     position: relative;
@@ -279,11 +268,9 @@ h1, h2, h3, h4, h5, h6,
     transition: all 0.2s;
     box-shadow: 0 20px 35px rgba(60, 30, 20, 0.08);
 }
-
 .faq-header {
     text-align: center;
 }
-
 .faq-badge {
     display: inline-block;
     background: #fef4ef;
@@ -296,32 +283,26 @@ h1, h2, h3, h4, h5, h6,
     margin-bottom: 1rem;
     font-family: 'Lato', sans-serif;
 }
-
 .faq-badge i {
     margin-right: 6px;
     font-size: 0.85rem;
 }
-
 .faq-divider {
     margin: 0.8rem auto 0.5rem;
     gap: 10px;
 }
-
 .faq-divider i {
     font-size: 0.7rem;
     color: #dbbd9b;
 }
-
 .accordion-item {
     border-radius: 20px !important;
     transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .accordion-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 22px rgba(80, 50, 30, 0.12) !important;
 }
-
 .accordion-button {
     font-size: clamp(1rem, 4vw, 1.2rem) !important;
     font-weight: 600 !important;
@@ -331,30 +312,25 @@ h1, h2, h3, h4, h5, h6,
     font-family: 'Inter', 'Segoe UI', sans-serif;
     gap: 8px;
 }
-
 @media (min-width: 992px) {
     .accordion-button .faq-question-text {
         font-size: 0.9rem !important;
     }
 }
-
 .accordion-button:not(.collapsed) {
     background-color: #fff7f0 !important;
     color: #a55a3a !important;
     border-bottom: 1px solid #fae2d4;
 }
-
 .accordion-button .faq-question-text {
     flex: 1;
     text-align: left;
     letter-spacing: -0.2px;
 }
-
 .accordion-button i.fa-fw {
     width: 1.8rem;
     font-size: 1.3rem;
 }
-
 .accordion-body {
     font-size: clamp(0.9rem, 3.8vw, 1rem) !important;
     padding: 1.2rem 1.8rem !important;
@@ -363,11 +339,9 @@ h1, h2, h3, h4, h5, h6,
     background: #ffffff;
     border-top: 1px solid #fae8df;
 }
-
 .accordion-body .text-pink {
     color: #c2835e;
 }
-
 .accordion-collapse {
     transition: height 0.3s ease-in-out;
 }
@@ -522,7 +496,7 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
 }
 
-/* ========== GLOBAL SAKURA PETALS – ABOVE BACKGROUNDS, BELOW CONTENT ========== */
+/* ========== GLOBAL SAKURA PETALS ========== */
 .sakura-petals {
     position: fixed;
     top: 0;
@@ -543,223 +517,159 @@ footer {
     z-index: 20;
 }
 
-/* Gallery Styles */
+/* ========== UPDATED PRENUP GALLERY (SWIPER) ========== */
 .prenup-gallery-section {
     position: relative;
     z-index: 20;
-    padding-top: 0.5rem;
-    margin-top: -1rem;
 }
-.gallery-wrap {
-    max-width: 620px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    z-index: 20;
-}
-
-.gallery-box {
-    position: relative;
+.gallery-card {
+    max-width: 1400px;
     width: 100%;
-    background: #fff;
-    border: 1px solid rgba(200,168,118,0.3);
-    box-shadow: 0 2px 0 rgba(200,168,118,0.15), 0 20px 60px rgba(58,40,40,0.1), 0 4px 16px rgba(58,40,40,0.06);
-    overflow: hidden;
-    user-select: none;
+    background: transparent;
+    backdrop-filter: none;
+    padding: 0.8rem 0 0rem;
+    border-top: 1px solid #000000;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    position: relative;
+    margin: 0 auto;
 }
-
-.gallery-box::before,
-.gallery-box::after {
+.gallery-card::after {
     content: '';
     position: absolute;
-    width: 36px;
-    height: 36px;
-    z-index: 10;
-    pointer-events: none;
-}
-.gallery-box::before {
-    top: 10px;
-    left: 10px;
-    border-top: 1.5px solid #c8a876;
-    border-left: 1.5px solid #c8a876;
-}
-.gallery-box::after {
     bottom: 10px;
-    right: 10px;
-    border-bottom: 1.5px solid #c8a876;
-    border-right: 1.5px solid #c8a876;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #000000;
 }
-
-.img-stage {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    background: #f0d9d0;
-    cursor: grab;
+.title-wrapper {
+    text-align: center;
+    margin-bottom: 0.05rem;
+    margin-top: 10px;
 }
-.img-stage:active {
-    cursor: grabbing;
-}
-
-.slide {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1), opacity 0.45s ease;
-    will-change: transform, opacity;
-}
-.slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-}
-.slide.active {
-    transform: translateX(0);
-    opacity: 1;
-    z-index: 2;
-}
-.slide.prev {
-    transform: translateX(-100%);
-    opacity: 0.4;
-    z-index: 1;
-    filter: blur(1px);
-}
-.slide.next {
-    transform: translateX(100%);
-    opacity: 0.4;
-    z-index: 1;
-    filter: blur(1px);
-}
-.slide.hidden {
-    transform: translateX(100%);
-    opacity: 0;
-    z-index: 0;
-}
-
-.slide.active img {
-    animation: gentlePop 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-}
-@keyframes gentlePop {
-    0% { transform: scale(0.96); opacity: 0.92; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.img-stage::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(253,248,243,0.15) 0%, transparent 30%, transparent 70%, rgba(253,248,243,0.25) 100%);
-    pointer-events: none;
-    z-index: 3;
-}
-
-.external-nav {
-    display: flex;
-    justify-content: space-between !important;
-    align-items: center;
-    gap: 20px;
-    padding: 20px 24px 12px;
-    background: #fff;
-}
-
-.gallery-counter {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 1rem;
-    background: rgba(200,168,118,0.12);
-    padding: 6px 16px;
-    border-radius: 40px;
-    color: #3a2828;
-    border: 1px solid rgba(200,168,118,0.3);
-    letter-spacing: 0.5px;
-    margin: 0;
-}
-.gallery-counter strong {
-    font-style: normal;
+.title-wrapper h1 {
+    font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
-    color: #c9897a;
-    font-size: 1.1rem;
-}
-
-.nav-btn-ext {
-    width: 52px;
-    height: 52px;
-    background: linear-gradient(135deg, #fff8f5, #fff);
-    border: 1px solid #d4af37;
-    border-radius: 50%;
-    cursor: pointer;
+    font-size: 2.3rem;
+    color: #31231a;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    gap: 0.8rem;
 }
-.nav-btn-ext:hover {
-    background: linear-gradient(135deg, #ffb7c5, #ff9aac);
-    border-color: #c9897a;
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 24px rgba(201,137,122,0.3);
+.title-wrapper i {
+    color: #ffb7c5;
+    font-size: 1.8rem;
 }
-.nav-btn-ext svg {
-    width: 22px;
-    height: 22px;
-    stroke: #9a6a6a;
-    stroke-width: 1.8;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: stroke 0.2s, transform 0.2s;
-}
-.nav-btn-ext:hover svg {
-    stroke: #fff;
-    transform: scale(1.1);
-}
-
-.dots {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 8px 0 22px;
-    background: #fff;
-    border-top: 1px solid rgba(200,168,118,0.12);
-}
-.dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #f0d9d0;
-    border: 1px solid #c8a876;
-    cursor: pointer;
-    transition: background 0.25s, transform 0.2s;
-    padding: 0;
-    margin: 0;
-}
-.dot.active {
-    background: #c8a876;
-    transform: scale(1.5);
-}
-
-.swipe-hint {
+.elegant-line {
     text-align: center;
-    font-size: 0.58rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #a08878;
-    margin-top: 16px;
-    margin-bottom: 8px;
+    margin: -10px auto 0.3rem auto;
+}
+.line-decoration {
+    display: inline-block;
+    width: 30px;
+    height: 2px;
+    background: #ffb7c5;
+    margin: 0 3px;
+    vertical-align: middle;
+}
+.line-decoration.long {
+    width: 45px;
+}
+.line-icon {
+    display: inline-block;
+    color: #ffb7c5;
+    font-size: 0.85rem;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+.swiper {
+    width: 100%;
+    overflow: visible;
+    padding: 5px 0 15px;
+    margin-top: -10px;
+}
+.swiper-slide {
+    width: auto !important;
+    height: auto;
+    opacity: 0.55;
+    filter: blur(0.8px);
+    transition: opacity 0.3s, filter 0.3s;
+}
+.swiper-slide-active {
+    opacity: 1;
+    filter: blur(0);
+    z-index: 2;
+}
+.img-box {
+    height: 65vh;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 0;
+}
+.img-box img {
+    height: 100%;
+    width: auto;
+    display: block;
+    border-radius: 0;
+}
+.swiper-button-prev,
+.swiper-button-next {
+    width: auto;
+    height: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    transition: transform 0.2s ease;
+}
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    transform: scale(1.1);
+    background: transparent;
+}
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000000;
+    text-shadow: 
+        -1px -1px 0 #ffffff,
+        1px -1px 0 #ffffff,
+        -1px 1px 0 #ffffff,
+        1px 1px 0 #ffffff;
+    -webkit-text-stroke: 0.5px #ffffff;
+}
+.swiper-pagination {
+    margin-top: 20px;
+    position: relative;
+    bottom: auto;
+}
+.swiper-pagination-bullet {
+    background: #ffb7c5;
     opacity: 0.6;
-    animation: fadeHint 3s ease 2s forwards;
 }
-@keyframes fadeHint {
-    to { opacity: 0; }
+.swiper-pagination-bullet-active {
+    background: #31231a;
+    opacity: 1;
 }
+@media (max-width: 768px) {
+    .title-wrapper h1 { font-size: 1.8rem; gap: 0.5rem; }
+    .title-wrapper i { font-size: 1.3rem; }
+    .line-decoration { width: 20px; margin: 0 2px; }
+    .line-decoration.long { width: 30px; }
+    .line-icon { font-size: 0.7rem; }
+    .swiper-button-prev:after,
+    .swiper-button-next:after { font-size: 2rem; }
+    .img-box { height: 30vh; }
+}
+@media (max-width: 480px) {
+    .img-box { height: 25vh; }
+}
+/* ========== END PRENUP GALLERY ========== */
 
-/* ===== ENHANCED LOVE STORY SECTION ===== */
+/* ========== ENHANCED LOVE STORY SECTION ========== */
 .love-story-section-new {
     background-color: transparent;
     position: relative;
@@ -782,7 +692,6 @@ footer {
     z-index: 20;
     margin-bottom: 1.2rem;
 }
-
 .love-story-main-title {
     font-family: 'EB Garamond', serif;
     font-size: 3rem;
@@ -792,7 +701,6 @@ footer {
     letter-spacing: 1px;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.03);
 }
-
 .sakura-divider {
     display: flex;
     justify-content: center;
@@ -805,7 +713,6 @@ footer {
     font-size: 0.7rem;
     opacity: 0.7;
 }
-
 .love-story-quote {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.1rem;
@@ -813,7 +720,6 @@ footer {
     color: #8c7568;
     margin-top: 0.1rem;
 }
-
 .love-grid-3x2 {
     position: relative;
     z-index: 20;
@@ -823,7 +729,6 @@ footer {
     max-width: 1000px;
     margin: 0 auto;
 }
-
 .love-card {
     position: relative;
     z-index: 20;
@@ -842,7 +747,6 @@ footer {
     box-shadow: 0 28px 42px -16px rgba(80, 40, 20, 0.25);
     border-color: #ffb7c5;
 }
-
 .love-img {
     aspect-ratio: 1 / 1;
     overflow: hidden;
@@ -859,7 +763,6 @@ footer {
 .love-card:hover .love-img img {
     transform: scale(1.08);
 }
-
 .love-card-overlay {
     position: absolute;
     top: 0;
@@ -882,7 +785,6 @@ footer {
 .love-card:hover .love-card-overlay {
     opacity: 1;
 }
-
 .love-caption {
     padding: 1.4rem 1.2rem 1.6rem;
     text-align: center;
@@ -1109,35 +1011,6 @@ footer {
         font-size: 0.9rem;
         margin-top: 0;
     }
-    .external-nav {
-        gap: 15px;
-        padding: 15px 16px 10px;
-    }
-    .gallery-counter {
-        font-size: 0.85rem;
-        padding: 4px 12px;
-    }
-    .gallery-counter strong {
-        font-size: 0.95rem;
-    }
-    .nav-btn-ext {
-        width: 44px;
-        height: 44px;
-    }
-    .nav-btn-ext svg {
-        width: 18px;
-        height: 18px;
-    }
-    .swipe-hint {
-        font-size: 0.5rem;
-    }
-    .gallery-wrapper {
-        padding-left: 5px !important;
-        padding-right: 5px !important;
-    }
-    .prenup-gallery-section .text-center {
-        margin-bottom: 0.5rem !important;
-    }
     .lightbox-prev,
     .lightbox-next {
         width: 40px;
@@ -1172,7 +1045,6 @@ footer {
     z-index: 20;
     background: transparent;
 }
-
 .attire-card-c {
     position: relative;
     z-index: 20;
@@ -1183,18 +1055,15 @@ footer {
     max-width: 800px;
     margin: 0 auto;
 }
-
 .attire-inner-bg {
     background: #ffffff;
     padding: 20px 30px;
     position: relative;
     border: 1px solid #f5eae6;
 }
-
 .attire-c-inner {
     width: 100%;
 }
-
 .attire-ornament {
     font-family: 'Cormorant Garamond', serif;
     font-size: 0.75rem;
@@ -1222,7 +1091,6 @@ footer {
     opacity: 0;
     transform: translateY(-15px);
 }
-
 .attire-photo {
     width: 100%;
     aspect-ratio: 1408 / 768;
@@ -1251,7 +1119,6 @@ footer {
     font-size: 0.7rem;
     text-align: center;
 }
-
 .attire-palette-row {
     display: flex;
     justify-content: space-between;
@@ -1285,12 +1152,10 @@ footer {
     font-family: monospace;
     color: #b09888;
 }
-
 .attire-divider {
     margin: 8px 0 12px;
     opacity: 0.3;
 }
-
 .attire-col {
     opacity: 0;
 }
@@ -1487,17 +1352,73 @@ footer {
     100% { opacity: 1; transform: translateX(0); }
 }
 
-@media (max-width: 550px) {
-    .tagline-share {
-        font-size: 1.2rem;
-        line-height: 1.25;
+/* ========== MOBILE ONLY: ALIGN & SHRINK MAP BUTTON (FLEX COLUMN + CENTER) ========== */
+@media (max-width: 768px) {
+    /* ----- VENUE CARDS ----- */
+    .venue-tag { font-size: 6px; }
+    .venue-name { font-size: 0.55rem; }
+    .venue-addr { font-size: 6px; }
+
+    /* ----- VENUE BODY FLEX COLUMN THAT CENTERS EVERYTHING ----- */
+    .venue-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;  /* ← left-aligns everything */
+    text-align: left;
+    padding: 0.8rem 1rem 1rem;
+}
+    /* Push venue text back to the left */
+    .venue-body .venue-tag,
+    .venue-body .venue-name,
+    .venue-body .venue-addr {
+        align-self: flex-start !important;   /* left-align text */
     }
+
+    /* ----- MAP BUTTON: SMALL, NO MIN-WIDTH, NATURALLY CENTERED ----- */
+    .map-btn {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+    border-radius: 8px !important;
+    margin: 0 !important;                 /* no margin at all */
+    min-width: 0 !important;
+    width: auto !important;
+    align-self: flex-start !important;   /* force left */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+    .map-btn .map-icon {
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    /* ----- SHARE MOMENT ----- */
+    .instruction-text { font-size: 0.65rem; }
+    .tagline-share { font-size: 0.845rem; line-height: 1.1; }
     .hashtag-eb-share {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+        text-align: center;
+        font-weight: 800 !important;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
     }
+
+    /* ----- EMBER CARD ----- */
+    .charcoal-ember-card .ember-title { font-size: 0.9rem !important; }
+    .charcoal-ember-card .ember-line { font-size: 0.6rem !important; gap: 3px; }
+    .charcoal-ember-card .ember-gift { font-size: 0.6rem !important; padding: 0.3rem 0.6rem; }
+    .charcoal-ember-card .ember-icon { font-size: 0.6rem !important; width: 1rem; }
+
+    /* ----- SWIPER NAV ----- */
+    .swiper-button-prev,
+    .swiper-button-next { transform: scale(0.6); }
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover { transform: scale(0.7); }
 }
 
-/* ========== CHARCOAL EMBER CARD ========== */
+/* ========== CHARCOAL EMBER CARD (desktop unchanged) ========== */
 .charcoal-ember-card {
     max-width: 420px;
     width: 100%;
@@ -1515,11 +1436,11 @@ footer {
     position: relative;
     z-index: 20;
 }
+/* ... (rest of ember card, countdown, venue section, save the date – all unchanged) ... */
 .charcoal-ember-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 28px 36px -14px rgba(0, 0, 0, 0.4);
 }
-
 .ember-inner {
     padding: 0.8rem 1.2rem;
     text-align: center;
@@ -1531,7 +1452,6 @@ footer {
     width: 100%;
     height: 100%;
 }
-
 .heart-3d {
     color: #ffb7c5;
     text-shadow: 0 1px 0px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.4), 0 0 8px rgba(255,183,197,0.7);
@@ -1544,14 +1464,12 @@ footer {
 .ember-title:hover .heart-3d {
     transform: scale(1.1);
 }
-
 .stars-3d,
 .ember-title,
 .ember-line,
 .ember-gift {
     opacity: 0;
 }
-
 .charcoal-ember-card.animate-ember .ember-title {
     animation: slideFromTop 2s ease forwards;
     animation-delay: 0.1s;
@@ -1566,7 +1484,6 @@ footer {
     animation: slideFromBottom 2s ease forwards;
     animation-delay: 0.5s;
 }
-
 @keyframes slideFromTop {
     0% { opacity: 0; transform: translateY(-40px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -1579,7 +1496,6 @@ footer {
     0% { opacity: 0; transform: translateY(60px); }
     100% { opacity: 1; transform: translateY(0); }
 }
-
 .ember-title {
     font-family: 'EB Garamond', serif;
     font-weight: 700;
@@ -1591,14 +1507,12 @@ footer {
     padding-bottom: 0.2rem;
     color: #fff0f1;
 }
-
 .ember-lines {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
     margin: 0.3rem 0;
 }
-
 .ember-line {
     font-size: 1rem;
     font-weight: 500;
@@ -1610,13 +1524,11 @@ footer {
     flex-wrap: wrap;
     color: #fff0f1;
 }
-
 .ember-icon {
     color: #ffb7c5;
     font-size: 0.9rem;
     width: 1.3rem;
 }
-
 .ember-gift {
     margin-top: 0.6rem;
     font-size: 1.05rem;
@@ -1630,8 +1542,6 @@ footer {
     color: #fff0f1;
     letter-spacing: 0.2px;
 }
-
-/* Mobile fixes for ember card */
 @media (max-width: 550px) {
     .charcoal-ember-card {
         max-width: 95%;
@@ -1681,7 +1591,6 @@ footer {
     position: relative;
     z-index: 20;
 }
-
 .countdown-inner {
     max-width: 1200px;
     margin: 0 auto;
@@ -1692,7 +1601,6 @@ footer {
     gap: 0.3rem;
     text-align: center;
 }
-
 .countdown-phrase {
     font-family: 'Playfair Display', serif;
     font-style: italic;
@@ -1700,14 +1608,12 @@ footer {
     font-size: 1rem;
     color: rgba(255,240,241,0.85);
 }
-
 .countdown-units {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
 }
-
 .countdown-unit {
     padding: 0 0.8rem;
     text-align: center;
@@ -1716,7 +1622,6 @@ footer {
 .countdown-unit:first-child {
     border-left: none;
 }
-
 .countdown-num {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -1725,7 +1630,6 @@ footer {
     display: block;
     line-height: 1;
 }
-
 .countdown-lbl {
     font-family: 'Jost', sans-serif;
     font-weight: 200;
@@ -1736,7 +1640,6 @@ footer {
     display: block;
     margin-top: 0.2rem;
 }
-
 @media (max-width: 768px) {
     .wedding-banner-img {
         height: 140px;
@@ -1764,7 +1667,6 @@ footer {
     position: relative;
     background: transparent;
 }
-
 .venue-section::before {
     content: '';
     position: absolute;
@@ -1776,7 +1678,6 @@ footer {
     z-index: 1;
     pointer-events: none;
 }
-
 .content-container {
     position: relative;
     z-index: 20;
@@ -1784,7 +1685,6 @@ footer {
     margin: 0 auto;
     padding: 0 1rem;
 }
-
 .section-heading {
     font-size: 32px;
     font-weight: 500;
@@ -1797,7 +1697,6 @@ footer {
     align-items: center;
     font-family: 'EB Garamond', serif;
 }
-
 .heading-divider {
     display: flex;
     align-items: center;
@@ -1805,19 +1704,16 @@ footer {
     gap: 8px;
     margin-top: 8px;
 }
-
 .divider-line {
     width: 55px;
     height: 1px;
     background: #ffb7c5;
     opacity: 0.7;
 }
-
 .divider-line.thin {
     width: 25px;
     opacity: 0.4;
 }
-
 .divider-diamond {
     width: 5px;
     height: 5px;
@@ -1825,7 +1721,6 @@ footer {
     transform: rotate(45deg);
     display: inline-block;
 }
-
 .venue-card {
     background: #4a2e22;
     border: 0.5px solid #5e3a2a;
@@ -1836,12 +1731,10 @@ footer {
     position: relative;
     z-index: 20;
 }
-
 .venue-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.3);
 }
-
 .venue-img {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -1849,11 +1742,9 @@ footer {
     display: block;
     background-color: #fff0f1;
 }
-
 .venue-body {
     padding: 0.8rem 1rem 1rem;
 }
-
 .venue-tag {
     font-size: 10px;
     letter-spacing: 0.14em;
@@ -1863,7 +1754,6 @@ footer {
     font-weight: 600;
     font-family: 'EB Garamond', serif;
 }
-
 .venue-name {
     font-size: 1rem;
     font-weight: 600;
@@ -1872,33 +1762,30 @@ footer {
     line-height: 1.2;
     font-family: 'EB Garamond', serif;
 }
-
 .venue-addr {
     font-size: 11px;
     color: #e2c7bd;
     margin-bottom: 10px;
     line-height: 1.35;
 }
-
-/* ===== WHITE BUTTON – KEEP ORIGINAL SVG MAP ICON ===== */
 .map-btn {
     background: white !important;
     color: #31231a !important;
     border: 1px solid #d4af37 !important;
-    border-radius: 12px !important;      /* less rounded than 40px */
+    border-radius: 12px !important;
     padding: 6px 14px !important;
     font-size: 12px;
-    width: auto !important;              /* not full width – shrinks to content */
-    min-width: 160px;                   /* optional: ensures reasonable click area */
+    width: auto !important;
+    min-width: 160px;
     cursor: pointer;
-    display: inline-flex;               /* allows width: auto + centering */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
     transition: all 0.2s;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
-    margin: 0 auto;                     /* centers the button in the card */
+    margin: 0 auto;
 }
 .map-btn:hover {
     background: #ffb7c5 !important;
@@ -1906,7 +1793,6 @@ footer {
     border-color: #ffb7c5 !important;
     transform: translateY(-2px);
 }
-
 .map-icon {
     width: 12px;
     height: 12px;
@@ -1916,9 +1802,6 @@ footer {
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-
-
-/* ensure two columns side-by-side on all screen sizes */
 .row.g-3 {
     --bs-gutter-y: 0.8rem;
     --bs-gutter-x: 0.8rem;
@@ -1927,8 +1810,6 @@ footer {
     flex: 0 0 auto;
     width: 50%;
 }
-
-/* mobile fine-tuning */
 @media (max-width: 768px) {
     .venue-section {
         padding: 1.5rem 0;
@@ -1937,29 +1818,12 @@ footer {
         font-size: 28px;
         margin-bottom: 16px;
     }
-    .venue-name {
-        font-size: 0.9rem;
-    }
-    .venue-addr {
-        font-size: 10px;
-    }
-    .map-btn {
-        font-size: 10px;
-        padding: 4px 10px;
-    }
     .content-container {
         padding: 0 0.75rem;
     }
-    .venue-tag {
-        font-size: 9px;
-    }
-    .venue-body {
-    text-align: center;   /* ensures inline-flex button is centered */
-}
 }
 
 /* ========== NEW SAVE THE DATE COMPONENT STYLES ========== */
-/* ========== SAVE THE DATE – TIGHTER SPACING, LINES VISIBLE ========== */
 .std-section {
     position: relative;
     z-index: 20;
@@ -1983,10 +1847,9 @@ footer {
     pointer-events: none;
 }
 .std-heading {
-    font-family: 'EB Garamond', Georgia, serif;
+    font-family: 'EB Garamond', Georgia, serif !important;
     font-size: 24px;
-    font-weight: 500;
-    font-style: italic;
+    font-weight: 600;
     letter-spacing: 0.2em;
     color: #31231a;
     text-transform: uppercase;
@@ -1995,17 +1858,16 @@ footer {
     margin-bottom: 0.5rem;
     animation: fadeUpHeadingStd 1.2s ease 0s forwards;
 }
-/* ORNAMENT LINES – ensure they are visible */
 .ornament-line {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin: 0.5rem 0 !important;   /* override Bootstrap mb-4/mt-4 */
+    margin: 0.5rem 0 !important;
 }
 .ornament-line .line-seg {
     flex: 1;
-    height: 1px;                   /* from 0.5px to 1px for visibility */
+    height: 1px;
     background: #31231a;
     opacity: 0.35;
 }
@@ -2068,7 +1930,6 @@ footer {
     object-fit: cover;
     display: block;
 }
-/* animations (unchanged but keep keyframes unique) */
 .photo-unit.from-left {
     opacity: 0;
     transform: translateX(-80px);
@@ -2130,5 +1991,4 @@ footer {
     .ornament-line {
         margin: 0.25rem 0 !important;
     }
-}
 }

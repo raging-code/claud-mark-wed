@@ -65,173 +65,145 @@ audio.addEventListener('ended', () => {
     isPlaying = false;
 });
 
-// ========== NEW WEDDING GALLERY (BOOTSTRAP 5 CAROUSEL) ==========
+// ========== NEW PRENUP GALLERY (SWIPER) ==========
 (function() {
-    function loadGalleryImages() {
+    // Load images using your naming convention and interleave portrait/landscape
+    function loadPrenupImages() {
         return new Promise((resolve) => {
-            let testIndex = 1;
-            let foundImages = [];
-            function tryNext() {
-                const imgPath = `assets/images/gallery-${testIndex}.webp`;
-                const imgTest = new Image();
-                imgTest.onload = () => {
-                    foundImages.push(imgPath);
-                    testIndex++;
-                    tryNext();
-                };
-                imgTest.onerror = () => {
-                    if (foundImages.length === 0) {
-                        resolve([
-                            'https://picsum.photos/id/104/1365/1365',
-                            'https://picsum.photos/id/30/1365/1365',
-                            'https://picsum.photos/id/58/1365/1365',
-                            'https://picsum.photos/id/26/1365/1365',
-                            'https://picsum.photos/id/42/1365/1365'
-                        ]);
-                    } else {
-                        resolve(foundImages);
-                    }
-                };
-                imgTest.src = imgPath;
-                if (testIndex > 12) {
-                    if (foundImages.length === 0) {
-                        resolve([
-                            'https://picsum.photos/id/104/1365/1365',
-                            'https://picsum.photos/id/30/1365/1365',
-                            'https://picsum.photos/id/58/1365/1365',
-                            'https://picsum.photos/id/26/1365/1365'
-                        ]);
-                    } else {
-                        resolve(foundImages);
-                    }
+            const portraits = [];
+            const landscapes = [];
+            const maxIndex = 15;
+
+            function tryPortrait(index) {
+                if (index > maxIndex) {
+                    tryLandscape(0);
+                    return;
                 }
+                const filename = index === 0 ? 'prenupp.webp' : `prenupp${index}.webp`;
+                const path = `assets/images/${filename}`;
+                const img = new Image();
+                img.onload = () => {
+                    portraits.push({ src: path, alt: `Portrait ${portraits.length + 1}` });
+                    tryPortrait(index + 1);
+                };
+                img.onerror = () => {
+                    tryPortrait(index + 1);
+                };
+                img.src = path;
             }
-            tryNext();
+
+            function tryLandscape(index) {
+                if (index > maxIndex) {
+                    finish();
+                    return;
+                }
+                const filename = index === 0 ? 'prenupl.webp' : `prenupl${index}.webp`;
+                const path = `assets/images/${filename}`;
+                const img = new Image();
+                img.onload = () => {
+                    landscapes.push({ src: path, alt: `Landscape ${landscapes.length + 1}` });
+                    tryLandscape(index + 1);
+                };
+                img.onerror = () => {
+                    tryLandscape(index + 1);
+                };
+                img.src = path;
+            }
+
+            function finish() {
+                // Interleave: landscape, portrait, landscape, portrait...
+                const combined = [];
+                const maxLen = Math.max(landscapes.length, portraits.length);
+                for (let i = 0; i < maxLen; i++) {
+                    if (i < landscapes.length) combined.push(landscapes[i]);
+                    if (i < portraits.length) combined.push(portraits[i]);
+                }
+
+                if (combined.length === 0) {
+                    // Fallback if no images found
+                    combined.push(
+                        { src: 'https://picsum.photos/id/42/1200/960', alt: 'Landscape fallback' },
+                        { src: 'https://picsum.photos/id/30/960/1440', alt: 'Portrait fallback' }
+                    );
+                }
+                resolve(combined);
+            }
+
+            tryPortrait(0);
         });
     }
 
-    const stage = document.getElementById('prenupStage');
-    if (!stage) return;
+    async function initGallery() {
+        const imagesData = await loadPrenupImages();
+        const wrapper = document.getElementById('slidesWrapper');
+        if (!wrapper) return;
 
-    let currentIndex = 0;
-    let slidesData = [];
-    let slideElements = [];
-    let autoInterval;
-    const totalSpan = document.getElementById('totalNumOverlay');
-    const currentSpan = document.getElementById('currentNumOverlay');
-    const dotsContainer = document.getElementById('prenupDots');
-    const prevBtn = document.getElementById('prenupPrevBtn');
-    const nextBtn = document.getElementById('prenupNextBtn');
-
-    function createSlides(images) {
-        stage.innerHTML = '';
-        const overlay = document.createElement('div');
-        overlay.className = 'photo-overlay';
-        stage.appendChild(overlay);
-        
-        images.forEach((src, idx) => {
+        wrapper.innerHTML = '';
+        imagesData.forEach(img => {
             const slide = document.createElement('div');
-            slide.className = 'slide';
-            if (idx === 0) slide.classList.add('active');
-            else if (idx === 1) slide.classList.add('next');
-            else slide.classList.add('hidden');
-            const img = document.createElement('img');
-            img.src = src;
-            img.alt = `Prenup photo ${idx+1}`;
-            img.loading = 'lazy';
-            slide.appendChild(img);
-            stage.appendChild(slide);
-            slideElements.push(slide);
-        });
-    }
-
-    function getClassForIndex(idx) {
-        if (idx === currentIndex) return 'slide active';
-        if (idx === (currentIndex - 1 + slidesData.length) % slidesData.length) return 'slide prev';
-        if (idx === (currentIndex + 1) % slidesData.length) return 'slide next';
-        return 'slide hidden';
-    }
-
-    function updateUI() {
-        slideElements.forEach((el, i) => {
-            el.className = getClassForIndex(i);
-        });
-        const dots = dotsContainer.querySelectorAll('.dot');
-        dots.forEach((dot, i) => {
-            if (i === currentIndex) dot.classList.add('active');
-            else dot.classList.remove('active');
-        });
-        if (currentSpan) currentSpan.textContent = String(currentIndex + 1).padStart(2, '0');
-        if (totalSpan) totalSpan.textContent = String(slidesData.length).padStart(2, '0');
-    }
-
-    function goToSlide(index) {
-        if (!slidesData.length) return;
-        if (index === currentIndex) return;
-        currentIndex = (index + slidesData.length) % slidesData.length;
-        updateUI();
-    }
-
-    function nextSlide() { goToSlide(currentIndex + 1); }
-    function prevSlide() { goToSlide(currentIndex - 1); }
-
-    function buildDots() {
-        if (!dotsContainer) return;
-        dotsContainer.innerHTML = '';
-        slidesData.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'dot' + (i === currentIndex ? ' active' : '');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
-        });
-    }
-
-    function initGallery(images) {
-        slidesData = images;
-        if (!slidesData.length) return;
-        createSlides(slidesData);
-        buildDots();
-        updateUI();
-
-        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-            if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+            slide.className = 'swiper-slide';
+            const frame = document.createElement('div');
+            frame.className = 'img-box';
+            const picture = document.createElement('img');
+            picture.src = img.src;
+            picture.alt = img.alt;
+            picture.loading = 'lazy';
+            frame.appendChild(picture);
+            slide.appendChild(frame);
+            wrapper.appendChild(slide);
         });
 
-        let touchStartX = 0;
-        stage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-        stage.addEventListener('touchend', (e) => {
-            const diff = e.changedTouches[0].screenX - touchStartX;
-            if (Math.abs(diff) > 50) {
-                diff < 0 ? nextSlide() : prevSlide();
-            }
-        });
+        const allImages = document.querySelectorAll('.img-box img');
+        let loadedCount = 0;
+        const totalImages = allImages.length;
 
-        function startAuto() { autoInterval = setInterval(nextSlide, 7000); }
-        function stopAuto() { clearInterval(autoInterval); }
-        startAuto();
-        const container = document.querySelector('.gallery-wrap');
-        if (container) {
-            container.addEventListener('mouseenter', stopAuto);
-            container.addEventListener('mouseleave', startAuto);
-            container.addEventListener('touchstart', stopAuto, { passive: true });
-            container.addEventListener('touchend', () => { stopAuto(); startAuto(); });
+        function startSwiper() {
+            new Swiper('.gallerySwiper', {
+                loop: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                spaceBetween: 24,
+                grabCursor: true,
+                speed: 550,
+                autoplay: {
+                    delay: 7000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true,
+                },
+            });
+        }
+
+        if (totalImages === 0) {
+            startSwiper();
+        } else {
+            allImages.forEach(img => {
+                if (img.complete) {
+                    loadedCount++;
+                    if (loadedCount === totalImages) startSwiper();
+                } else {
+                    img.addEventListener('load', () => {
+                        loadedCount++;
+                        if (loadedCount === totalImages) startSwiper();
+                    });
+                    img.addEventListener('error', () => {
+                        loadedCount++;
+                        if (loadedCount === totalImages) startSwiper();
+                    });
+                }
+            });
+            if (loadedCount === totalImages) startSwiper(); // all cached
         }
     }
 
-    loadGalleryImages().then(images => {
-        initGallery(images);
-    }).catch(() => {
-        initGallery([
-            'https://picsum.photos/id/104/1365/1365',
-            'https://picsum.photos/id/30/1365/1365',
-            'https://picsum.photos/id/58/1365/1365',
-            'https://picsum.photos/id/26/1365/1365'
-        ]);
-    });
+    initGallery();
 })();
 
 // ========== RSVP DROPDOWN & FORM HANDLER ==========
@@ -547,14 +519,13 @@ audio.addEventListener('ended', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 emberCard.classList.add('animate-ember');
-                emberObserver.unobserve(emberCard); // only animate once
+                emberObserver.unobserve(emberCard);
             }
         });
-    }, { threshold: 0.3, rootMargin: "0px 0px -20px 0px" }); // trigger when 30% visible
+    }, { threshold: 0.3, rootMargin: "0px 0px -20px 0px" });
 
     emberObserver.observe(emberCard);
 
-    // fallback if already visible
     if (emberCard.getBoundingClientRect().top < window.innerHeight - 100) {
         emberCard.classList.add('animate-ember');
         emberObserver.unobserve(emberCard);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Claudine and Mark Wedding</title>
     
@@ -13,11 +13,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- TYPOGRAPHY OVERRIDE: HEADING = EB Garamond, BODY = Inter -->
     <style>
         /* ----- GLOBAL RESET: BODY TEXT (INTER) ----- */
         body, 
@@ -125,13 +124,6 @@
         }
         
         /* Hashtag specific: bold EB Garamond */
-        .hashtag-eb-share {
-            font-weight: 800 !important;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
-        }
-        
         /* maintain button text & inputs not heading */
         button, .btn, .nav-btn-ext, .map-btn-venue, .btn-submit {
             font-family: 'Inter', sans-serif !important;
@@ -172,6 +164,39 @@
         /* ensure rsvp form labels are clean */
         .form-label {
             font-weight: 500;
+        }
+
+        /* ===== MOBILE LEFT ALIGNMENT FOR VENUE CARDS, BUT CENTER THE MAP BUTTON ===== */
+        @media (max-width: 768px) {
+            .venue-body {
+                text-align: left !important;
+                padding: 0.8rem 1rem 1rem;
+            }
+            .venue-body .venue-tag,
+            .venue-body .venue-name,
+            .venue-body .venue-addr {
+                text-align: left !important;
+            }
+            .venue-card {
+                text-align: left;
+            }
+
+            /* This overrides everything and centers the button */
+            .map-btn {
+                display: flex !important;           /* block‑level flex container */
+                justify-content: center !important;
+                align-items: center !important;
+                width: fit-content !important;      /* shrink to content size */
+                margin: 0 auto !important;          /* horizontal centering */
+                font-size: 9px !important;          /* small text */
+                padding: 2px 6px !important;        /* tighter padding */
+                transform: none !important;         /* remove any scaling */
+                border-radius: 8px !important;
+            }
+            .map-btn .map-icon {
+                width: 10px !important;
+                height: 10px !important;
+            }
         }
     </style>
 </head>
@@ -225,7 +250,7 @@
     <!-- ========== NEW: SAVE THE DATE COMPONENT ========== -->
     <section class="std-section">
         <div class="std-card">
-            <p class="std-heading">Please Save the Date</p>
+            <p class="std-heading">A date to keep</p>
             <div class="ornament-line mb-4">
                 <div class="line-seg"></div>
                 <div class="orn-center">
@@ -276,31 +301,31 @@
         </div>
     </section>
 
-    <!-- ========== PRENUP GALLERY ========== -->
+    <!-- ========== PRENUP GALLERY (SWIPER) ========== -->
     <section class="prenup-gallery-section py-4">
-        <div class="container px-0 px-md-3">
-            <div class="text-center mb-2">
-                <h2 class="serif fs-2 mt-2" style="color: #3f2c21;">Our Prenup Gallery</h2>
-                <div class="elegant-divider mx-auto my-2"></div>
-            </div>
-            <div class="gallery-wrapper" style="padding: 0 5px;">
-                <div class="gallery-wrap">
-                    <div class="gallery-box">
-                        <div class="img-stage" id="prenupStage"></div>
-                        <div class="external-nav">
-                            <button class="nav-btn-ext" id="prenupPrevBtn" aria-label="Previous">
-                                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-                            </button>
-                            <div class="gallery-counter" id="galleryCounter">
-                                <strong id="currentNumOverlay">01</strong> / <span id="totalNumOverlay">00</span>
-                            </div>
-                            <button class="nav-btn-ext" id="prenupNextBtn" aria-label="Next">
-                                <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-                            </button>
-                        </div>
-                        <div class="dots" id="prenupDots"></div>
-                    </div>
-                    <div class="swipe-hint">← Swipe to navigate →</div>
+        <div class="container">
+            <div class="gallery-card">
+                <div class="title-wrapper">
+                    <h1>
+                        <i class="bi bi-suit-heart-fill"></i>
+                        Our Prenup Gallery
+                        <i class="bi bi-suit-heart-fill"></i>
+                    </h1>
+                </div>
+                <div class="elegant-line">
+                    <span class="line-decoration long"></span>
+                    <span class="line-icon"><i class="bi bi-brightness-alt-ring-fill"></i></span>
+                    <span class="line-decoration"></span>
+                    <span class="line-icon"><i class="bi bi-suit-heart-fill"></i></span>
+                    <span class="line-decoration"></span>
+                    <span class="line-icon"><i class="bi bi-brightness-alt-ring-fill"></i></span>
+                    <span class="line-decoration long"></span>
+                </div>
+                <div class="swiper gallerySwiper">
+                    <div class="swiper-wrapper" id="slidesWrapper"></div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
         </div>
@@ -424,7 +449,7 @@
         </div>
     </section>
 
-    <!-- ========== VENUE SECTION ========== -->
+    <!-- ========== VENUE SECTION (CEREMONY & RECEPTION) ========== -->
     <div class="venue-section">
         <div class="content-container">
             <h2 class="section-heading">
@@ -452,7 +477,7 @@
                                     <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
                                     <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
                                 </svg>
-                                Open in Google Maps
+                                Open in Maps
                             </button>
                         </div>
                     </div>
@@ -471,7 +496,7 @@
                                     <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
                                     <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
                                 </svg>
-                                Open in Google Maps
+                                Open in Maps
                             </button>
                         </div>
                     </div>
@@ -726,6 +751,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
     <script src="js/script.js" defer></script>
     <script>
         const WEDDING = new Date('2026-06-25T15:00:00');
