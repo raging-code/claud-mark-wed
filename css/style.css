@@ -1375,24 +1375,22 @@ footer {
     }
 
     /* ----- MAP BUTTON: SMALL, NO MIN-WIDTH, NATURALLY CENTERED ----- */
-    .map-btn {
+.map-btn {
     display: flex !important;
-    justify-content: center;
-    align-items: center;
-    font-size: 9px !important;
-    padding: 2px 6px !important;
-    border-radius: 8px !important;
-    margin: 0 !important;                 /* no margin at all */
-    min-width: 0 !important;
-    width: auto !important;
-    align-self: flex-start !important;   /* force left */
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: fit-content !important;
+    margin: 0 !important;
+    font-size: 7px !important;           /* very small text */
+    padding: 1px 0 !important;           /* no side padding, tiny vertical */
+    transform: none !important;
+    border-radius: 6px !important;
 }
-    .map-btn .map-icon {
-        width: 10px !important;
-        height: 10px !important;
-    }
+.map-btn .map-icon {
+    width: 8px !important;
+    height: 8px !important;
+    margin-right: 3px;
+}
 
     /* ----- SHARE MOMENT ----- */
     .instruction-text { font-size: 0.65rem; }

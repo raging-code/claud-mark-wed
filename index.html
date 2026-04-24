@@ -182,21 +182,23 @@
             }
 
             /* This overrides everything and centers the button */
-            .map-btn {
-                display: flex !important;           /* block‑level flex container */
-                justify-content: center !important;
-                align-items: center !important;
-                width: fit-content !important;      /* shrink to content size */
-                margin: 0 auto !important;          /* horizontal centering */
-                font-size: 9px !important;          /* small text */
-                padding: 2px 6px !important;        /* tighter padding */
-                transform: none !important;         /* remove any scaling */
-                border-radius: 8px !important;
-            }
-            .map-btn .map-icon {
-                width: 10px !important;
-                height: 10px !important;
-            }
+.map-btn {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    width: fit-content !important;
+    margin: 0 !important;
+    font-size: 7px !important;           /* small text */
+    padding: 2px 4px !important;           /* no side padding, tiny vertical */
+    border-radius: 6px !important;
+    transform: none !important;
+    min-width: 0 !important;             /* kill any forced width */
+}
+.map-btn .map-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-right: 3px;
+}
         }
     </style>
 </head>
