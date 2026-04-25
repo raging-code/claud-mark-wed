@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Claudine and Mark Wedding</title>
     
@@ -10,202 +10,37 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+          crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          integrity="sha384-XGjxtQfXaH2tnPFa9x+ruJTuLE3Aa6LhHSWRr1XeTyhezb4abCG4ccI5AkVDxqC+"
+          crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          integrity="sha384-5e2ESR8Ycmos6g3gAKr1Jvwye8sW4U1u/cAKulfVJnkakCcMqhOudbtPnvJ+nbv7"
+          crossorigin="anonymous">
+    <!-- Swiper CSS (kept for other possible uses) -->
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+          integrity="sha384-gAPqlBuTCdtVcYt9ocMOYWrnBZ4XSL6q+4eXqwNycOr4iFczhNKtnYhF3NEXJM51"
+          crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" 
+          rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* ----- GLOBAL RESET: BODY TEXT (INTER) ----- */
-        body, 
-        p, 
-        span:not(.countdown-num):not(.countdown-lbl):not(.love-card-overlay i),
-        li, 
-        div:not(.countdown-unit):not(.countdown-inner):not(.gallery-counter):not(.lightbox-caption),
-        .form-label, 
-        .form-control, 
-        .accordion-body, 
-        .faq-question-text,
-        .btn-submit,
-        .dropdown-selected,
-        .dropdown-option,
-        .instruction-text,
-        .share-tagline,
-        .tagline-share,
-        .hashtag-eb-share,
-        .small-line,
-        .countdown-phrase,
-        .countdown-lbl,
-        .countdown-num,
-        .love-date,
-        .venue-details p,
-        .map-btn-venue,
-        .attire-col ul li,
-        .ember-line span,
-        .ember-gift,
-        .audio-card .small,
-        .swipe-hint,
-        .proposal-date,
-        .custom-dropdown *,
-        #rsvpMessage,
-        footer p,
-        .cinematic-overlay .venue-details h4,
-        .attire-palette-hex,
-        .attire-palette-label,
-        .attire-subtitle,
-        .love-caption p,
-        .love-story-quote,
-        .countdown-eyebrow {
-            font-family: 'Inter', sans-serif !important;
-        }
-
-        /* specific numeric counters inside gallery should also be Inter but preserve design */
-        .gallery-counter strong,
-        .gallery-counter span {
-            font-family: 'Inter', sans-serif !important;
-        }
-
-        /* ----- ALL HEADINGS: EB Garamond (serif elegance) ----- */
-        h1, h2, h3, h4, h5, h6,
-        .serif,
-        .section-title,
-        .love-story-main-title,
-        .design-title,
-        .ember-title,
-        .attire-title,
-        .midnight-header h2,
-        .love-card h4,
-        .attire-col h4,
-        .venue-details h4,
-        .cinematic-overlay .venue-details h4,
-        .charcoal-ember-card .ember-title,
-        .faq-header h2,
-        .countdown-eyebrow,
-        .countdown-phrase,
-        .attire-title,
-        .attire-subtitle,
-        .share-hashtag .hashtag-eb-share,
-        .love-story-main-title,
-        .love-story-quote,
-        .attire-palette-label,
-        .attire-col-tag,
-        .ember-title,
-        .attire-ornament,
-        .wedding-banner *,
-        .rsvp-card .section-title,
-        .love-story-title-wrapper h2 {
-            font-family: 'EB Garamond', serif !important;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-        }
-
-        /* specific heading weights */
-        h1, h2, .section-title, .love-story-main-title {
-            font-weight: 600 !important;
-        }
-        
-        .love-card h4, .attire-col h4 {
-            font-weight: 600 !important;
-            letter-spacing: 0.01em;
-        }
-        
-        .countdown-eyebrow, .attire-col-tag {
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-        }
-        
-        .ember-title {
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        
-        /* Hashtag specific: bold EB Garamond */
-        /* maintain button text & inputs not heading */
-        button, .btn, .nav-btn-ext, .map-btn-venue, .btn-submit {
-            font-family: 'Inter', sans-serif !important;
-        }
-        
-        /* ensure audio progress & slider text */
-        .progress-container span, #currentTime, #duration {
-            font-family: 'Inter', sans-serif !important;
-        }
-        
-        /* keep sakura petals & special icons */
-        .sakura-petals, .fas, .far, .fab {
-            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", system-ui, sans-serif;
-        }
-        
-        /* preserve some elegance for quote */
-        .love-story-quote {
-            font-style: italic;
-            font-weight: 400;
-        }
-        
-        /* countdown numbers get extra boldness but still Inter */
-        .countdown-num {
-            font-weight: 700 !important;
-            font-size: 2.2rem;
-        }
-        
-        /* avoid overriding lightbox close & arrows font icons */
-        .lightbox-close, .lightbox-prev, .lightbox-next {
-            font-family: system-ui, sans-serif;
-        }
-        
-        /* small adjustment for venue buttons */
-        .venue-buttons .map-btn-venue {
-            font-weight: 500;
-        }
-        
-        /* ensure rsvp form labels are clean */
-        .form-label {
-            font-weight: 500;
-        }
-
-        /* ===== MOBILE LEFT ALIGNMENT FOR VENUE CARDS, BUT CENTER THE MAP BUTTON ===== */
-        @media (max-width: 768px) {
-            .venue-body {
-                text-align: left !important;
-                padding: 0.8rem 1rem 1rem;
-            }
-            .venue-body .venue-tag,
-            .venue-body .venue-name,
-            .venue-body .venue-addr {
-                text-align: left !important;
-            }
-            .venue-card {
-                text-align: left;
-            }
-
-            /* This overrides everything and centers the button */
-.map-btn {
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    width: fit-content !important;
-    margin: 0 !important;
-    font-size: 7px !important;           /* small text */
-    padding: 2px 4px !important;           /* no side padding, tiny vertical */
-    border-radius: 6px !important;
-    transform: none !important;
-    min-width: 0 !important;             /* kill any forced width */
-}
-.map-btn .map-icon {
-    width: 10px !important;
-    height: 10px !important;
-    margin-right: 3px;
-}
-        }
-    </style>
 </head>
 <body>
 
     <div class="sakura-petals"></div>
 
+    <!-- ==================== 1. COVER PHOTO (Hero) ==================== -->
     <section class="hero-section">
         <div class="hero-image-wrapper">
             <picture>
@@ -216,11 +51,12 @@
         </div>
     </section>
 
+    <!-- ==================== 2. LOGO (Banner) ==================== -->
     <div class="wedding-banner">
         <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager">
     </div>
 
-    <!-- ========== WEDDING COUNTDOWN ========== -->
+    <!-- ==================== 3. COUNTDOWN ==================== -->
     <div class="countdown-banner">
         <div class="countdown-inner">
             <span class="countdown-phrase">The beginning of forever starts in...</span>
@@ -233,7 +69,7 @@
         </div>
     </div>
 
-    <!-- ========== THEME SONG / AUDIO CARD ========== -->
+    <!-- ==================== AUDIO PLAYER (kept) ==================== -->
     <div class="container mt-4 mb-5">
         <div class="audio-card shadow-sm rounded-3 mx-auto">
             <div class="audio-controls d-flex gap-2">
@@ -245,74 +81,16 @@
                 <input type="range" id="seekSlider" class="form-range" value="0" step="0.01">
                 <span id="duration" class="small">0:00</span>
             </div>
-            <audio id="themeAudio" src="assets/audio/theme-song.mp3" preload="auto"></audio>
+            <audio id="themeAudio" src="assets/audio/theme-song.mp3" preload="metadata"></audio>
         </div>
     </div>
 
-    <!-- ========== NEW: SAVE THE DATE COMPONENT ========== -->
-    <section class="std-section">
-        <div class="std-card">
-            <p class="std-heading">A date to keep</p>
-            <div class="ornament-line mb-4">
-                <div class="line-seg"></div>
-                <div class="orn-center">
-                    <div class="orn-diamond sm"></div>
-                    <div class="orn-diamond"></div>
-                    <div class="orn-diamond sm"></div>
-                </div>
-                <div class="line-seg"></div>
-            </div>
-
-            <div class="photos-row">
-                <div class="photo-unit from-left">
-                    <div class="photo-box">
-                        <img src="assets/images/06.webp" alt="Save the date left" loading="lazy">
-                    </div>
-                </div>
-                <div class="photos-sep">
-                    <div class="sep-dot"></div>
-                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
-                    <div class="sep-dot"></div>
-                </div>
-                <div class="photo-unit from-bottom">
-                    <div class="photo-box">
-                        <img src="assets/images/25.webp" alt="Save the date center" loading="lazy">
-                    </div>
-                </div>
-                <div class="photos-sep">
-                    <div class="sep-dot"></div>
-                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
-                    <div class="sep-dot"></div>
-                </div>
-                <div class="photo-unit from-right">
-                    <div class="photo-box">
-                        <img src="assets/images/26.webp" alt="Save the date right" loading="lazy">
-                    </div>
-                </div>
-            </div>
-
-            <div class="ornament-line mt-4">
-                <div class="line-seg"></div>
-                <div class="orn-center">
-                    <div class="orn-diamond sm"></div>
-                    <div class="orn-diamond"></div>
-                    <div class="orn-diamond sm"></div>
-                </div>
-                <div class="line-seg"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== PRENUP GALLERY (SWIPER) ========== -->
-    <section class="prenup-gallery-section py-4">
+    <!-- ==================== 4. PROPOSAL PHOTOS ==================== -->
+    <section class="proposal-gallery-section py-4">
         <div class="container">
             <div class="gallery-card">
                 <div class="title-wrapper">
-                    <h1>
-                        <i class="bi bi-suit-heart-fill"></i>
-                        Our Prenup Gallery
-                        <i class="bi bi-suit-heart-fill"></i>
-                    </h1>
+                    <h1><i class="bi bi-suit-heart-fill"></i> The Proposal <i class="bi bi-suit-heart-fill"></i></h1>
                 </div>
                 <div class="elegant-line">
                     <span class="line-decoration long"></span>
@@ -323,139 +101,98 @@
                     <span class="line-icon"><i class="bi bi-brightness-alt-ring-fill"></i></span>
                     <span class="line-decoration long"></span>
                 </div>
-                <div class="swiper gallerySwiper">
-                    <div class="swiper-wrapper" id="slidesWrapper"></div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
+                <div class="viewer-wrap" id="proposalViewer">
+                    <div class="main-stage" id="proposalStage">
+                        <button class="nav-arrow prev" id="proposalPrevBtn" aria-label="Previous slide">
+                            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button class="nav-arrow next" id="proposalNextBtn" aria-label="Next slide">
+                            <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+                        </button>
+                    </div>
+                    <div class="thumbs-row" id="proposalThumbsRow"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== LOVE STORY SECTION ========== -->
-    <section class="love-story-section-new py-5">
-        <div class="container">
-            <div class="love-story-title-wrapper text-center mb-4">
-                <h2 class="love-story-main-title">Our Love Story</h2>
-                <div class="sakura-divider">
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-heart"></i>
-                </div>
-                <p class="love-story-quote">"Every love story is beautiful, but ours is my favorite."</p>
-            </div>
-            <div class="love-grid-3x2">
-                <div class="love-card" data-index="0">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-1.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-1.jpg" alt="First coffee" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>First Coffee Date</h4>
-                        <p>Oat milk lattes & nervous smiles</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> August 2018</span>
-                    </div>
-                </div>
-                <div class="love-card" data-index="1">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-2.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-2.jpg" alt="First getaway" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>First Getaway</h4>
-                        <p>Mountains, lost roads & forever</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> December 2019</span>
-                    </div>
-                </div>
-                <div class="love-card" data-index="2">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-3.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-3.jpg" alt="One year" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>One Year</h4>
-                        <p>Same café, bigger dreams</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> August 2019</span>
-                    </div>
-                </div>
-                <div class="love-card" data-index="3">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-4.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-4.jpg" alt="She said yes" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>She Said Yes</h4>
-                        <p>Cherry blossoms & a ring</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> April 2025</span>
-                    </div>
-                </div>
-                <div class="love-card" data-index="4">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-5.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-5.jpg" alt="Family" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>Family United</h4>
-                        <p>Two families, one heart</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> October 2020</span>
-                    </div>
-                </div>
-                <div class="love-card" data-index="5">
-                    <div class="love-img">
-                        <picture>
-                            <source srcset="assets/images/love-story/story-6.webp" type="image/webp">
-                            <img src="assets/images/love-story/story-6.jpg" alt="Dance" loading="lazy" width="600" height="600">
-                        </picture>
-                        <div class="love-card-overlay"><i class="fas fa-search-plus"></i></div>
-                    </div>
-                    <div class="love-caption">
-                        <h4>Practice Dance</h4>
-                        <p>Stepping on toes, laughing</p>
-                        <span class="love-date"><i class="fas fa-calendar-alt me-1"></i> Present</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- ==================== 5. PROPOSAL VIDEO ==================== -->
     <section class="video-section py-5">
         <div class="container text-center" style="padding-top: 20px;">
             <h2 class="section-title mb-5px">The Surprise Proposal in Japan</h2>
             <p class="proposal-date mb-5px">OSAKA, JAPAN — APRIL 9, 2025</p>
             <div class="video-frame-wrapper mx-auto mt-5px">
                 <div class="video-sakura-frame">
-                    <video controls class="proposal-video" preload="metadata" playsinline width="300" height="560">
-                        <source src="assets/videos/proposal.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+                    <iframe width="300" height="560" 
+                            src="https://www.youtube.com/embed/CjJX6q6xWs8?autoplay=0&modestbranding=1&rel=0&showinfo=0" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen
+                            style="border-radius:14px; display:block; object-fit:cover;">
+                    </iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== VENUE SECTION (CEREMONY & RECEPTION) ========== -->
+    <!-- ==================== 6. LOVE STORY ==================== -->
+    <section class="new-love-story">
+        <header class="love-story-header">
+            <h1 class="love-story-main-title">Our Journey Together<br><em>A Love Story</em></h1>
+        </header>
+        <div class="love-story-container-custom">
+            <div class="story-row">
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" loading="lazy"></div><div class="text"><div class="meta"><span class="num">01</span><span class="date">Year 2011</span></div><h2 class="title">The Beginning</h2><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" loading="lazy"></div><div class="text"><div class="meta"><span class="num">02</span><span class="date">Year 2014</span></div><h2 class="title">Two Lovebirds</h2><p class="body">Same school, meeting during breaktime, and sharing meals together.</p></div></div></div>
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" loading="lazy"></div><div class="text"><div class="meta"><span class="num">03</span><span class="date">Year 2015</span></div><h2 class="title">Our Sports</h2><p class="body">Our 3rd year as boyfriend and girlfriend. Supporting her in her first UAAP season.</p></div></div></div>
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" loading="lazy"></div><div class="text"><div class="meta"><span class="num">04</span><span class="date">Years 2018 & 2022</span></div><h2 class="title">Our Life</h2><p class="body">he earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" loading="lazy"></div><div class="text"><div class="meta"><span class="num">05</span><span class="date">Year 2025</span></div><h2 class="title">Under the Sakura</h2><p class="body">The day she said “Yes” and we started our dream business.</p></div></div></div>
+                <div class="story-col"><div class="item"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" loading="lazy"></div><div class="text"><div class="meta"><span class="num">06</span><span class="date">Year 2026</span></div><h2 class="title">Beginning of Forever</h2><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+            </div>
+        </div>
+        <footer class="love-story-footer-rule">
+            <div class="rule"><span></span><span></span></div>
+        </footer>
+    </section>
+
+    <!-- ==================== 7. PRENUP PHOTOS ==================== -->
+    <section class="prenup-gallery-section py-4">
+        <div class="container">
+            <div class="gallery-card">
+                <div class="title-wrapper">
+                    <h1><i class="bi bi-suit-heart-fill"></i> Our Prenup Gallery <i class="bi bi-suit-heart-fill"></i></h1>
+                </div>
+                <div class="elegant-line">
+                    <span class="line-decoration long"></span>
+                    <span class="line-icon"><i class="bi bi-brightness-alt-ring-fill"></i></span>
+                    <span class="line-decoration"></span>
+                    <span class="line-icon"><i class="bi bi-suit-heart-fill"></i></span>
+                    <span class="line-decoration"></span>
+                    <span class="line-icon"><i class="bi bi-brightness-alt-ring-fill"></i></span>
+                    <span class="line-decoration long"></span>
+                </div>
+                <div class="viewer-wrap" id="prenupViewer">
+                    <div class="main-stage" id="prenupStage">
+                        <button class="nav-arrow prev" id="prenupPrevBtn" aria-label="Previous slide">
+                            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button class="nav-arrow next" id="prenupNextBtn" aria-label="Next slide">
+                            <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+                        </button>
+                    </div>
+                    <div class="thumbs-row" id="prenupThumbsRow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 8. VENUE AND TIME ==================== -->
     <div class="venue-section">
         <div class="content-container">
             <h2 class="section-heading">
-                Where Love Unfolds
+                The Venue
                 <span class="heading-divider">
                     <span class="divider-line thin"></span>
                     <span class="divider-line"></span>
@@ -467,18 +204,13 @@
             <div class="row g-3">
                 <div class="col-6">
                     <div class="venue-card">
-                        <img class="venue-img" src="assets/images/ceremony.webp" alt="Ceremony venue: Hall of Justice Makati">
+                        <img class="venue-img" src="assets/images/ceremony.webp" alt="Ceremony venue">
                         <div class="venue-body">
                             <div class="venue-tag">— Ceremony —</div>
                             <div class="venue-name">Hall of Justice Makati City</div>
                             <div class="venue-addr">6th Floor RTC Branch 236, Makati, Metro Manila</div>
                             <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/6DVMnTif36NG1L827', '_blank')">
-                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                    <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
-                                    <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
-                                </svg>
+                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 Open in Maps
                             </button>
                         </div>
@@ -486,18 +218,13 @@
                 </div>
                 <div class="col-6">
                     <div class="venue-card">
-                        <img class="venue-img" src="assets/images/reception.webp" alt="Reception venue: City Garden GRAND Hotel Makati">
+                        <img class="venue-img" src="assets/images/reception.webp" alt="Reception venue">
                         <div class="venue-body">
                             <div class="venue-tag">— Reception —</div>
                             <div class="venue-name">City Garden GRAND Hotel Makati</div>
                             <div class="venue-addr">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</div>
                             <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/NYs9tP5MVKtoPbb9A', '_blank')">
-                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                    <path d="M12 2v2M22 10h-2M4 10H2M12 22v-2" stroke-width="1.5"/>
-                                    <rect x="2" y="2" width="20" height="20" rx="2" stroke-width="1.2" opacity="0.3"/>
-                                </svg>
+                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 Open in Maps
                             </button>
                         </div>
@@ -507,107 +234,31 @@
         </div>
     </div>
 
-    <!-- ========== ATTIRE GUIDE ========== -->
+    <!-- ==================== 9. ATTIRE ==================== -->
     <section class="attire-guide-section py-4">
         <div class="container">
             <div class="attire-card-c">
                 <div class="attire-inner-bg">
                     <div class="attire-c-inner">
-                        <div class="attire-ornament text-center">✦  ✦  ✦</div>
-                        <div class="attire-title text-center">Attire Guide</div>
-                        <div class="attire-subtitle text-center">Please dress to celebrate with us</div>
                         <div class="attire-photo" id="attirePhotoContainer">
                             <img src="assets/images/dresscode.webp" alt="Dress Code" class="attire-img"
                                  onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
                             <div class="photo-placeholder" style="display: none;">
-                                <svg width="55" height="55" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="#bba898" stroke-width="1.2" fill="none"/>
-                                    <circle cx="8.5" cy="9.5" r="1.5" stroke="#bba898" stroke-width="1.2" fill="none"/>
-                                    <path d="M22 14L17 10L9 16L5 13L2 15" stroke="#bba898" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
-                                </svg>
+                                <svg width="55" height="55" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#bba898" stroke-width="1.2" fill="none"/><circle cx="8.5" cy="9.5" r="1.5" stroke="#bba898" stroke-width="1.2"/><path d="M22 14L17 10L9 16L5 13L2 15" stroke="#bba898" stroke-width="1.2"/></svg>
                                 <span>dresscode.webp</span>
-                                <span style="font-size:0.6rem; margin-top:4px;">(transparent bg)</span>
-                            </div>
-                        </div>
-                        <div class="attire-palette-row">
-                            <div class="attire-palette-item">
-                                <div class="attire-palette-label">LADIES</div>
-                                <div class="attire-palette-swatch" style="background: #FAC784;"></div>
-                                <div class="attire-palette-hex">#FAC784</div>
-                            </div>
-                            <div class="attire-palette-item">
-                                <div class="attire-palette-label">GENTLEMEN</div>
-                                <div class="attire-palette-swatch" style="background: #A48459;"></div>
-                                <div class="attire-palette-hex">#A48459</div>
-                            </div>
-                        </div>
-                        <hr class="attire-divider">
-                        <div class="row g-2">
-                            <div class="col-6 text-center">
-                                <div class="attire-col her">
-                                    <div class="attire-col-tag">Ladies</div>
-                                    <h4>For Her</h4>
-                                    <ul class="list-unstyled small">
-                                        <li>Floral maxi or midi</li>
-                                        <li>Cocktail gown</li>
-                                        <li>Strappy heels or flats</li>
-                                        <li>Delicate accessories</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-6 text-center">
-                                <div class="attire-col him">
-                                    <div class="attire-col-tag">Gentlemen</div>
-                                    <h4>For Him</h4>
-                                    <ul class="list-unstyled small">
-                                        <li>Long-sleeve dress shirt</li>
-                                        <li>Tailored trousers</li>
-                                        <li>Oxford leather shoes</li>
-                                        <li>Dark blazer</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                         <div class="share-moment-wrapper mt-3 pt-2" id="shareMomentBlock">
                             <hr class="attire-divider">
                             <div class="text-center">
-                                <div class="share-icons-group">
-                                    <div class="d-flex justify-content-center gap-3 icon-row-custom">
-                                        <span>📷</span>
-                                        <span>✦</span>
-                                        <span>♡</span>
-                                        <span>✦</span>
-                                        <span>📸</span>
-                                    </div>
-                                    <div class="instruction-text">share your perspective</div>
-                                </div>
-                                <div class="share-tagline">
-                                    <div class="tagline-share">
-                                        Capture the memories,<br> share the love, and tag us along the way!
-                                    </div>
-                                    <div class="custom-divider-short"></div>
-                                </div>
-                                <div class="share-hashtag">
-                                    <div class="hashtag-eb-share">
-                                        #ForeverMARKedforCLAUDINE
-                                    </div>
-                                </div>
+                                <div class="share-tagline"><div class="tagline-share">Capture the memories,<br> share the love, and tag us along the way!</div><div class="custom-divider-short"></div></div>
+                                <div class="share-hashtag"><div class="hashtag-eb-share">#ForeverMARKedforCLAUDINE</div></div>
                             </div>
                         </div>
                         <div class="charcoal-ember-card" id="charcoalEmberCard">
                             <div class="ember-inner">
-                                <h3 class="ember-title">
-                                    <i class="fas fa-heart heart-3d"></i>
-                                    <i class="fas fa-heart heart-3d"></i>
-                                    A Little Note
-                                    <i class="fas fa-heart heart-3d"></i>
-                                    <i class="fas fa-heart heart-3d"></i>
-                                </h3>
-                                <div class="ember-lines">
-                                    <div class="ember-line"><i class="fas fa-fire ember-icon"></i> <span>Please arrive when the day begins</span></div>
-                                    <div class="ember-line"><i class="fas fa-mug-hot ember-icon"></i> <span>Stay with us through every moment</span></div>
-                                    <div class="ember-line"><i class="fas fa-campground ember-icon"></i> <span>And leave only with joy in your heart</span></div>
-                                </div>
+                                <h3 class="ember-title"><i class="fas fa-heart heart-3d"></i><i class="fas fa-heart heart-3d"></i> A Little Note <i class="fas fa-heart heart-3d"></i><i class="fas fa-heart heart-3d"></i></h3>
+                                <div class="ember-lines"><div class="ember-line"><i class="fas fa-fire ember-icon"></i> <span>Please arrive when the day begins</span></div><div class="ember-line"><i class="fas fa-mug-hot ember-icon"></i> <span>Stay with us through every moment</span></div><div class="ember-line"><i class="fas fa-campground ember-icon"></i> <span>And leave only with joy in your heart</span></div></div>
                                 <div class="ember-gift">✨ Your presence is the greatest gift ✨</div>
                             </div>
                         </div>
@@ -617,118 +268,39 @@
         </div>
     </section>
 
+    <!-- ==================== 10. FAQ ==================== -->
     <section class="faq-section py-5">
         <div class="container">
             <div class="faq-card p-4 p-md-5">
-                <div class="faq-header mb-4 text-center">
-                    <h2 class="design-title mb-0">What You Need to Know</h2>
-                </div>
+                <div class="faq-header mb-4 text-center"><h2 class="design-title mb-0">What You Need to Know</h2></div>
                 <div class="accordion" id="faqAccordionWedding">
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePark">
-                                <i class="fas fa-parking fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">Parking – Where can I park my car?</span>
-                            </button>
-                        </h2>
-                        <div id="collapsePark" class="accordion-collapse collapse" data-bs-parent="#faqAccordionWedding">
-                            <div class="accordion-body text-secondary bg-white">
-                                <i class="fas fa-car me-2 text-pink"></i> Complimentary parking is available at the venue's private lot. Shuttles will run from 4 PM until midnight.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapsePlus">
-                                <i class="fas fa-user-plus fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">Plus one – Can I bring a guest?</span>
-                            </button>
-                        </h2>
-                        <div id="collapsePlus" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-envelope me-2 text-pink"></i> Only guests listed on your invitation.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseKids">
-                                <i class="fas fa-baby-carriage fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">Kids at the wedding?</span>
-                            </button>
-                        </h2>
-                        <div id="collapseKids" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-heart-broken me-2 text-pink"></i> Adults-only event (18+).</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseRSVPchange">
-                                <i class="fas fa-exchange-alt fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">RSVP change?</span>
-                            </button>
-                        </h2>
-                        <div id="collapseRSVPchange" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-calendar-check me-2 text-pink"></i> Please inform us as soon as possible.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseSeat">
-                                <i class="fas fa-table fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">Seating arrangement?</span>
-                            </button>
-                        </h2>
-                        <div id="collapseSeat" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-chair me-2 text-pink"></i> Assigned tables, free choice within.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapsePhoto">
-                                <i class="fas fa-camera-retro fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">Photos / videos allowed?</span>
-                            </button>
-                        </h2>
-                        <div id="collapsePhoto" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-mobile-alt me-2 text-pink"></i> Unplugged ceremony, reception snaps welcome!</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseRSVPneed">
-                                <i class="fas fa-envelope-open-text fa-fw me-3 wedding-accent"></i>
-                                <span class="faq-question-text">RSVP needed?</span>
-                            </button>
-                        </h2>
-                        <div id="collapseRSVPneed" class="accordion-collapse collapse">
-                            <div class="accordion-body"><i class="fas fa-check-circle me-2 text-pink"></i> Yes, formal RSVP required for headcount.</div>
-                        </div>
-                    </div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePark"><i class="fas fa-parking fa-fw me-3 wedding-accent"></i><span class="faq-question-text">Parking – Where can I park my car?</span></button></h2><div id="collapsePark" class="accordion-collapse collapse" data-bs-parent="#faqAccordionWedding"><div class="accordion-body text-secondary bg-white"><i class="fas fa-car me-2 text-pink"></i> Complimentary parking is available at the venue's private lot. Shuttles will run from 4 PM until midnight.</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapsePlus"><i class="fas fa-user-plus fa-fw me-3 wedding-accent"></i><span class="faq-question-text">Plus one – Can I bring a guest?</span></button></h2><div id="collapsePlus" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-envelope me-2 text-pink"></i> Only guests listed on your invitation.</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseKids"><i class="fas fa-baby-carriage fa-fw me-3 wedding-accent"></i><span class="faq-question-text">Kids at the wedding?</span></button></h2><div id="collapseKids" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-heart-broken me-2 text-pink"></i> Adults-only event (18+).</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseRSVPchange"><i class="fas fa-exchange-alt fa-fw me-3 wedding-accent"></i><span class="faq-question-text">RSVP change?</span></button></h2><div id="collapseRSVPchange" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-calendar-check me-2 text-pink"></i> Please inform us as soon as possible.</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseSeat"><i class="fas fa-table fa-fw me-3 wedding-accent"></i><span class="faq-question-text">Seating arrangement?</span></button></h2><div id="collapseSeat" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-chair me-2 text-pink"></i> Assigned tables, free choice within.</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapsePhoto"><i class="fas fa-camera-retro fa-fw me-3 wedding-accent"></i><span class="faq-question-text">Photos / videos allowed?</span></button></h2><div id="collapsePhoto" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-mobile-alt me-2 text-pink"></i> Unplugged ceremony, reception snaps welcome!</div></div></div>
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded-4 overflow-hidden"><h2 class="accordion-header"><button class="accordion-button collapsed bg-light fw-semibold text-dark" data-bs-toggle="collapse" data-bs-target="#collapseRSVPneed"><i class="fas fa-envelope-open-text fa-fw me-3 wedding-accent"></i><span class="faq-question-text">RSVP needed?</span></button></h2><div id="collapseRSVPneed" class="accordion-collapse collapse"><div class="accordion-body"><i class="fas fa-check-circle me-2 text-pink"></i> Yes, formal RSVP required for headcount.</div></div></div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- ==================== 11. RSVP ==================== -->
     <section class="rsvp-section py-5">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="rsvp-card mx-auto" style="max-width: 550px;">
-                        <div class="midnight-header">
-                            <h2 class="section-title mb-0">RSVP</h2>
-                        </div>
+                        <div class="midnight-header"><h2 class="section-title mb-0">RSVP</h2></div>
                         <form id="rsvpForm" novalidate>
-                            <div style="display:none;" aria-hidden="true">
-                                <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
-                            </div>
+                            <div style="display:none;"><input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></div>
                             <div class="mb-2"><label for="name" class="form-label">Name *</label><input type="text" class="form-control" id="name" name="name" required></div>
                             <div class="mb-2"><label for="email" class="form-label">Email *</label><input type="email" class="form-control" id="email" name="email" required></div>
                             <div class="mb-2"><label for="phone" class="form-label">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone"></div>
                             <div class="mb-2"><label for="message" class="form-label">Message</label><textarea class="form-control" id="message" name="message" rows="2"></textarea></div>
                             <div class="mb-3"><label class="form-label">Are you attending? *</label>
-                                <div class="custom-dropdown" id="attendingDropdown">
-                                    <div class="dropdown-selected">Select an option</div>
-                                    <ul class="dropdown-options"><li class="dropdown-option" data-value="yes">Yes, I'll be there</li><li class="dropdown-option" data-value="no">No, I can't make it</li></ul>
-                                </div>
+                                <div class="custom-dropdown" id="attendingDropdown"><div class="dropdown-selected">Select an option</div><ul class="dropdown-options"><li class="dropdown-option" data-value="yes">Yes, I'll be there</li><li class="dropdown-option" data-value="no">No, I can't make it</li></ul></div>
                                 <input type="hidden" id="attending" name="attending" value="">
                             </div>
                             <div class="text-center"><button type="submit" class="btn-submit" id="rsvpSubmitBtn">SUBMIT</button></div>
@@ -752,8 +324,8 @@
         <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" integrity="sha384-2UI1PfnXFjVMQ7/ZDEF70CR943oH3v6uZrFQGGqJYlvhh4g6z6uVktxYbOlAczav" crossorigin="anonymous"></script>
     <script src="js/script.js" defer></script>
     <script>
         const WEDDING = new Date('2026-06-25T15:00:00');

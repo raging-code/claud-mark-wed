@@ -65,146 +65,228 @@ audio.addEventListener('ended', () => {
     isPlaying = false;
 });
 
-// ========== NEW PRENUP GALLERY (SWIPER) ==========
-(function() {
-    // Load images using your naming convention and interleave portrait/landscape
-    function loadPrenupImages() {
-        return new Promise((resolve) => {
-            const portraits = [];
-            const landscapes = [];
-            const maxIndex = 15;
+// ========== GALLERY BUILDER (reusable) ==========
+function createGallery(galleryId, imagePrefixes) {
+    const stage = document.getElementById(galleryId + 'Stage');
+    const thumbsRow = document.getElementById(galleryId + 'ThumbsRow');
+    const prevBtn = document.getElementById(galleryId + 'PrevBtn');
+    const nextBtn = document.getElementById(galleryId + 'NextBtn');
+    if (!stage || !thumbsRow) return;
 
-            function tryPortrait(index) {
-                if (index > maxIndex) {
-                    tryLandscape(0);
-                    return;
-                }
-                const filename = index === 0 ? 'prenupp.webp' : `prenupp${index}.webp`;
-                const path = `assets/images/${filename}`;
-                const img = new Image();
-                img.onload = () => {
-                    portraits.push({ src: path, alt: `Portrait ${portraits.length + 1}` });
-                    tryPortrait(index + 1);
-                };
-                img.onerror = () => {
-                    tryPortrait(index + 1);
-                };
-                img.src = path;
-            }
+    const landscapeIndices = [0, 1, 2, 3];
+    const portraitIndices = [0, 1, 2, 3];
 
-            function tryLandscape(index) {
-                if (index > maxIndex) {
-                    finish();
-                    return;
-                }
-                const filename = index === 0 ? 'prenupl.webp' : `prenupl${index}.webp`;
-                const path = `assets/images/${filename}`;
-                const img = new Image();
-                img.onload = () => {
-                    landscapes.push({ src: path, alt: `Landscape ${landscapes.length + 1}` });
-                    tryLandscape(index + 1);
-                };
-                img.onerror = () => {
-                    tryLandscape(index + 1);
-                };
-                img.src = path;
-            }
-
-            function finish() {
-                // Interleave: landscape, portrait, landscape, portrait...
-                const combined = [];
-                const maxLen = Math.max(landscapes.length, portraits.length);
-                for (let i = 0; i < maxLen; i++) {
-                    if (i < landscapes.length) combined.push(landscapes[i]);
-                    if (i < portraits.length) combined.push(portraits[i]);
-                }
-
-                if (combined.length === 0) {
-                    // Fallback if no images found
-                    combined.push(
-                        { src: 'https://picsum.photos/id/42/1200/960', alt: 'Landscape fallback' },
-                        { src: 'https://picsum.photos/id/30/960/1440', alt: 'Portrait fallback' }
-                    );
-                }
-                resolve(combined);
-            }
-
-            tryPortrait(0);
+    async function loadImages() {
+        const candidates = [];
+        landscapeIndices.forEach(i => {
+            const filename = i === 0 ? `${imagePrefixes.landscape}.webp` : `${imagePrefixes.landscape}${i}.webp`;
+            candidates.push({ type: 'landscape', src: `assets/images/${filename}`, alt: `Landscape ${i+1}` });
         });
-    }
-
-    async function initGallery() {
-        const imagesData = await loadPrenupImages();
-        const wrapper = document.getElementById('slidesWrapper');
-        if (!wrapper) return;
-
-        wrapper.innerHTML = '';
-        imagesData.forEach(img => {
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-            const frame = document.createElement('div');
-            frame.className = 'img-box';
-            const picture = document.createElement('img');
-            picture.src = img.src;
-            picture.alt = img.alt;
-            picture.loading = 'lazy';
-            frame.appendChild(picture);
-            slide.appendChild(frame);
-            wrapper.appendChild(slide);
+        portraitIndices.forEach(i => {
+            const filename = i === 0 ? `${imagePrefixes.portrait}.webp` : `${imagePrefixes.portrait}${i}.webp`;
+            candidates.push({ type: 'portrait', src: `assets/images/${filename}`, alt: `Portrait ${i+1}` });
         });
 
-        const allImages = document.querySelectorAll('.img-box img');
-        let loadedCount = 0;
-        const totalImages = allImages.length;
-
-        function startSwiper() {
-            new Swiper('.gallerySwiper', {
-                loop: true,
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                spaceBetween: 24,
-                grabCursor: true,
-                speed: 550,
-                autoplay: {
-                    delay: 7000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true,
-                },
-            });
+        const results = [];
+        for (const c of candidates) {
+            try {
+                await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve();
+                    img.onerror = () => reject();
+                    img.src = c.src;
+                });
+                results.push(c);
+            } catch (e) {
+                // file doesn't exist, skip
+            }
         }
-
-        if (totalImages === 0) {
-            startSwiper();
-        } else {
-            allImages.forEach(img => {
-                if (img.complete) {
-                    loadedCount++;
-                    if (loadedCount === totalImages) startSwiper();
-                } else {
-                    img.addEventListener('load', () => {
-                        loadedCount++;
-                        if (loadedCount === totalImages) startSwiper();
-                    });
-                    img.addEventListener('error', () => {
-                        loadedCount++;
-                        if (loadedCount === totalImages) startSwiper();
-                    });
-                }
-            });
-            if (loadedCount === totalImages) startSwiper(); // all cached
+        const combined = [];
+        const landscapes = results.filter(r => r.type === 'landscape');
+        const portraits = results.filter(r => r.type === 'portrait');
+        const maxLen = Math.max(landscapes.length, portraits.length);
+        for (let i = 0; i < maxLen; i++) {
+            if (i < landscapes.length) combined.push({ src: landscapes[i].src, alt: landscapes[i].alt });
+            if (i < portraits.length) combined.push({ src: portraits[i].src, alt: portraits[i].alt });
         }
+        if (combined.length === 0) {
+            combined.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback' });
+        }
+        return combined;
     }
 
-    initGallery();
-})();
+    async function init() {
+        const imagesData = await loadImages();
+        stage.querySelectorAll('.slide').forEach(el => el.remove());
+        thumbsRow.innerHTML = '';
+
+        imagesData.forEach((imgData, index) => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = 'slide';
+            slideDiv.dataset.index = index;
+            const blurBg = document.createElement('div');
+            blurBg.className = 'slide-blur';
+            blurBg.style.backgroundImage = `url('${imgData.src}')`;
+            const imgEl = document.createElement('img');
+            imgEl.src = imgData.src;
+            imgEl.alt = imgData.alt;
+            imgEl.loading = 'lazy';
+            slideDiv.appendChild(blurBg);
+            slideDiv.appendChild(imgEl);
+            stage.insertBefore(slideDiv, prevBtn); // insert before nav buttons
+
+            const thumbDiv = document.createElement('div');
+            thumbDiv.className = 'thumb';
+            thumbDiv.dataset.index = index;
+            const thumbImg = document.createElement('img');
+            thumbImg.src = imgData.src;
+            thumbImg.alt = 'thumb ' + (index + 1);
+            thumbDiv.appendChild(thumbImg);
+            thumbsRow.appendChild(thumbDiv);
+        });
+
+        const slides = stage.querySelectorAll('.slide');
+        const thumbs = thumbsRow.querySelectorAll('.thumb');
+        if (slides.length === 0) return;
+
+        let currentIndex = 0;
+        let isAnimating = false;
+        let autoTimer = null;
+        const AUTO_ADVANCE_DELAY = 5500;
+
+        function updateActiveState() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
+            thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+        }
+
+        function navigateTo(targetIndex, direction = 1) {
+            const normalizedIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
+            if (isAnimating || normalizedIndex === currentIndex) return;
+
+            isAnimating = true;
+            const previousIndex = currentIndex;
+            currentIndex = normalizedIndex;
+
+            slides[previousIndex].classList.remove('active');
+            slides[previousIndex].classList.add('exit-left');
+            slides[previousIndex].style.transform = `translateX(${direction > 0 ? -40 : 40}px)`;
+            slides[previousIndex].style.opacity = '0';
+
+            const incomingSlide = slides[currentIndex];
+            incomingSlide.style.transform = `translateX(${direction > 0 ? 40 : -40}px)`;
+            incomingSlide.style.opacity = '0';
+            incomingSlide.classList.add('active');
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    incomingSlide.style.transform = '';
+                    incomingSlide.style.opacity = '';
+                });
+            });
+
+            setTimeout(() => {
+                slides[previousIndex].classList.remove('exit-left');
+                slides[previousIndex].style.transform = '';
+                slides[previousIndex].style.opacity = '';
+                isAnimating = false;
+            }, 800);
+
+            updateActiveState();
+        }
+
+        function goToPrevious() { navigateTo(currentIndex - 1, -1); }
+        function goToNext() { navigateTo(currentIndex + 1, 1); }
+        function jumpTo(index) {
+            const direction = index >= currentIndex ? 1 : -1;
+            navigateTo(index, direction);
+        }
+
+        function startAutoAdvance() {
+            stopAutoAdvance();
+            autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY);
+        }
+        function stopAutoAdvance() {
+            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        }
+
+        prevBtn.addEventListener('click', e => { e.preventDefault(); goToPrevious(); });
+        nextBtn.addEventListener('click', e => { e.preventDefault(); goToNext(); });
+
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                jumpTo(parseInt(thumb.dataset.index, 10));
+            });
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); goToPrevious(); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); goToNext(); }
+        });
+
+        // Touch swipe
+        let touchStartX = 0, touchStartY = 0, touchStartTime = 0, touchActive = false;
+        stage.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            touchActive = true;
+            stopAutoAdvance();
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            if (!touchActive) return;
+            touchActive = false;
+            const deltaX = e.changedTouches[0].clientX - touchStartX;
+            const deltaY = e.changedTouches[0].clientY - touchStartY;
+            const elapsed = Date.now() - touchStartTime;
+            const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+            const threshold = 30;
+            const isQuick = elapsed < 300 && Math.abs(deltaX) > 20;
+
+            if (isHorizontal && (Math.abs(deltaX) > threshold || isQuick)) {
+                deltaX < 0 ? goToNext() : goToPrevious();
+            }
+            clearTimeout(stage._resumeTimeout);
+            stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
+        }, { passive: true });
+
+        document.addEventListener('touchcancel', () => { touchActive = false; });
+
+        // Mouse drag
+        let mouseStartX = 0, isDragging = false;
+        stage.addEventListener('mousedown', e => {
+            if (e.target.closest('.nav-arrow')) return;
+            mouseStartX = e.clientX;
+            isDragging = true;
+            stopAutoAdvance();
+        });
+        window.addEventListener('mouseup', e => {
+            if (!isDragging) return;
+            isDragging = false;
+            const deltaX = e.clientX - mouseStartX;
+            if (Math.abs(deltaX) > 50) {
+                deltaX < 0 ? goToNext() : goToPrevious();
+            }
+            startAutoAdvance();
+        });
+        stage.addEventListener('mouseleave', () => {
+            if (isDragging) { isDragging = false; startAutoAdvance(); }
+        });
+        stage.addEventListener('mouseenter', stopAutoAdvance);
+        stage.addEventListener('mouseleave', () => {
+            if (!isDragging) startAutoAdvance();
+        });
+
+        updateActiveState();
+        startAutoAdvance();
+    }
+
+    init();
+}
+
+// ========== INITIALIZE BOTH GALLERIES ==========
+createGallery('proposal', { landscape: 'proposall', portrait: 'proposalp' });
+createGallery('prenup', { landscape: 'prenupl', portrait: 'prenupp' });
 
 // ========== RSVP DROPDOWN & FORM HANDLER ==========
 (function() {
@@ -370,7 +452,7 @@ audio.addEventListener('ended', () => {
     }
 })();
 
-// ========== LOVE STORY LIGHTBOX ==========
+// ========== LOVE STORY LIGHTBOX (for prenup images only) ==========
 (function() {
     const lightbox = document.getElementById('loveLightbox');
     const lightboxImg = document.getElementById('lightboxImg');
@@ -510,7 +592,7 @@ audio.addEventListener('ended', () => {
     }
 })();
 
-// ========== CHARCOAL EMBER CARD SCROLL ANIMATION (NEW) ==========
+// ========== CHARCOAL EMBER CARD SCROLL ANIMATION ==========
 (function() {
     const emberCard = document.getElementById('charcoalEmberCard');
     if (!emberCard) return;
@@ -529,5 +611,21 @@ audio.addEventListener('ended', () => {
     if (emberCard.getBoundingClientRect().top < window.innerHeight - 100) {
         emberCard.classList.add('animate-ember');
         emberObserver.unobserve(emberCard);
+    }
+})();
+
+// ========== NEW LOVE STORY INTERSECTION OBSERVER ==========
+(function() {
+    const storyItems = document.querySelectorAll('.new-love-story .item');
+    if (storyItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        storyItems.forEach(item => observer.observe(item));
     }
 })();
