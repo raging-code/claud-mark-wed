@@ -99,8 +99,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ========== GALLERY BUILDER with SCROLLING 5 THUMBS ==========
-// This version always displays exactly 5 thumbnails.
-// The set of thumbnails shifts so that the current image's thumbnail is always among them.
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
     const thumbsRow = document.getElementById(galleryId + 'ThumbsRow');
@@ -108,7 +106,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     const nextBtn = document.getElementById(galleryId + 'NextBtn');
     if (!stage || !thumbsRow) return;
 
-    // Load images sequentially
     async function loadImages() {
         const images = [];
         let i = startIndex;
@@ -117,7 +114,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
             const webpSrc = `${basePath}${prefix}${i}.webp`;
             const jpgSrc = `${basePath}${prefix}${i}.jpg`;
-            let loaded = false;
             try {
                 await new Promise((resolve, reject) => {
                     const img = new Image();
@@ -126,7 +122,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     img.src = webpSrc;
                 });
                 images.push({ src: webpSrc, alt: `${prefix} ${i}` });
-                loaded = true;
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
@@ -137,7 +132,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                         img.src = jpgSrc;
                     });
                     images.push({ src: jpgSrc, alt: `${prefix} ${i}` });
-                    loaded = true;
                     consecutiveFailures = 0;
                 } catch (e2) {
                     consecutiveFailures++;
@@ -158,7 +152,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     const fullImageSrcs = imagesData.map(img => img.src);
     const slides = [];
 
-    // Create slide elements
     imagesData.forEach((imgData, index) => {
         const slideDiv = document.createElement('div');
         slideDiv.className = 'slide';
@@ -185,9 +178,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
-    const THUMB_WINDOW_SIZE = 5; // show exactly 5 thumbs
+    const THUMB_WINDOW_SIZE = 5;
 
-    // Helper: get the start index for the thumb window that contains imageIndex
     function getThumbStartIndex(imageIndex) {
         const total = imagesData.length;
         let start = Math.max(0, imageIndex - Math.floor(THUMB_WINDOW_SIZE / 2));
@@ -197,7 +189,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         return start;
     }
 
-    // Render the thumbnails for the current window
     function renderThumbs() {
         thumbsRow.innerHTML = '';
         const start = getThumbStartIndex(currentIndex);
@@ -213,12 +204,11 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             thumbDiv.appendChild(thumbImg);
             thumbsRow.appendChild(thumbDiv);
         }
-        updateActiveState(); // re-apply active class
+        updateActiveState();
     }
 
     function updateActiveState() {
         slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
-        // Update thumbs (only the ones currently in DOM)
         const currentThumbs = document.querySelectorAll(`#${galleryId}ThumbsRow .thumb`);
         currentThumbs.forEach(thumb => {
             const idx = parseInt(thumb.dataset.index, 10);
@@ -261,7 +251,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             isAnimating = false;
         }, 800);
 
-        // After navigation, re-render thumbs so that the current image's thumb is visible
         renderThumbs();
         updateActiveState();
     }
@@ -281,11 +270,9 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
     }
 
-    // Event listeners
     prevBtn.addEventListener('click', e => { e.preventDefault(); goToPrevious(); });
     nextBtn.addEventListener('click', e => { e.preventDefault(); goToNext(); });
 
-    // Delegate click events for thumbs (re-attach after each render)
     thumbsRow.addEventListener('click', (e) => {
         const thumb = e.target.closest('.thumb');
         if (thumb) {
@@ -299,7 +286,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); goToNext(); }
     });
 
-    // Touch swipe
     let touchStartX = 0, touchActive = false;
     stage.addEventListener('touchstart', e => {
         touchStartX = e.touches[0].clientX;
@@ -318,7 +304,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     });
     document.addEventListener('touchcancel', () => { touchActive = false; });
 
-    // Mouse drag
     let mouseStartX = 0, isDragging = false;
     stage.addEventListener('mousedown', e => {
         if (e.target.closest('.nav-arrow')) return;
@@ -341,13 +326,11 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     stage.addEventListener('mouseenter', stopAutoAdvance);
     stage.addEventListener('mouseleave', () => { if (!isDragging) startAutoAdvance(); });
 
-    // Initial render
     renderThumbs();
     updateActiveState();
     startAutoAdvance();
 }
 
-// Initialize galleries
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 20);
 createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
@@ -366,7 +349,7 @@ loveStoryItems.forEach((item, idx) => {
     }
 });
 
-// ========== RSVP DROPDOWN & FORM HANDLER (unchanged) ==========
+// ========== RSVP DROPDOWN & FORM HANDLER ==========
 (function() {
     const dropdown = document.getElementById('attendingDropdown');
     if (dropdown) {

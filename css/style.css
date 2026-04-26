@@ -1271,7 +1271,7 @@ footer {
     background: transparent;
     line-height: 0;
     position: relative;
-    z-index: 20;  /* Explicitly set to 20 */
+    z-index: 20;
 }
 .cover-container {
     width: 100%;
