@@ -133,7 +133,7 @@ function createGallery(galleryId, imagePrefixes) {
             imgEl.loading = 'lazy';
             slideDiv.appendChild(blurBg);
             slideDiv.appendChild(imgEl);
-            stage.insertBefore(slideDiv, prevBtn); // insert before nav buttons
+            stage.insertBefore(slideDiv, prevBtn);
 
             const thumbDiv = document.createElement('div');
             thumbDiv.className = 'thumb';

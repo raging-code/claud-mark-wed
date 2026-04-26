@@ -203,10 +203,139 @@ h1, h2, h3, h4, h5, h6,
     .countdown-phrase { font-size: 0.85rem; }
 }
 
-/* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
-/* Both sections use the same inner classes but scoped to each section */
+/* Save the date */
+.std-section {
+    position: relative;
+    z-index: 20;
+    background: transparent;
+    padding: 0.5rem 1rem 0.5rem;
+}
+.std-card {
+    background: #fff0f1;
+    border: 1px solid #31231a;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem;
+    position: relative;
+}
+.std-card::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 0.5px solid #ffb7c5;
+    pointer-events: none;
+}
+.std-heading {
+    font-family: 'EB Garamond', Georgia, serif !important;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #31231a;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+    animation: fadeUpHeadingStd 1.2s ease 0s forwards;
+}
+.ornament-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0.5rem 0 !important;
+}
+.ornament-line .line-seg {
+    flex: 1;
+    height: 1px;
+    background: #31231a;
+    opacity: 0.35;
+}
+.ornament-line .orn-center {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+}
+.orn-diamond {
+    width: 6px;
+    height: 6px;
+    background: #ffb7c5;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+.orn-diamond.sm {
+    width: 4px;
+    height: 4px;
+    background: transparent;
+    border: 0.5px solid #f0a0b2;
+}
+.photos-row {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.photos-sep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    align-self: center;
+    opacity: 0;
+    animation: fadeInStd 1s ease 1.5s forwards;
+}
+.sep-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffb7c5;
+}
+.photo-unit {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.photo-box {
+    width: 100%;
+    aspect-ratio: 2046 / 2730;
+    background: #f9dde3;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.photo-unit.from-left {
+    opacity: 0;
+    transform: translateX(-80px);
+    animation: slideFromLeftStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+.photo-unit.from-bottom {
+    opacity: 0;
+    transform: translateY(80px);
+    animation: slideFromBottomStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+.photo-unit.from-right {
+    opacity: 0;
+    transform: translateX(80px);
+    animation: slideFromRightStd 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards;
+}
+@keyframes slideFromLeftStd { to { opacity: 1; transform: translateX(0); } }
+@keyframes slideFromBottomStd { to { opacity: 1; transform: translateY(0); } }
+@keyframes slideFromRightStd { to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeUpHeadingStd { from { opacity: 0; transform: translateY(8px); } to { opacity: 0.85; transform: translateY(0); } }
+.ornament-line:first-of-type { opacity: 0; animation: fadeUpStd 1.2s ease 0.15s forwards; }
+@keyframes fadeUpStd { from { opacity: 0; transform: translateY(8px); } to { opacity: 0.75; transform: translateY(0); } }
+.ornament-line:last-of-type { animation: fadeUpLastStd 1.2s ease 2.4s forwards; opacity: 0; }
+@keyframes fadeUpLastStd { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInStd { to { opacity: 1; } }
 
-/* Proposal gallery */
+/* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
 .proposal-gallery-section .viewer-wrap,
 .prenup-gallery-section .viewer-wrap {
     width: 100%;
@@ -402,7 +531,6 @@ h1, h2, h3, h4, h5, h6,
     transform: scale(1.04);
 }
 
-/* Section‑specific gallery card, title, lines (identical for both) */
 .proposal-gallery-section .gallery-card,
 .prenup-gallery-section .gallery-card {
     max-width: 1400px;
@@ -465,7 +593,6 @@ h1, h2, h3, h4, h5, h6,
     margin: 0 2px;
 }
 
-/* Mobile gallery adjustments */
 @media (max-width: 480px) {
     .proposal-gallery-section .thumbs-row,
     .prenup-gallery-section .thumbs-row { gap: 4px; }
@@ -520,7 +647,7 @@ h1, h2, h3, h4, h5, h6,
     .prenup-gallery-section .nav-arrow { transition: none; }
 }
 
-/* ========== LOVE STORY SECTION (unchanged) ========== */
+/* ========== LOVE STORY (unchanged) ========== */
 .new-love-story {
     background: #faf8f5;
     font-family: 'Inter', sans-serif;
@@ -553,7 +680,6 @@ h1, h2, h3, h4, h5, h6,
     font-style: italic;
     color: #b07850;
 }
-/* ... (rest of love story styles remain exactly the same as your latest CSS) ... */
 .new-love-story .love-story-container-custom {
     max-width: 1060px;
     margin: 0 auto;
@@ -880,7 +1006,6 @@ h1, h2, h3, h4, h5, h6,
 @keyframes attireSlideLeftIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
 .attire-ornament, .attire-title, .attire-subtitle, .attire-palette-row, .attire-col { display: none !important; }
 
-/* Share moment block */
 .share-moment-wrapper { border-top: 1px solid rgba(200,168,118,0.2); margin-top: 1rem; padding-top: 0.5rem; }
 .tagline-share {
     font-family: 'Cormorant Garamond', serif;
@@ -913,7 +1038,6 @@ h1, h2, h3, h4, h5, h6,
 @keyframes slideLeftIn { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
 @keyframes slideRightIn { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
 
-/* Charcoal ember card */
 .charcoal-ember-card {
     max-width: 420px;
     width: 100%;
@@ -980,7 +1104,7 @@ h1, h2, h3, h4, h5, h6,
     .ember-gift { font-size: 0.8rem; padding: 0.35rem 0.8rem; }
 }
 
-/* ========== FAQ & RSVP (unchanged) ========== */
+/* ========== FAQ & RSVP ========== */
 .faq-section { position: relative; z-index: 20; padding-top: 1rem; margin-top: -1rem; }
 .faq-section .faq-card { background: white; border-radius: 32px; box-shadow: 0 20px 35px rgba(60, 30, 20, 0.08); }
 .faq-header { text-align: center; }
@@ -1222,7 +1346,7 @@ footer {
 .custom-divider-short { display: none !important; }
 .share-tagline { margin-bottom: 1rem !important; }
 
-/* ========== Z‑INDEX LAYERS FOR GALLERY SECTIONS ========== */
+/* ========== Z‑INDEX LAYERS ========== */
 .proposal-gallery-section,
 .prenup-gallery-section {
     position: relative;
