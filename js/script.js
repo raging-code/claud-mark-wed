@@ -561,3 +561,14 @@ loveStoryItems.forEach((item, idx) => {
         storyItems.forEach(item => observer.observe(item));
     }
 })();
+
+// ========== PLACEHOLDER FOR SHARE PHOTO BUTTON (no link yet) ==========
+const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
+if (sharePhotoBtn) {
+    sharePhotoBtn.addEventListener('click', () => {
+        // Placeholder: you can later replace this with actual link or function
+        console.log('Share photo button clicked - ready for link integration');
+        // Optional alert for demonstration (remove later if needed)
+        // alert('Share feature coming soon!');
+    });
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src 'self' https://www.youtube.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' https://uziyzioqazqznjsvhxky.supabase.co https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; frame-src 'self' https://www.youtube.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' https://uziyzioqazqznjsvhxky.supabase.co https://cdn.jsdelivr.net https://www.youtube.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data:;">
     <meta property="og:title" content="Claudine and Mark Wedding">
     <meta property="og:description" content="OSAKA, JAPAN — APRIL 9, 2025 · The Surprise Proposal">
     <meta property="og:image" content="https://claudineandmarkwedding2026.pages.dev/assets/images/hero-couple.jpg">
@@ -48,6 +48,16 @@
 <body>
 
     <div class="sakura-petals"></div>
+
+    <!-- ==================== TOP ANCHOR NAVIGATION ==================== -->
+    <nav class="top-anchor-nav">
+        <div class="nav-links-container">
+            <a href="#prenup-gallery-section" class="anchor-link">Prenup Gallery</a>
+            <a href="#proposal-gallery-section" class="anchor-link">Proposal Gallery</a>
+            <a href="#details-section" class="anchor-link">Details</a>
+            <a href="#rsvp-section" class="anchor-link">RSVP</a>
+        </div>
+    </nav>
 
     <!-- ==================== 1. COVER PHOTO (Hero) ==================== -->
     <section class="hero-section">
@@ -140,8 +150,8 @@
         </div>
     </section>
 
-    <!-- ==================== 4. PROPOSAL PHOTOS ==================== -->
-    <section class="proposal-gallery-section py-2">
+    <!-- ==================== 4. PROPOSAL PHOTOS (with ID for anchor) ==================== -->
+    <section class="proposal-gallery-section py-2" id="proposal-gallery-section">
         <div class="container">
             <div class="gallery-card">
                 <h2 class="section-title mb-1">The Surprise Proposal in Japan</h2>
@@ -209,8 +219,8 @@
         </footer>
     </section>
 
-    <!-- ==================== 7. PRENUP PHOTOS ==================== -->
-    <section class="prenup-gallery-section py-2">
+    <!-- ==================== 7. PRENUP PHOTOS (with ID for anchor) ==================== -->
+    <section class="prenup-gallery-section py-2" id="prenup-gallery-section">
         <div class="container">
             <div class="gallery-card">
                 <div class="title-wrapper">
@@ -256,18 +266,8 @@
         </div>
     </section>
 
-    <!-- ==================== 7.6 NEW FULL-WIDTH COVER PHOTO (cover1) - z-index 20 ==================== -->
-    <section class="cover-fullwidth-section">
-        <div class="cover-container">
-            <picture>
-                <source srcset="assets/images/cover1.webp" type="image/webp">
-                <img src="assets/images/cover1.jpg" alt="Wedding Cover" class="cover-full-img" loading="lazy">
-            </picture>
-        </div>
-    </section>
-
-    <!-- ==================== 8. VENUE AND TIME ==================== -->
-    <div class="venue-section">
+    <!-- ==================== VENUE AND TIME (with ID for anchor) ==================== -->
+    <div class="venue-section" id="details-section">
         <div class="content-container">
             <h2 class="section-heading">
                 The Venue
@@ -312,7 +312,7 @@
         </div>
     </div>
 
-    <!-- ==================== 9. ATTIRE (without "A Little Note") ==================== -->
+    <!-- ==================== 9. ATTIRE WITH HASHTAG + NEW SHARE SECTION ==================== -->
     <section class="attire-guide-section py-2">
         <div class="container">
             <div class="attire-card-c">
@@ -332,6 +332,11 @@
                                 <div class="share-tagline"><div class="tagline-share">Capture the memories,<br> share the love, and tag us along the way!</div><div class="custom-divider-short"></div></div>
                                 <div class="share-hashtag"><div class="hashtag-eb-share">#ForeverMARKedforCLAUDINE</div></div>
                             </div>
+                        </div>
+                        <!-- NEW: Got the shot? Share it here! button section -->
+                        <div class="photo-share-callout">
+                            <p class="share-prompt-text">Got the shot? Share it here!</p>
+                            <button class="btn-share-placeholder" id="sharePhotoPlaceholderBtn">Share Your Photo</button>
                         </div>
                     </div>
                 </div>
@@ -357,8 +362,8 @@
         </div>
     </section>
 
-    <!-- ==================== 11. RSVP ==================== -->
-    <section class="rsvp-section py-3">
+    <!-- ==================== 11. RSVP (with ID for anchor) ==================== -->
+    <section class="rsvp-section py-3" id="rsvp-section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">

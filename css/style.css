@@ -18,6 +18,7 @@ html, body {
     width: 100%;
     overflow-x: hidden;
     position: relative;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,6 +43,47 @@ h1, h2, h3, h4, h5, h6,
 .mb-5px { margin-bottom: 5px !important; }
 .mt-5px { margin-top: 5px !important; }
 .text-pink { color: var(--sakura-pink) !important; }
+
+/* ===== TOP ANCHOR NAVIGATION ===== */
+.top-anchor-nav {
+    background: #31231a;  /* changed from #fff0f1 to #31231a */
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,240,241,0.2);
+    position: relative;
+    z-index: 30;
+}
+.nav-links-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.anchor-link {
+    font-family: 'EB Garamond', serif;  /* changed to EB Garamond */
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;  /* changed to white */
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+}
+.anchor-link:hover {
+    color: #ffb7c5;  /* pink on hover */
+    border-bottom-color: #ffb7c5;
+    transform: translateY(-1px);
+}
+@media (max-width: 640px) {
+    .nav-links-container {
+        gap: 12px;
+    }
+    .anchor-link {
+        font-size: 0.75rem;
+    }
+}
 
 /* Hero Section */
 .hero-section {
@@ -535,15 +577,24 @@ h1, h2, h3, h4, h5, h6,
     margin-bottom: 0.05rem;
     margin-top: 6px;
 }
-.proposal-gallery-section .title-wrapper h1,
+/* ===== MAKE PRENUP GALLERY TITLE MATCH PROPOSAL TITLE STYLE ===== */
 .prenup-gallery-section .title-wrapper h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    font-size: 2rem;
-    color: #31231a;
+    font-family: 'EB Garamond', serif !important;
+    font-weight: 700 !important;
+    font-size: 1.8rem !important;
+    color: var(--dark-charcoal);
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+}
+@media (max-width: 768px) {
+    .prenup-gallery-section .title-wrapper h1 {
+        font-size: 1.3rem !important;
+    }
+}
+.proposal-gallery-section .title-wrapper h1,
+.prenup-gallery-section .title-wrapper h1 {
+    /* existing */
 }
 .proposal-gallery-section .title-wrapper i,
 .prenup-gallery-section .title-wrapper i { color: #ffb7c5; font-size: 1.5rem; }
@@ -631,7 +682,7 @@ h1, h2, h3, h4, h5, h6,
     padding: 0 0 1rem 0;
     margin: 0;
     position: relative;
-    z-index: 10;  /* Changed from 20 to 10 as requested */
+    z-index: 10;
 }
 .new-love-story .love-story-header {
     text-align: center;
@@ -807,6 +858,16 @@ h1, h2, h3, h4, h5, h6,
     text-align: center;
     padding-bottom: 6px;
 }
+/* Mobile: Make "The Surprise Proposal in Japan" smaller */
+@media (max-width: 768px) {
+    .proposal-gallery-section .section-title {
+        font-size: 1.3rem !important;
+    }
+    .proposal-date {
+        font-size: 0.65rem !important;
+        letter-spacing: 1px;
+    }
+}
 .proposal-date {
     font-family: 'Lato', sans-serif;
     font-size: 0.8rem;
@@ -856,6 +917,7 @@ h1, h2, h3, h4, h5, h6,
     padding: 1.2rem 0;
     position: relative;
     background: transparent;
+    margin-top: 70px;  /* added margin to move down slightly */
 }
 .venue-section::before {
     content: '';
@@ -1022,6 +1084,50 @@ h1, h2, h3, h4, h5, h6,
     display: inline-block;
     padding: 0;
     letter-spacing: 0.3px;
+}
+
+/* ===== NEW SHARE PHOTO CALLOUT ===== */
+.photo-share-callout {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.8rem 0.5rem;
+    background: transparent !important;
+    border: none !important;
+    border: 1px solid rgba(255,224,224,0.5);
+}
+.share-prompt-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    color: #31231a;;  /* white text for contrast */
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+.btn-share-placeholder {
+    background: #ffb7c5;
+    border: none;
+    color: #31231a;
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    padding: 6px 22px;
+    border-radius: 40px;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.btn-share-placeholder:hover {
+    background: #31231a;
+    color: #ffb7c5;
+    transform: translateY(-2px);
+}
+@media (max-width: 560px) {
+    .share-prompt-text {
+        font-size: 0.9rem;
+    }
+    .btn-share-placeholder {
+        font-size: 0.7rem;
+        padding: 5px 16px;
+    }
 }
 
 /* ========== FAQ & RSVP ========== */
@@ -1261,27 +1367,4 @@ footer {
 .prenup-gallery-section {
     position: relative;
     z-index: 20;
-}
-
-/* ========== NEW COVER FULL-WIDTH SECTION (cover1) - z-index 20 ========== */
-.cover-fullwidth-section {
-    width: 100%;
-    margin: 20px 0;
-    padding: 0;
-    background: transparent;
-    line-height: 0;
-    position: relative;
-    z-index: 20;
-}
-.cover-container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-.cover-full-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    aspect-ratio: 2048 / 1365;
-    object-fit: cover;
 }
