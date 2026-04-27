@@ -34,7 +34,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
           integrity="sha384-5e2ESR8Ycmos6g3gAKr1Jvwye8sW4U1u/cAKulfVJnkakCcMqhOudbtPnvJ+nbv7"
           crossorigin="anonymous">
-    <!-- Swiper CSS (kept for other possible uses) -->
+    <!-- Swiper CSS -->
     <link rel="stylesheet" 
           href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
           integrity="sha384-gAPqlBuTCdtVcYt9ocMOYWrnBZ4XSL6q+4eXqwNycOr4iFczhNKtnYhF3NEXJM51"
@@ -104,48 +104,27 @@
         </div>
     </div>
 
-    <!-- ==================== SAVE THE DATE ==================== -->
-    <section class="std-section">
-        <div class="std-card">
-            <p class="std-heading">A date to keep</p>
-            <div class="ornament-line mb-3">
-                <div class="line-seg"></div>
-                <div class="orn-center">
-                    <div class="orn-diamond sm"></div>
-                    <div class="orn-diamond"></div>
-                    <div class="orn-diamond sm"></div>
-                </div>
-                <div class="line-seg"></div>
-            </div>
-            <div class="photos-row">
-                <div class="photo-unit from-left">
-                    <div class="photo-box"><img src="assets/images/06.webp" alt="Save the date left" loading="lazy"></div>
-                </div>
-                <div class="photos-sep">
-                    <div class="sep-dot"></div>
-                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
-                    <div class="sep-dot"></div>
-                </div>
-                <div class="photo-unit from-bottom">
-                    <div class="photo-box"><img src="assets/images/25.webp" alt="Save the date center" loading="lazy"></div>
-                </div>
-                <div class="photos-sep">
-                    <div class="sep-dot"></div>
-                    <div class="sep-dot" style="background:#31231a;opacity:0.2;"></div>
-                    <div class="sep-dot"></div>
-                </div>
-                <div class="photo-unit from-right">
-                    <div class="photo-box"><img src="assets/images/26.webp" alt="Save the date right" loading="lazy"></div>
+    <!-- ==================== SAVE THE DATE (NEW PHOTO GALLERY, NOW AT z-index 20) ==================== -->
+    <section class="std-section" style="position: relative; z-index: 20;">
+        <div class="text-center" style="margin-bottom: 0.5rem;">
+            <h3 class="save-the-date-heading">Save the Date!</h3>
+        </div>
+        <div class="d-flex flex-row flex-nowrap gap-2 align-items-end justify-content-center w-100 photo-row"
+             style="max-width: 960px; margin: 0 auto; padding: 10px 10px;">
+            <div class="photo-col">
+                <div class="photo-wrap ratio ratio-photo">
+                    <img src="assets/images/06.webp" alt="Save the date left" loading="lazy" />
                 </div>
             </div>
-            <div class="ornament-line mt-3">
-                <div class="line-seg"></div>
-                <div class="orn-center">
-                    <div class="orn-diamond sm"></div>
-                    <div class="orn-diamond"></div>
-                    <div class="orn-diamond sm"></div>
+            <div class="photo-col photo-col--mid">
+                <div class="photo-wrap ratio ratio-photo">
+                    <img src="assets/images/25.webp" alt="Save the date center" loading="lazy" />
                 </div>
-                <div class="line-seg"></div>
+            </div>
+            <div class="photo-col">
+                <div class="photo-wrap ratio ratio-photo">
+                    <img src="assets/images/26.webp" alt="Save the date right" loading="lazy" />
+                </div>
             </div>
         </div>
     </section>
@@ -180,7 +159,7 @@
         </div>
     </section>
 
-    <!-- ==================== 5. PROPOSAL VIDEO (moved down, no overlap) ==================== -->
+    <!-- ==================== 5. PROPOSAL VIDEO ==================== -->
     <section class="video-section py-3">
         <div class="container text-center">
             <div class="video-frame-wrapper mx-auto">
@@ -199,19 +178,20 @@
         </div>
     </section>
 
-    <!-- ==================== 6. LOVE STORY (z-index: 10) ==================== -->
+    <!-- ==================== 6. LOVE STORY (background behind petals, content above petals) ==================== -->
     <section class="new-love-story">
+        <div class="love-story-bg"></div>
         <header class="love-story-header">
             <h1 class="love-story-main-title">Our Journey Together<br><em>A Love Story</em></h1>
         </header>
         <div class="love-story-container-custom">
             <div class="story-row">
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" loading="lazy"></div><div class="text"><div class="meta"><span class="num">01</span><span class="date">Year 2011</span></div><h2 class="title">The Beginning</h2><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" loading="lazy"></div><div class="text"><div class="meta"><span class="num">02</span><span class="date">Year 2014</span></div><h2 class="title">Two Lovebirds</h2><p class="body">Same school, meeting during breaktime, and sharing meals together.</p></div></div></div>
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" loading="lazy"></div><div class="text"><div class="meta"><span class="num">03</span><span class="date">Year 2015</span></div><h2 class="title">Our Sports</h2><p class="body">Our 3rd year as boyfriend and girlfriend. Supporting her in her first UAAP season.</p></div></div></div>
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" loading="lazy"></div><div class="text"><div class="meta"><span class="num">04</span><span class="date">Years 2018 & 2022</span></div><h2 class="title">Our Life</h2><p class="body">he earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" loading="lazy"></div><div class="text"><div class="meta"><span class="num">05</span><span class="date">Year 2025</span></div><h2 class="title">Under the Sakura</h2><p class="body">The day she said “Yes” and we started our dream business.</p></div></div></div>
-                <div class="story-col"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" loading="lazy"></div><div class="text"><div class="meta"><span class="num">06</span><span class="date">Year 2026</span></div><h2 class="title">Beginning of Forever</h2><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, meeting during breaktime, and sharing meals together.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as boyfriend and girlfriend. Supporting her in her first UAAP season.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Years 2018 & 2022</span></div><p class="body">he earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes” and we started our dream business.</p></div></div></div>
+                <div class="story-col"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
             </div>
         </div>
         <footer class="love-story-footer-rule">
@@ -250,12 +230,12 @@
         </div>
     </section>
 
-    <!-- ==================== 7.5 PRENUP VIDEO (18:9, sharp edges, full-width) ==================== -->
+    <!-- ==================== 7.5 PRENUP VIDEO ==================== -->
     <section class="prenup-fullwidth-video">
         <div class="prenup-video-container">
             <div class="video-ratio-18-9">
                 <iframe class="prenup-video-iframe" 
-                        src="https://www.youtube.com/embed/5LJbZPmThzY?si=UXzdOV4NP1PNKael" 
+                        src="https://www.youtube.com/embed/k-MuPT6nGUY?si=5bS7Y_3MdUnGO7_l" 
                         title="Prenup Wedding Video"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -266,53 +246,50 @@
         </div>
     </section>
 
-    <!-- ==================== VENUE AND TIME (with ID for anchor) ==================== -->
+    <!-- ==================== VENUE (REPLACED) ==================== -->
     <div class="venue-section" id="details-section">
-        <div class="content-container">
-            <h2 class="section-heading">
-                The Venue
-                <span class="heading-divider">
-                    <span class="divider-line thin"></span>
-                    <span class="divider-line"></span>
-                    <span class="divider-diamond"></span>
-                    <span class="divider-line"></span>
-                    <span class="divider-line thin"></span>
-                </span>
-            </h2>
-            <div class="row g-2">
-                <div class="col-6">
-                    <div class="venue-card">
-                        <img class="venue-img" src="assets/images/ceremony.webp" alt="Ceremony venue">
-                        <div class="venue-body">
-                            <div class="venue-tag">— Ceremony —</div>
-                            <div class="venue-name">Hall of Justice Makati City</div>
-                            <div class="venue-addr">6th Floor RTC Branch 236, Makati, Metro Manila</div>
-                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/6DVMnTif36NG1L827', '_blank')">
-                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Open in Maps
-                            </button>
-                        </div>
+        <div class="venue-container">
+            <div class="venue-header-block">
+                <h2 class="venue-main-heading"><em>The Venue</em></h2>
+            </div>
+
+            <div class="venue-row">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <p class="venue-label">Civil Wedding Ceremony</p>
+                        <h3 class="venue-place">6th Floor, Hall of Justice, Makati City</h3>
+                        <p class="venue-address-secondary">899 J. P. Rizal St, Makati City, Metro Manila</p>
+                        <p class="venue-time">10:30-11:30am</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <a href="https://maps.google.com/?q=899+J.+P.+Rizal+St,+Makati+City,+Metro+Manila" target="_blank" class="venue-map-btn">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                            Maps
+                        </a>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="venue-card">
-                        <img class="venue-img" src="assets/images/reception.webp" alt="Reception venue">
-                        <div class="venue-body">
-                            <div class="venue-tag">— Reception —</div>
-                            <div class="venue-name">City Garden GRAND Hotel Makati</div>
-                            <div class="venue-addr">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</div>
-                            <button class="map-btn" onclick="window.open('https://maps.app.goo.gl/NYs9tP5MVKtoPbb9A', '_blank')">
-                                <svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Open in Maps
-                            </button>
-                        </div>
+            </div>
+
+            <div class="venue-row">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <p class="venue-label">Reception</p>
+                        <h3 class="venue-place">City Garden Grand Hotel Makati</h3>
+                        <p class="venue-address-secondary">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</p>
+                        <p class="venue-time">4:30pm-8:00pm</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <a href="https://maps.google.com/?q=City+Garden+Grand+Hotel,+8008+Makati+Ave,+Makati+City" target="_blank" class="venue-map-btn">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                            Maps
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== 9. ATTIRE WITH HASHTAG + NEW SHARE SECTION ==================== -->
+    <!-- ==================== 9. ATTIRE WITH HASHTAG + SHARE SECTION ==================== -->
     <section class="attire-guide-section py-2">
         <div class="container">
             <div class="attire-card-c">
@@ -333,7 +310,6 @@
                                 <div class="share-hashtag"><div class="hashtag-eb-share">#ForeverMARKedforCLAUDINE</div></div>
                             </div>
                         </div>
-                        <!-- NEW: Got the shot? Share it here! button section -->
                         <div class="photo-share-callout">
                             <p class="share-prompt-text">Got the shot? Share it here!</p>
                             <button class="btn-share-placeholder" id="sharePhotoPlaceholderBtn">Share Your Photo</button>
@@ -362,26 +338,53 @@
         </div>
     </section>
 
-    <!-- ==================== 11. RSVP (with ID for anchor) ==================== -->
+    <!-- ==================== 11. RSVP (REPLACED) ==================== -->
     <section class="rsvp-section py-3" id="rsvp-section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <div class="rsvp-card mx-auto" style="max-width: 550px;">
-                        <div class="midnight-header"><h2 class="section-title mb-0">RSVP</h2></div>
-                        <form id="rsvpForm" novalidate>
-                            <div style="display:none;"><input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></div>
-                            <div class="mb-2"><label for="name" class="form-label">Name *</label><input type="text" class="form-control" id="name" name="name" required></div>
-                            <div class="mb-2"><label for="email" class="form-label">Email *</label><input type="email" class="form-control" id="email" name="email" required></div>
-                            <div class="mb-2"><label for="phone" class="form-label">Phone Number</label><input type="tel" class="form-control" id="phone" name="phone"></div>
-                            <div class="mb-2"><label for="message" class="form-label">Message</label><textarea class="form-control" id="message" name="message" rows="2"></textarea></div>
-                            <div class="mb-3"><label class="form-label">Are you attending? *</label>
-                                <div class="custom-dropdown" id="attendingDropdown"><div class="dropdown-selected">Select an option</div><ul class="dropdown-options"><li class="dropdown-option" data-value="yes">Yes, I'll be there</li><li class="dropdown-option" data-value="no">No, I can't make it</li></ul></div>
-                                <input type="hidden" id="attending" name="attending" value="">
-                            </div>
-                            <div class="text-center"><button type="submit" class="btn-submit" id="rsvpSubmitBtn">SUBMIT</button></div>
+                    <div class="rsvp-card">
+                        <div class="rsvp-inner-border">
+                            <h1 class="rsvp-header">RSVP</h1>
+                            <p class="rsvp-date">Kindly respond by June 1st</p>
+
+                            <form id="rsvpForm" novalidate>
+                                <div style="display:none;"><input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></div>
+
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+                                    <label for="name">Name *</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                    <label for="email">Email Address *</label>
+                                </div>
+
+                                <div class="form-floating">
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone">
+                                    <label for="phone">Phone Number</label>
+                                </div>
+
+                                <!-- Attending dropdown with static label (no more floating) -->
+                                <div class="message-group">
+                                    <label for="attending" class="message-label">Are you attending? *</label>
+                                    <select class="attending-select" id="attending" name="attending" required>
+                                        <option value="" disabled selected>Please choose an option</option>
+                                        <option value="yes">Yes – can’t wait to be there!</option>
+                                        <option value="no">No – sorry to miss it, hope it’s great!</option>
+                                    </select>
+                                </div>
+
+                                <div class="message-group">
+                                    <label for="message" class="message-label">Message</label>
+                                    <textarea class="message-textarea" id="message" name="message" placeholder="Your message..."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-submit" id="rsvpSubmitBtn">Send Response</button>
+                            </form>
                             <div id="rsvpMessage" class="mt-2 text-center"></div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

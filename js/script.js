@@ -1,3 +1,12 @@
+// ========== ALWAYS START AT TOP ON LOAD / REFRESH ==========
+window.addEventListener('beforeunload', () => {
+    window.scrollTo(0, 0);
+});
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 // ========== AUDIO PLAYER ==========
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
@@ -349,44 +358,8 @@ loveStoryItems.forEach((item, idx) => {
     }
 });
 
-// ========== RSVP DROPDOWN & FORM HANDLER ==========
+// ========== RSVP FORM HANDLER (adapted for new select) ==========
 (function() {
-    const dropdown = document.getElementById('attendingDropdown');
-    if (dropdown) {
-        const selectedDiv = dropdown.querySelector('.dropdown-selected');
-        const optionsDiv = dropdown.querySelector('.dropdown-options');
-        const hiddenInput = document.getElementById('attending');
-        const options = dropdown.querySelectorAll('.dropdown-option');
-
-        if (selectedDiv) {
-            selectedDiv.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (optionsDiv) optionsDiv.classList.toggle('show');
-                selectedDiv.classList.toggle('open');
-            });
-        }
-
-        options.forEach(opt => {
-            opt.addEventListener('click', function(e) {
-                const value = this.getAttribute('data-value');
-                const text = this.innerText;
-                if (selectedDiv) selectedDiv.innerText = text;
-                if (hiddenInput) hiddenInput.value = value;
-                if (optionsDiv) optionsDiv.classList.remove('show');
-                if (selectedDiv) selectedDiv.classList.remove('open');
-                options.forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!dropdown.contains(e.target)) {
-                if (optionsDiv) optionsDiv.classList.remove('show');
-                if (selectedDiv) selectedDiv.classList.remove('open');
-            }
-        });
-    }
-
     const rsvpForm = document.getElementById('rsvpForm');
     const submitBtn = document.getElementById('rsvpSubmitBtn');
     const msgDiv = document.getElementById('rsvpMessage');
@@ -397,7 +370,7 @@ loveStoryItems.forEach((item, idx) => {
 
             const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
-            const attendingInput = document.getElementById('attending');
+            const attendingSelect = document.getElementById('attending');   // new select element
 
             if (msgDiv) msgDiv.innerHTML = '';
 
@@ -408,7 +381,7 @@ loveStoryItems.forEach((item, idx) => {
                 error = 'Please enter your email address.';
             } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
                 error = 'Please enter a valid email address.';
-            } else if (!attendingInput.value) {
+            } else if (!attendingSelect.value) {
                 error = 'Please select whether you are attending.';
             }
 
@@ -434,11 +407,6 @@ loveStoryItems.forEach((item, idx) => {
                 if (result.success) {
                     msgDiv.innerHTML = '<div class="alert alert-success">Thank you! Your RSVP has been saved.</div>';
                     rsvpForm.reset();
-                    const selectedDiv = document.querySelector('.dropdown-selected');
-                    if (selectedDiv) selectedDiv.innerText = 'Select an option';
-                    const hiddenAttend = document.getElementById('attending');
-                    if (hiddenAttend) hiddenAttend.value = '';
-                    document.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
                 } else {
                     msgDiv.innerHTML = `<div class="alert alert-danger">${result.error || 'Something went wrong. Please try again.'}</div>`;
                 }
@@ -562,13 +530,10 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== PLACEHOLDER FOR SHARE PHOTO BUTTON (no link yet) ==========
+// ========== PLACEHOLDER FOR SHARE PHOTO BUTTON ==========
 const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
 if (sharePhotoBtn) {
     sharePhotoBtn.addEventListener('click', () => {
-        // Placeholder: you can later replace this with actual link or function
         console.log('Share photo button clicked - ready for link integration');
-        // Optional alert for demonstration (remove later if needed)
-        // alert('Share feature coming soon!');
     });
 }
