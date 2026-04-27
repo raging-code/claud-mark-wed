@@ -1,10 +1,12 @@
-// ========== FIXED AUDIO PLAYER (timestamp & seek issues resolved) ==========
+// ========== IMPROVED AUDIO PLAYER (seek fixes) ==========
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const muteBtn = document.getElementById('muteBtn');
 const seekSlider = document.getElementById('seekSlider');
 const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
+
+let isScrubbing = false;
 
 function formatTime(seconds) {
     if (isNaN(seconds) || !isFinite(seconds) || seconds < 0) return "0:00";
@@ -29,13 +31,13 @@ if (audio) {
     audio.addEventListener('canplay', updateSeekMax);
     
     audio.addEventListener('timeupdate', () => {
-        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+        if (!isScrubbing && audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             const percent = audio.currentTime / audio.duration;
             if (!isNaN(percent) && isFinite(percent)) {
                 seekSlider.value = percent;
             }
             currentTimeSpan.textContent = formatTime(audio.currentTime);
-        } else {
+        } else if (!isScrubbing) {
             currentTimeSpan.textContent = formatTime(audio.currentTime);
         }
     });
@@ -55,23 +57,28 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    let wasPlayingBeforeSeek = false;
-    seekSlider?.addEventListener('mousedown', () => {
-        wasPlayingBeforeSeek = !audio.paused;
-    });
+    // Seek slider events
     seekSlider?.addEventListener('input', (e) => {
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+            isScrubbing = true;
             const newTime = parseFloat(e.target.value) * audio.duration;
             if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
                 audio.currentTime = newTime;
+                currentTimeSpan.textContent = formatTime(newTime);
             }
         }
     });
+    
     seekSlider?.addEventListener('change', () => {
-        if (wasPlayingBeforeSeek && audio.paused) {
-            audio.play().catch(e => console.log("Auto-resume after seek failed:", e));
-        }
-        wasPlayingBeforeSeek = false;
+        isScrubbing = false;
+    });
+    
+    // Touch support for mobile
+    seekSlider?.addEventListener('touchstart', () => {
+        isScrubbing = true;
+    });
+    seekSlider?.addEventListener('touchend', () => {
+        isScrubbing = false;
     });
     
     audio.addEventListener('ended', () => {
@@ -130,7 +137,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== GALLERY BUILDER (fixed direction: prev = right-to-left, next = left-to-right) ==========
+// ========== GALLERY BUILDER (fixed direction + restored swipe) ==========
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
     const prevBtn = document.getElementById(galleryId + 'PrevBtn');
@@ -191,7 +198,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'lazy';
+        // No lazy loading
+        imgEl.loading = 'eager';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -251,8 +259,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     }
 
     // direction: -1 = prev, 1 = next
-    // Prev: new slide comes from RIGHT (right-to-left motion), current exits LEFT
-    // Next: new slide comes from LEFT (left-to-right motion), current exits RIGHT
+    // Prev: current exits RIGHT, new comes from LEFT
+    // Next: current exits LEFT, new comes from RIGHT
     function navigateTo(targetIndex, direction) {
         const normalizedIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
         if (isAnimating || normalizedIndex === currentIndex) return;
@@ -262,11 +270,11 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
         let exitX, incomingX;
         if (direction === -1) { // PREV
-            exitX = -40;        // current exits left
-            incomingX = 40;     // new comes from right
+            exitX = 40;        // current exits right
+            incomingX = -40;   // new comes from left
         } else { // NEXT (direction === 1)
-            exitX = 40;         // current exits right
-            incomingX = -40;    // new comes from left
+            exitX = -40;       // current exits left
+            incomingX = 40;    // new comes from right
         }
 
         slides[previousIndex].classList.remove('active');
@@ -300,8 +308,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     function startAutoAdvance() { stopAutoAdvance(); autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY); }
     function stopAutoAdvance() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
 
-    prevBtn.addEventListener('click', e => { e.preventDefault(); goToPrevious(); });
-    nextBtn.addEventListener('click', e => { e.preventDefault(); goToNext(); });
+    prevBtn.addEventListener('click', e => { e.preventDefault(); stopAutoAdvance(); goToPrevious(); startAutoAdvance(); });
+    nextBtn.addEventListener('click', e => { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); });
 
     if (thumbsTrack) {
         thumbsTrack.addEventListener('click', (e) => {
@@ -309,43 +317,92 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             if (thumb) {
                 const idx = parseInt(thumb.dataset.index, 10);
                 if (!isNaN(idx) && idx !== currentIndex) {
+                    stopAutoAdvance();
                     const dir = idx > currentIndex ? 1 : -1;
                     navigateTo(idx, dir);
+                    startAutoAdvance();
                 }
             }
         });
     }
 
     document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowLeft') { e.preventDefault(); goToPrevious(); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); goToNext(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); stopAutoAdvance(); goToPrevious(); startAutoAdvance(); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0, touchActive = false;
-    stage.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchActive = true; stopAutoAdvance(); }, { passive: true });
-    document.addEventListener('touchend', e => {
+    // ========== RESTORED TOUCH SWIPE ==========
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchActive = false;
+
+    stage.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchActive = true;
+        stopAutoAdvance();
+    }, { passive: true });
+
+    stage.addEventListener('touchmove', (e) => {
+        if (!touchActive) return;
+        // Optional: prevent page scroll when swiping horizontally
+        const deltaX = e.touches[0].clientX - touchStartX;
+        if (Math.abs(deltaX) > 20) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    stage.addEventListener('touchend', (e) => {
         if (!touchActive) return;
         touchActive = false;
-        const deltaX = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > 40) deltaX < 0 ? goToNext() : goToPrevious();
+        touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+        if (Math.abs(deltaX) > 40) {
+            if (deltaX < 0) {
+                goToNext();   // swipe left → next
+            } else {
+                goToPrevious(); // swipe right → previous
+            }
+        }
+        // Restart auto-advance after a delay
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
-    document.addEventListener('touchcancel', () => { touchActive = false; });
 
-    let mouseStartX = 0, isDragging = false;
-    stage.addEventListener('mousedown', e => {
-        if (e.target.closest('.nav-arrow')) return;
-        mouseStartX = e.clientX; isDragging = true; stopAutoAdvance();
+    stage.addEventListener('touchcancel', () => {
+        touchActive = false;
+        clearTimeout(stage._resumeTimeout);
+        stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
-    window.addEventListener('mouseup', e => {
+
+    // Mouse drag swipe (desktop)
+    let mouseStartX = 0;
+    let isDragging = false;
+
+    stage.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.nav-arrow')) return;
+        mouseStartX = e.clientX;
+        isDragging = true;
+        stopAutoAdvance();
+    });
+
+    window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
         const deltaX = e.clientX - mouseStartX;
-        if (Math.abs(deltaX) > 50) deltaX < 0 ? goToNext() : goToPrevious();
+        if (Math.abs(deltaX) > 50) {
+            if (deltaX < 0) goToNext();
+            else goToPrevious();
+        }
         startAutoAdvance();
     });
-    stage.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; startAutoAdvance(); } });
+
+    stage.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            isDragging = false;
+            startAutoAdvance();
+        }
+    });
+
     stage.addEventListener('mouseenter', stopAutoAdvance);
     stage.addEventListener('mouseleave', () => { if (!isDragging) startAutoAdvance(); });
 
