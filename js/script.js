@@ -107,7 +107,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== GALLERY BUILDER with SCROLLING 5 THUMBS ==========
+// ========== GALLERY BUILDER (unchanged) ==========
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
     const thumbsRow = document.getElementById(galleryId + 'ThumbsRow');
@@ -148,9 +148,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             }
             i++;
         }
-        if (images.length === 0) {
-            images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback' });
-        }
+        if (images.length === 0) images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback' });
         return images;
     }
 
@@ -192,9 +190,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     function getThumbStartIndex(imageIndex) {
         const total = imagesData.length;
         let start = Math.max(0, imageIndex - Math.floor(THUMB_WINDOW_SIZE / 2));
-        if (start + THUMB_WINDOW_SIZE > total) {
-            start = Math.max(0, total - THUMB_WINDOW_SIZE);
-        }
+        if (start + THUMB_WINDOW_SIZE > total) start = Math.max(0, total - THUMB_WINDOW_SIZE);
         return start;
     }
 
@@ -221,11 +217,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const currentThumbs = document.querySelectorAll(`#${galleryId}ThumbsRow .thumb`);
         currentThumbs.forEach(thumb => {
             const idx = parseInt(thumb.dataset.index, 10);
-            if (idx === currentIndex) {
-                thumb.classList.add('active');
-            } else {
-                thumb.classList.remove('active');
-            }
+            if (idx === currentIndex) thumb.classList.add('active');
+            else thumb.classList.remove('active');
         });
     }
 
@@ -266,28 +259,17 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
     function goToPrevious() { navigateTo(currentIndex - 1, -1); }
     function goToNext() { navigateTo(currentIndex + 1, 1); }
-    function jumpTo(index) {
-        const direction = index >= currentIndex ? 1 : -1;
-        navigateTo(index, direction);
-    }
+    function jumpTo(index) { navigateTo(index, index >= currentIndex ? 1 : -1); }
 
-    function startAutoAdvance() {
-        stopAutoAdvance();
-        autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY);
-    }
-    function stopAutoAdvance() {
-        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-    }
+    function startAutoAdvance() { stopAutoAdvance(); autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY); }
+    function stopAutoAdvance() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
 
     prevBtn.addEventListener('click', e => { e.preventDefault(); goToPrevious(); });
     nextBtn.addEventListener('click', e => { e.preventDefault(); goToNext(); });
 
     thumbsRow.addEventListener('click', (e) => {
         const thumb = e.target.closest('.thumb');
-        if (thumb) {
-            const idx = parseInt(thumb.dataset.index, 10);
-            if (!isNaN(idx)) jumpTo(idx);
-        }
+        if (thumb) { const idx = parseInt(thumb.dataset.index, 10); if (!isNaN(idx)) jumpTo(idx); }
     });
 
     document.addEventListener('keydown', e => {
@@ -296,18 +278,12 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     });
 
     let touchStartX = 0, touchActive = false;
-    stage.addEventListener('touchstart', e => {
-        touchStartX = e.touches[0].clientX;
-        touchActive = true;
-        stopAutoAdvance();
-    }, { passive: true });
+    stage.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchActive = true; stopAutoAdvance(); }, { passive: true });
     document.addEventListener('touchend', e => {
         if (!touchActive) return;
         touchActive = false;
         const deltaX = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > 40) {
-            deltaX < 0 ? goToNext() : goToPrevious();
-        }
+        if (Math.abs(deltaX) > 40) deltaX < 0 ? goToNext() : goToPrevious();
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
@@ -316,22 +292,16 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     let mouseStartX = 0, isDragging = false;
     stage.addEventListener('mousedown', e => {
         if (e.target.closest('.nav-arrow')) return;
-        mouseStartX = e.clientX;
-        isDragging = true;
-        stopAutoAdvance();
+        mouseStartX = e.clientX; isDragging = true; stopAutoAdvance();
     });
     window.addEventListener('mouseup', e => {
         if (!isDragging) return;
         isDragging = false;
         const deltaX = e.clientX - mouseStartX;
-        if (Math.abs(deltaX) > 50) {
-            deltaX < 0 ? goToNext() : goToPrevious();
-        }
+        if (Math.abs(deltaX) > 50) deltaX < 0 ? goToNext() : goToPrevious();
         startAutoAdvance();
     });
-    stage.addEventListener('mouseleave', () => {
-        if (isDragging) { isDragging = false; startAutoAdvance(); }
-    });
+    stage.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; startAutoAdvance(); } });
     stage.addEventListener('mouseenter', stopAutoAdvance);
     stage.addEventListener('mouseleave', () => { if (!isDragging) startAutoAdvance(); });
 
@@ -343,7 +313,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 20);
 createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
-// ========== LOVE STORY CLICKABLE LIGHTBOX ==========
+// ========== LOVE STORY LIGHTBOX ==========
 const loveStoryImages = [];
 const loveStoryItems = document.querySelectorAll('.new-love-story .item');
 loveStoryItems.forEach((item, idx) => {
@@ -358,7 +328,7 @@ loveStoryItems.forEach((item, idx) => {
     }
 });
 
-// ========== RSVP FORM HANDLER (adapted for new select) ==========
+// ========== RSVP FORM ==========
 (function() {
     const rsvpForm = document.getElementById('rsvpForm');
     const submitBtn = document.getElementById('rsvpSubmitBtn');
@@ -367,28 +337,18 @@ loveStoryItems.forEach((item, idx) => {
     if (rsvpForm) {
         rsvpForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
-            const attendingSelect = document.getElementById('attending');   // new select element
-
+            const attendingSelect = document.getElementById('attending');
             if (msgDiv) msgDiv.innerHTML = '';
 
             let error = '';
-            if (!nameInput.value.trim()) {
-                error = 'Please enter your name.';
-            } else if (!emailInput.value.trim()) {
-                error = 'Please enter your email address.';
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-                error = 'Please enter a valid email address.';
-            } else if (!attendingSelect.value) {
-                error = 'Please select whether you are attending.';
-            }
+            if (!nameInput.value.trim()) error = 'Please enter your name.';
+            else if (!emailInput.value.trim()) error = 'Please enter your email address.';
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) error = 'Please enter a valid email address.';
+            else if (!attendingSelect.value) error = 'Please select whether you are attending.';
 
-            if (error) {
-                msgDiv.innerHTML = `<div class="alert alert-danger">${error}</div>`;
-                return;
-            }
+            if (error) { msgDiv.innerHTML = `<div class="alert alert-danger">${error}</div>`; return; }
 
             const originalBtnText = submitBtn.textContent;
             submitBtn.disabled = true;
@@ -396,7 +356,6 @@ loveStoryItems.forEach((item, idx) => {
 
             const formData = new FormData(rsvpForm);
             const data = new URLSearchParams(formData);
-
             try {
                 const response = await fetch('/api/rsvp', {
                     method: 'POST',
@@ -408,11 +367,11 @@ loveStoryItems.forEach((item, idx) => {
                     msgDiv.innerHTML = '<div class="alert alert-success">Thank you! Your RSVP has been saved.</div>';
                     rsvpForm.reset();
                 } else {
-                    msgDiv.innerHTML = `<div class="alert alert-danger">${result.error || 'Something went wrong. Please try again.'}</div>`;
+                    msgDiv.innerHTML = `<div class="alert alert-danger">${result.error || 'Something went wrong.'}</div>`;
                 }
             } catch (err) {
                 console.error('RSVP error:', err);
-                msgDiv.innerHTML = '<div class="alert alert-danger">Network error. Please check your connection and try again.</div>';
+                msgDiv.innerHTML = '<div class="alert alert-danger">Network error. Please try again.</div>';
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalBtnText;
@@ -421,43 +380,34 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS ANIMATION ==========
+// ========== SAKURA PETALS (unchanged) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 0.28 : 1.0;
-    const petalImages = [
-        'assets/images/sakura-petal.webp',
-        'assets/images/sakura-petal1.webp',
-        'assets/images/sakura-petal2.webp'
-    ];
+    const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     const petalCount = 40;
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
-        const randomIndex = Math.floor(Math.random() * petalImages.length);
-        const randomImage = petalImages[randomIndex];
-        petal.style.backgroundImage = `url('${randomImage}')`;
+        const ri = Math.floor(Math.random() * petalImages.length);
+        petal.style.backgroundImage = `url('${petalImages[ri]}')`;
         petal.style.backgroundSize = 'contain';
         petal.style.backgroundRepeat = 'no-repeat';
         petal.style.position = 'absolute';
         petal.style.pointerEvents = 'none';
-        let minSize = 20, maxSize = 50;
-        if (randomIndex === 0 || randomIndex === 1) {
-            minSize = minSize * 1.5;
-            maxSize = maxSize * 1.5;
-        }
-        let size = minSize + Math.random() * (maxSize - minSize);
-        size = size * sizeFactor;
+        let min = 20, max = 50;
+        if (ri === 0 || ri === 1) { min *= 1.5; max *= 1.5; }
+        let size = (min + Math.random() * (max - min)) * sizeFactor;
         petal.style.width = size + 'px';
         petal.style.height = size + 'px';
         petal.style.left = Math.random() * 100 + '%';
         petal.style.top = -Math.random() * 40 + '%';
-        const duration = 12 + Math.random() * 20;
-        const delay = Math.random() * 18;
-        const easing = ['linear', 'ease-in', 'ease-out', 'ease-in-out'][Math.floor(Math.random() * 4)];
-        petal.style.animation = `fall ${duration}s ${easing} infinite`;
-        petal.style.animationDelay = `${delay}s`;
+        const dur = 12 + Math.random() * 20;
+        const del = Math.random() * 18;
+        const e = ['linear','ease-in','ease-out','ease-in-out'][Math.floor(Math.random()*4)];
+        petal.style.animation = `fall ${dur}s ${e} infinite`;
+        petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
         petal.style.willChange = 'transform';
         petalContainer.appendChild(petal);
@@ -470,13 +420,12 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== ATTIRE CARD ENTRANCE ANIMATION ==========
+// ========== ATTIRE CARD ENTRANCE (unchanged) ==========
 (function() {
     function startAttireAnimation() {
-        const attireCard = document.querySelector('.attire-card-c');
-        if (!attireCard) return;
-        if (attireCard.classList.contains('animate-entrance')) return;
-        attireCard.classList.add('animate-entrance');
+        const card = document.querySelector('.attire-card-c');
+        if (!card || card.classList.contains('animate-entrance')) return;
+        card.classList.add('animate-entrance');
     }
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -489,48 +438,49 @@ loveStoryItems.forEach((item, idx) => {
     const target = document.querySelector('.attire-card-c');
     if (target) {
         observer.observe(target);
-        if (target.getBoundingClientRect().top < window.innerHeight - 80) {
-            startAttireAnimation();
-        }
+        if (target.getBoundingClientRect().top < window.innerHeight - 80) startAttireAnimation();
     }
 })();
 
-// ========== SHARE MOMENT BLOCK ANIMATION ==========
+// ========== SAVE THE DATE SLIDE ANIMATIONS (only once) ==========
 (function() {
-    const shareBlock = document.getElementById('shareMomentBlock');
-    if (!shareBlock) return;
-    const shareObserver = new IntersectionObserver((entries) => {
+    const left = document.querySelector('.std-photo-left');
+    const mid = document.querySelector('.std-photo-mid');
+    const right = document.querySelector('.std-photo-right');
+    if (!left || !mid || !right) return;
+
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                shareBlock.classList.add('animate-share');
-                shareObserver.unobserve(shareBlock);
+                left.classList.add('slide-in');
+                mid.classList.add('slide-in');
+                right.classList.add('slide-in');
+                observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.2, rootMargin: "0px 0px -10px 0px" });
-    shareObserver.observe(shareBlock);
-    if (shareBlock.getBoundingClientRect().top < window.innerHeight - 80) {
-        shareBlock.classList.add('animate-share');
-        shareObserver.unobserve(shareBlock);
-    }
+    }, { threshold: 0.2 });
+
+    observer.observe(document.querySelector('.photo-row'));
 })();
 
-// ========== NEW LOVE STORY INTERSECTION OBSERVER ==========
+// ========== LOVE STORY ITEM OBSERVER (slide once) ==========
 (function() {
     const storyItems = document.querySelectorAll('.new-love-story .item');
-    if (storyItems.length) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        storyItems.forEach(item => observer.observe(item));
-    }
+    if (!storyItems.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    storyItems.forEach(item => observer.observe(item));
 })();
 
-// ========== PLACEHOLDER FOR SHARE PHOTO BUTTON ==========
+// ========== SHARE PHOTO PLACEHOLDER ==========
 const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
 if (sharePhotoBtn) {
     sharePhotoBtn.addEventListener('click', () => {
