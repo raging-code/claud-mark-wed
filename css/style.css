@@ -159,6 +159,23 @@ h1, h2, h3, h4, h5, h6,
     transition: all 0.3s ease;
     border-radius: 40px;
 }
+.audio-controls .btn-outline-pink {
+    width: 38px;                     /* fixed width */
+    height: 38px;                    /* fixed height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;                      /* remove Bootstrap’s padding */
+    border-radius: 50%;              /* perfect circle */
+}
+/* Prevent the circular button from changing shape on press */
+.audio-controls .btn-outline-pink:focus,
+.audio-controls .btn-outline-pink:active {
+    outline: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    border-radius: 50% !important;
+}
 .btn-outline-pink:hover {
     background-color: var(--sakura-pink);
     color: white;
@@ -561,13 +578,13 @@ h1, h2, h3, h4, h5, h6,
 .venue-main-heading {
     font-family: 'EB Garamond', serif; font-size: clamp(28px, 4vw, 48px);
     color: #ffffff; font-weight: 400; letter-spacing: -1px;
-    text-transform: uppercase; line-height: 1; margin: 0;
+    text-transform: uppercase; line-height: 1; margin: 0; margin-bottom: 0px;
 }
 .venue-main-heading em { font-style: normal; font-weight: 600; }
 .venue-row { border-bottom: 1px solid rgba(255,255,255,0.15); padding: 22px 0; transition: background 0.2s; }
 .venue-row:first-of-type { border-top: 1px solid rgba(255,255,255,0.15); }
 .venue-row:hover { background: rgba(255,255,255,0.04); }
-.venue-label { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 400; margin-bottom: 4px; }
+.venue-label { font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 600; margin-bottom: 4px; }
 .venue-place { font-family: 'EB Garamond', serif; font-size: 22px; font-weight: 600; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 .venue-address-secondary { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 300; letter-spacing: 0.5px; margin-bottom: 2px; }
 .venue-time { font-size: 14px; color: #ffffff; letter-spacing: 1px; font-weight: 600; margin-top: 4px; margin-bottom: 0; }
@@ -579,7 +596,25 @@ h1, h2, h3, h4, h5, h6,
     transition: all 0.3s; font-weight: 400;
 }
 .venue-map-btn:hover { background: #ffffff; color: #31231a; border-color: #ffffff; }
-.venue-row .col-4 { text-align: right; flex: 0 0 auto; width: auto; padding-left: 120px; }
+.venue-row .col-4 {
+    padding-left: 0 !important;
+    text-align: center !important;   /* change from right to center */
+}
+.venue-row .col-8 {
+    text-align: center !important;
+}
+.venue-row .row {
+    flex-direction: column;
+    align-items: center;
+}
+.venue-row .col-8, .venue-row .col-4 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+}
+.venue-map-btn {
+    margin-top: 8px;
+}
 .venue-header-block {
     border-bottom: none;
 }
@@ -605,7 +640,7 @@ h1, h2, h3, h4, h5, h6,
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;
-    font-size: 2rem;
+    font-size: 2px;
     font-weight: 800;
     color: #31231a;
     display: inline-block;
@@ -641,9 +676,25 @@ h1, h2, h3, h4, h5, h6,
 @media (max-width: 768px){
 .venue-row .col-4 {
     padding-left: 0 !important;
-    text-align: right !important;
+    text-align: center !important;   /* change from right to center */
 }
-
+.venue-row .col-8 {
+    text-align: center !important;
+}
+.venue-row .row {
+    flex-direction: column;
+    align-items: center;
+}
+.venue-row .col-8, .venue-row .col-4 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+}
+.venue-map-btn {
+    margin-top: 6px; margin-left: 10px;
+}
+.venue-main-heading {
+    margin-bottom: 0px;}
 .photo-row {
     align-items: center !important;    /* vertically center all photos */
 }
@@ -719,11 +770,11 @@ footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d
     .share-moment-wrapper .share-tagline p:last-of-type {font-size: 1rem !important;}
     .tagline-share { font-size: 1rem !important; }
     .btn-share-placeholder { font-size: 0.8rem !important;      }
-    .hashtag-eb-share { font-size: 1.4rem !important; }
+    .hashtag-eb-share { font-size: 1.5rem !important; }
     .venue-section { padding: 0px 0; margin-top: 20px; margin-bottom: -5px; }
     .venue-main-heading { font-size: 18px; }
     .venue-row { padding: 12px 0; }
-    .venue-label { font-size: 7px; letter-spacing: 1px; }
+    .venue-label { font-size: 10px; letter-spacing: 1px; }
     .venue-place { font-size: 9px; }
     .venue-address-secondary { font-size: 8px; }
     .venue-time { font-size: 8px; }

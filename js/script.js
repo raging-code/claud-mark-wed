@@ -1,4 +1,3 @@
-// ========== IMPROVED AUDIO PLAYER (seek fixes) ==========
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const muteBtn = document.getElementById('muteBtn');
@@ -7,6 +6,9 @@ const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 
 let isScrubbing = false;
+
+// Detect Facebook / Messenger WebView
+const isFacebookBrowser = /FBAN|FBAV|Messenger/.test(navigator.userAgent);
 
 function formatTime(seconds) {
     if (isNaN(seconds) || !isFinite(seconds) || seconds < 0) return "0:00";
@@ -57,23 +59,37 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // Seek slider events
-    seekSlider?.addEventListener('input', (e) => {
-        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-            isScrubbing = true;
-            const newTime = parseFloat(e.target.value) * audio.duration;
-            if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
-                audio.currentTime = newTime;
-                currentTimeSpan.textContent = formatTime(newTime);
+    // ----- SEEK HANDLING (variant for Messenger) -----
+    if (isFacebookBrowser) {
+        // In Facebook/Messenger WebView, use 'change' only to avoid glitching
+        seekSlider?.addEventListener('change', (e) => {
+            if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+                const newTime = parseFloat(e.target.value) * audio.duration;
+                if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
+                    audio.currentTime = newTime;
+                    currentTimeSpan.textContent = formatTime(newTime);
+                }
             }
-        }
-    });
+        });
+    } else {
+        // Normal browsers: smooth seeking on 'input'
+        seekSlider?.addEventListener('input', (e) => {
+            if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+                isScrubbing = true;
+                const newTime = parseFloat(e.target.value) * audio.duration;
+                if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
+                    audio.currentTime = newTime;
+                    currentTimeSpan.textContent = formatTime(newTime);
+                }
+            }
+        });
+        
+        seekSlider?.addEventListener('change', () => {
+            isScrubbing = false;
+        });
+    }
     
-    seekSlider?.addEventListener('change', () => {
-        isScrubbing = false;
-    });
-    
-    // Touch support for mobile
+    // Touch support for mobile (keep these)
     seekSlider?.addEventListener('touchstart', () => {
         isScrubbing = true;
     });
@@ -90,6 +106,26 @@ if (audio) {
             updateSeekMax();
         }
     }, 2000);
+    
+    // ========== AUTO‑PLAY AFTER 5 SECONDS ==========
+    setTimeout(() => {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }).catch(() => {
+                function playOnInteraction() {
+                    audio.play().then(() => {
+                        if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    }).catch(() => {});
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                }
+                document.addEventListener('click', playOnInteraction, { once: true });
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+            });
+        }
+    }, 5000);
 }
 
 // ========== GLOBAL LIGHTBOX ==========
@@ -137,7 +173,37 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
+// ========== VIDEO FACADES (click to load iframe) ==========
+(function() {
+    document.querySelectorAll('.video-facade').forEach(facade => {
+        const videoId = facade.dataset.videoId;
+        if (!videoId) return;
+        const playBtn = facade.querySelector('.video-play-btn');
+        if (!playBtn) return;
+
+        playBtn.addEventListener('click', () => {
+            const iframe = document.createElement('iframe');
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.borderRadius = facade.parentElement.classList.contains('video-sakura-frame') ? '12px' : '0';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`;
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            iframe.setAttribute('allowfullscreen', '');
+            iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+            facade.innerHTML = '';
+            facade.appendChild(iframe);
+        });
+    });
+})();
+
 // ========== GALLERY BUILDER (fixed direction + restored swipe) ==========
+// Global cache to prevent image discarding
+window._galleryImageCache = window._galleryImageCache || [];
+
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
     const prevBtn = document.getElementById(galleryId + 'PrevBtn');
@@ -154,24 +220,25 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
             const webpSrc = `${basePath}${prefix}${i}.webp`;
             const jpgSrc = `${basePath}${prefix}${i}.jpg`;
+            let img = new Image();
             try {
                 await new Promise((resolve, reject) => {
-                    const img = new Image();
                     img.onload = () => resolve();
                     img.onerror = () => reject();
                     img.src = webpSrc;
                 });
-                images.push({ src: webpSrc, alt: `${prefix} ${i}` });
+                images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
+                window._galleryImageCache.push(img);  // keep in memory
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
                     await new Promise((resolve, reject) => {
-                        const img = new Image();
                         img.onload = () => resolve();
                         img.onerror = () => reject();
                         img.src = jpgSrc;
                     });
-                    images.push({ src: jpgSrc, alt: `${prefix} ${i}` });
+                    images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
+                    window._galleryImageCache.push(img);
                     consecutiveFailures = 0;
                 } catch (e2) {
                     consecutiveFailures++;
@@ -179,7 +246,13 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             }
             i++;
         }
-        if (images.length === 0) images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback' });
+        if (images.length === 0) {
+            let fallback = new Image();
+            fallback.src = 'https://picsum.photos/id/42/1200/960';
+            await new Promise((resolve) => { fallback.onload = resolve; });
+            images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
+            window._galleryImageCache.push(fallback);
+        }
         return images;
     }
 
@@ -187,7 +260,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
-    const fullImageSrcs = imagesData.map(img => img.src);
+    const fullImageSrcs = imagesData.map(data => data.src);
     const slides = [];
     const thumbElements = [];
 
@@ -257,9 +330,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     }
 
-    // direction: -1 = prev, 1 = next
-    // Prev: current exits RIGHT, new comes from LEFT
-    // Next: current exits LEFT, new comes from RIGHT
     function navigateTo(targetIndex, direction) {
         const normalizedIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
         if (isAnimating || normalizedIndex === currentIndex) return;
@@ -268,12 +338,12 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         currentIndex = normalizedIndex;
 
         let exitX, incomingX;
-        if (direction === -1) { // PREV
-            exitX = 40;        // current exits right
-            incomingX = -40;   // new comes from left
-        } else { // NEXT (direction === 1)
-            exitX = -40;       // current exits left
-            incomingX = 40;    // new comes from right
+        if (direction === -1) {
+            exitX = 40;
+            incomingX = -40;
+        } else {
+            exitX = -40;
+            incomingX = 40;
         }
 
         slides[previousIndex].classList.remove('active');
@@ -330,7 +400,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    // ========== RESTORED TOUCH SWIPE ==========
     let touchStartX = 0;
     let touchEndX = 0;
     let touchActive = false;
@@ -343,7 +412,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
     stage.addEventListener('touchmove', (e) => {
         if (!touchActive) return;
-        // Optional: prevent page scroll when swiping horizontally
         const deltaX = e.touches[0].clientX - touchStartX;
         if (Math.abs(deltaX) > 20) {
             e.preventDefault();
@@ -357,12 +425,11 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const deltaX = touchEndX - touchStartX;
         if (Math.abs(deltaX) > 40) {
             if (deltaX < 0) {
-                goToNext();   // swipe left → next
+                goToNext();
             } else {
-                goToPrevious(); // swipe right → previous
+                goToPrevious();
             }
         }
-        // Restart auto-advance after a delay
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
@@ -373,7 +440,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    // Mouse drag swipe (desktop)
     let mouseStartX = 0;
     let isDragging = false;
 

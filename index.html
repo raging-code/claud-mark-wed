@@ -13,6 +13,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Claudine and Mark Wedding</title>
     
+    <!-- Prevent automatic scroll restoration & always start at the top -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('DOMContentLoaded', function() {
+            window.scrollTo(0, 0);
+        });
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -173,15 +183,19 @@
         <div class="container text-center">
             <div class="video-frame-wrapper mx-auto">
                 <div class="video-sakura-frame">
-                    <iframe width="300" height="560" 
-                            src="https://www.youtube.com/embed/CjJX6q6xWs8?autoplay=0&modestbranding=1&rel=0&showinfo=0" 
-                            title="YouTube video player" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            referrerpolicy="strict-origin-when-cross-origin" 
-                            allowfullscreen
-                            style="border-radius:14px; display:block; object-fit:cover;">
-                    </iframe>
+                    <div class="video-facade"
+                         data-video-id="CjJX6q6xWs8"
+                         style="position:relative; width:280px; height:520px; border-radius:12px; overflow:hidden; background:#000;">
+                        <img src="https://img.youtube.com/vi/CjJX6q6xWs8/hqdefault.jpg" 
+                             alt="Video thumb" 
+                             style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />
+                        <button class="video-play-btn" 
+                                style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
+                                       background:rgba(0,0,0,0.6); border:none; border-radius:50%; width:60px; height:60px;
+                                       display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                            <i class="fas fa-play" style="color:#fff; font-size:20px;"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -191,7 +205,7 @@
     <section class="new-love-story">
         <div class="love-story-bg"></div>
         <header class="love-story-header">
-            <h1 class="love-story-main-title">Our Journey Together<br><em>A Love Story</em></h1>
+            <h1 class="love-story-main-title">Our Journey Together<br></h1>
         </header>
         <div class="love-story-container-custom">
             <div class="story-row">
@@ -251,14 +265,19 @@
     <section class="prenup-fullwidth-video">
         <div class="prenup-video-container">
             <div class="video-ratio-18-9">
-                <iframe class="prenup-video-iframe" 
-                        src="https://www.youtube.com/embed/k-MuPT6nGUY?si=5bS7Y_3MdUnGO7_l" 
-                        title="Prenup Wedding Video"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                </iframe>
+                <div class="video-facade"
+                     data-video-id="k-MuPT6nGUY"
+                     style="position:absolute; top:0; left:0; width:100%; height:100%; background:#000;">
+                    <img src="https://img.youtube.com/vi/k-MuPT6nGUY/hqdefault.jpg" 
+                         alt="Prenup video"
+                         style="width:100%; height:100%; object-fit:cover;" />
+                    <button class="video-play-btn"
+                            style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                                   background:rgba(0,0,0,0.6); border:none; border-radius:50%; width:70px; height:70px;
+                                   display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                        <i class="fas fa-play" style="color:#fff; font-size:24px;"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -279,7 +298,7 @@
                         <p class="venue-time">10:30-11:30am</p>
                     </div>
                     <div class="col-4 text-end">
-                        <a href="https://maps.google.com/?q=899+J.+P.+Rizal+St,+Makati+City,+Metro+Manila" target="_blank" class="venue-map-btn">
+                        <a href="https://maps.app.goo.gl/mPcNQAgCvkt3EuXU6" target="_blank" class="venue-map-btn">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
                             Maps
                         </a>
@@ -332,7 +351,7 @@
                                         Don’t forget to tag us and use our hashtag:
                                     </p>
                                     <div class="hashtag-eb-share" style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">
-                                        #ForeverMarkedforClaudine 
+                                        #ForeverMarkedforClaud 
                                     </div>
                                     <p style="font-family: 'EB Garamond', serif; font-size: 1.3rem; margin-bottom: 0rem;">
                                         Got the perfect shot? We’d love to see it!<br>
