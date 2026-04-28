@@ -1,16 +1,12 @@
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const muteBtn = document.getElementById('muteBtn');
+const seekSlider = document.getElementById('seekSlider');
 const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 
-const progressContainer = document.getElementById('progressContainer');
-const seekTrack = document.getElementById('seekTrack');
-const seekFill = document.getElementById('seekFill');
-const seekThumb = document.getElementById('seekThumb');
-const seekSlider = document.getElementById('seekSlider'); // hidden native input
-
-let isSeeking = false;
+let isScrubbing = false;
+let durationReady = false;
 
 function formatTime(seconds) {
     if (isNaN(seconds) || !isFinite(seconds) || seconds < 0) return "0:00";
@@ -19,135 +15,109 @@ function formatTime(seconds) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-function updateSeekUI(percent) {
-    percent = Math.min(1, Math.max(0, percent));
-    seekFill.style.width = `${percent * 100}%`;
-    seekThumb.style.left = `${percent * 100}%`;
-    if (!isSeeking) {
-        seekSlider.value = percent;
-    }
-    currentTimeSpan.textContent = formatTime(percent * (audio.duration || 0));
-}
-
-function setAudioFromPercent(percent) {
-    if (!audio.duration || !isFinite(audio.duration)) return;
-    audio.currentTime = percent * audio.duration;
-}
-
-// -------- custom seek bar pointer handling --------
-function getPercentFromEvent(e) {
-    const rect = seekTrack.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    let percent = (clientX - rect.left) / rect.width;
-    return Math.min(1, Math.max(0, percent));
-}
-
-function onSeekStart(e) {
-    e.preventDefault();
-    isSeeking = true;
-    const percent = getPercentFromEvent(e);
-    updateSeekUI(percent);
-    setAudioFromPercent(percent);
-    seekTrack.setPointerCapture(e.pointerId);
-}
-
-function onSeekMove(e) {
-    if (!isSeeking) return;
-    e.preventDefault();
-    const percent = getPercentFromEvent(e);
-    updateSeekUI(percent);
-    setAudioFromPercent(percent);
-}
-
-function onSeekEnd(e) {
-    if (!isSeeking) return;
-    isSeeking = false;
-    const percent = getPercentFromEvent(e);
-    updateSeekUI(percent);
-    setAudioFromPercent(percent);
-    seekTrack.releasePointerCapture(e.pointerId);
-}
-
-seekTrack.addEventListener('pointerdown', onSeekStart);
-seekTrack.addEventListener('pointermove', onSeekMove);
-seekTrack.addEventListener('pointerup', onSeekEnd);
-seekTrack.addEventListener('pointercancel', onSeekEnd);
-
-// Also listen to the container for clicks on the time display area
-progressContainer.addEventListener('pointerdown', (e) => {
-    if (e.target === seekTrack || e.target.closest('.seek-thumb') || e.target.closest('.seek-fill')) return;
-    const percent = getPercentFromEvent(e);
-    updateSeekUI(percent);
-    setAudioFromPercent(percent);
-});
-
-// Keep the hidden native range in sync for keyboard users
-seekSlider.addEventListener('input', () => {
-    if (!isSeeking) {
-        const percent = parseFloat(seekSlider.value);
-        updateSeekUI(percent);
-        setAudioFromPercent(percent);
-    }
-});
-
-// Audio events
-if (audio) {
-    audio.addEventListener('loadedmetadata', () => {
+function updateDurationDisplay() {
+    if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+        seekSlider.max = audio.duration;
+        seekSlider.disabled = false;
         durationSpan.textContent = formatTime(audio.duration);
-    });
-    
+        durationReady = true;
+    } else {
+        seekSlider.max = 100;
+        seekSlider.disabled = true;
+        durationSpan.textContent = "0:00";
+        durationReady = false;
+    }
+}
+
+if (audio) {
+    audio.addEventListener('loadedmetadata', updateDurationDisplay);
+    audio.addEventListener('durationchange', updateDurationDisplay);
+    audio.addEventListener('canplay', updateDurationDisplay);
+
+    // Update slider and time display while playing
     audio.addEventListener('timeupdate', () => {
-        if (!isSeeking && audio.duration) {
-            const percent = audio.currentTime / audio.duration;
-            updateSeekUI(percent);
+        if (!isScrubbing && durationReady) {
+            seekSlider.value = audio.currentTime;
         }
         currentTimeSpan.textContent = formatTime(audio.currentTime);
     });
-    
+
+    // Play/Pause
     playPauseBtn?.addEventListener('click', () => {
         if (audio.paused) {
-            audio.play().catch(e => console.log("Audio play error:", e));
+            audio.play().catch(() => {});
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         } else {
             audio.pause();
             playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
     });
-    
+
+    // Mute toggle
     muteBtn?.addEventListener('click', () => {
         audio.muted = !audio.muted;
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
-    
+
+    // Seek slider – use seconds now
+    seekSlider?.addEventListener('input', () => {
+        if (durationReady) {
+            isScrubbing = true;
+            const preview = parseFloat(seekSlider.value);
+            currentTimeSpan.textContent = formatTime(preview);
+        }
+    });
+
+    seekSlider?.addEventListener('change', () => {
+        if (durationReady) {
+            const target = parseFloat(seekSlider.value);
+            if (!isNaN(target) && isFinite(target)) {
+                audio.currentTime = target;
+            }
+        }
+        isScrubbing = false;
+    });
+
+    // Prevent touch drag from being interrupted
+    seekSlider?.addEventListener('touchstart', () => { isScrubbing = true; });
+    seekSlider?.addEventListener('touchend', () => {
+        // change event will reset isScrubbing after seeking
+    });
+
+    // Reset play button on end
     audio.addEventListener('ended', () => {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
-    
-    // Autoplay
-    function attemptPlay() {
+
+    // Try to play immediately, then fallback to user gesture
+    const attemptAutoplay = () => {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }).catch(() => {
-                function playOnInteraction() {
+                // Autoplay blocked; wait for first interaction
+                const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                     }).catch(() => {});
                     document.removeEventListener('click', playOnInteraction);
                     document.removeEventListener('touchstart', playOnInteraction);
-                }
+                };
                 document.addEventListener('click', playOnInteraction, { once: true });
                 document.addEventListener('touchstart', playOnInteraction, { once: true });
             });
         }
-    }
-    
-    if (document.readyState === 'complete') {
-        attemptPlay();
-    } else {
-        window.addEventListener('DOMContentLoaded', attemptPlay);
-    }
+    };
+    // Immediate attempt (no delay)
+    attemptAutoplay();
+
+    // Make sure slider updates once duration becomes known
+    setTimeout(() => {
+        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+            updateDurationDisplay();
+        }
+    }, 2000);
 }
 
 // ========== GLOBAL LIGHTBOX ==========
@@ -202,7 +172,6 @@ document.addEventListener('keydown', (e) => {
         if (!videoId) return;
         const playBtn = facade.querySelector('.video-play-btn');
         if (!playBtn) return;
-
         playBtn.addEventListener('click', () => {
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
@@ -222,8 +191,8 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (with image pinning) ==========
-window._pinnedImages = window._pinnedImages || [];
+// ========== GALLERY BUILDER ==========
+window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
@@ -249,6 +218,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     img.src = webpSrc;
                 });
                 images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
+                window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
@@ -258,6 +228,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                         img.src = jpgSrc;
                     });
                     images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
+                    window._galleryImageCache.push(img);
                     consecutiveFailures = 0;
                 } catch (e2) {
                     consecutiveFailures++;
@@ -270,6 +241,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             fallback.src = 'https://picsum.photos/id/42/1200/960';
             await new Promise((resolve) => { fallback.onload = resolve; });
             images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
+            window._galleryImageCache.push(fallback);
         }
         return images;
     }
@@ -289,8 +261,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'eager';
-        imgEl.decoding = 'sync';
+        imgEl.loading = 'lazy';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -299,7 +270,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         slideDiv.appendChild(imgEl);
         stage.insertBefore(slideDiv, prevBtn);
         slides.push(slideDiv);
-        window._pinnedImages.push(imgEl);  // prevent discard
 
         if (thumbsTrack) {
             const thumbDiv = document.createElement('div');
@@ -308,12 +278,10 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'eager';
-            thumbImg.decoding = 'sync';
+            thumbImg.loading = 'lazy';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
-            window._pinnedImages.push(thumbImg);
         }
     });
 
@@ -428,49 +396,64 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0, touchEndX = 0, touchActive = false;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchActive = false;
+
     stage.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchActive = true;
         stopAutoAdvance();
     }, { passive: true });
+
     stage.addEventListener('touchmove', (e) => {
         if (!touchActive) return;
-        if (Math.abs(e.touches[0].clientX - touchStartX) > 20) e.preventDefault();
+        const deltaX = e.touches[0].clientX - touchStartX;
+        if (Math.abs(deltaX) > 20) {
+            e.preventDefault();
+        }
     }, { passive: false });
+
     stage.addEventListener('touchend', (e) => {
         if (!touchActive) return;
         touchActive = false;
         touchEndX = e.changedTouches[0].clientX;
-        if (Math.abs(touchEndX - touchStartX) > 40) {
-            if (touchEndX < touchStartX) goToNext();
+        const deltaX = touchEndX - touchStartX;
+        if (Math.abs(deltaX) > 40) {
+            if (deltaX < 0) goToNext();
             else goToPrevious();
         }
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
+
     stage.addEventListener('touchcancel', () => {
         touchActive = false;
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    let mouseStartX = 0, isDragging = false;
+    let mouseStartX = 0;
+    let isDragging = false;
+
     stage.addEventListener('mousedown', (e) => {
         if (e.target.closest('.nav-arrow')) return;
         mouseStartX = e.clientX;
         isDragging = true;
         stopAutoAdvance();
     });
+
     window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
-        if (Math.abs(e.clientX - mouseStartX) > 50) {
-            if (e.clientX < mouseStartX) goToNext();
+        const deltaX = e.clientX - mouseStartX;
+        if (Math.abs(deltaX) > 50) {
+            if (deltaX < 0) goToNext();
             else goToPrevious();
         }
         startAutoAdvance();
     });
+
     stage.addEventListener('mouseleave', () => {
         if (isDragging) { isDragging = false; startAutoAdvance(); }
     });
@@ -487,7 +470,8 @@ createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
 // ========== LOVE STORY LIGHTBOX ==========
 const loveStoryImages = [];
-document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
+const loveStoryItems = document.querySelectorAll('.new-love-story .item');
+loveStoryItems.forEach((item, idx) => {
     const img = item.querySelector('.photo img');
     if (img) {
         loveStoryImages.push(img.src);
@@ -542,13 +526,13 @@ document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS (unchanged) ==========
+// ========== SAKURA PETALS ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 8 : 15;
+    const petalCount = isMobile ? 8 : 30;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -571,6 +555,7 @@ document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
+        petal.style.willChange = 'transform';
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -622,7 +607,7 @@ document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
     observer.observe(document.querySelector('.photo-row'));
 })();
 
-// Custom dropdown
+// Custom dropdown logic
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
@@ -650,19 +635,10 @@ document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
     });
 })();
 
-// Share photo placeholder
+// ========== SHARE PHOTO PLACEHOLDER ==========
 const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
 if (sharePhotoBtn) {
     sharePhotoBtn.addEventListener('click', () => {
         console.log('Share photo button clicked - ready for link integration');
     });
 }
-
-// ========== PIN ALL IMAGES TO PREVENT DISCARDING ==========
-window.addEventListener('load', () => {
-    document.querySelectorAll('img').forEach(img => {
-        if (!window._pinnedImages.includes(img)) {
-            window._pinnedImages.push(img);
-        }
-    });
-});
