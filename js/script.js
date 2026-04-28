@@ -198,7 +198,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        // No lazy loading
         imgEl.loading = 'eager';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
@@ -551,6 +550,42 @@ loveStoryItems.forEach((item, idx) => {
         });
     }, { threshold: 0.2 });
     observer.observe(document.querySelector('.photo-row'));
+})();
+
+// Custom dropdown logic (always drops down)
+(function () {
+    const dropdown = document.getElementById('attendingDropdown');
+    if (!dropdown) return;
+
+    const selectedDiv = dropdown.querySelector('.dropdown-selected');
+    const options = dropdown.querySelectorAll('.dropdown-options li');
+    const hiddenInput = document.getElementById('attending');
+
+    // Toggle open/close
+    selectedDiv.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+    });
+
+    // Choose an option
+    options.forEach(li => {
+        li.addEventListener('click', () => {
+            const val = li.getAttribute('data-value');
+            selectedDiv.textContent = li.textContent;
+            selectedDiv.setAttribute('data-value', val);
+            hiddenInput.value = val;          // update the hidden field
+            dropdown.classList.remove('open');
+            // Trigger validation/change if needed
+            hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+        }
+    });
 })();
 
 // ========== SHARE PHOTO PLACEHOLDER ==========

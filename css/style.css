@@ -240,11 +240,26 @@ h1, h2, h3, h4, h5, h6,
 
 .ratio-photo { --bs-aspect-ratio: 150%; }
 
-.photo-col { flex: 1; max-width: 300px; }
-.photo-col--mid { max-width: 240px; margin-bottom: 36px; }
+/* Side photos – larger base width, no conflict with flex */
+.photo-col {
+    flex: 1;
+    max-width: 150px;          /* was 100px */
+}
+
+/* Middle photo – wider, no upward margin */
+.photo-col--mid {
+    max-width: 220px;          /* was 200px */
+    margin-bottom: 0;          /* was 36px – removed */
+}
+
 .photo-wrap { overflow: hidden; }
 .photo-wrap img { transition: transform 0.7s ease; }
 .photo-col:hover .photo-wrap img { transform: scale(1.04); }
+
+/* Override inline align-items-end to centre all photos */
+.photo-row {
+    align-items: center !important;
+}
 
 /* Initial slide states */
 .std-photo-left   { opacity: 0; transform: translateX(-100px); transition: all 0.8s ease; }
@@ -451,7 +466,7 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .love-story-main-title em { font-style: italic; color: #b07850; }
 .new-love-story .love-story-container-custom {
     max-width: 1060px; margin: 0 auto; padding: 0px 30px 20px;
-    contain: layout style paint;
+    contain: layout style;
 }
 .new-love-story .story-row {
     display: flex; flex-wrap: wrap; margin-left: 0; margin-right: 0;
@@ -535,7 +550,7 @@ h1, h2, h3, h4, h5, h6,
 
 /* ========== VENUE ========== */
 .venue-section {
-    width: 100%; background: #31231a; padding: 50px 0; margin-top: 5rem;
+    width: 100%; background: #31231a; padding: 10px 0; margin-top: 1rem !important;
     font-family: 'Inter', sans-serif; position: relative; z-index: 20;
 }
 .venue-container { max-width: 1000px; margin: 0 auto; padding: 0 1rem; }
@@ -565,7 +580,15 @@ h1, h2, h3, h4, h5, h6,
 }
 .venue-map-btn:hover { background: #ffffff; color: #31231a; border-color: #ffffff; }
 .venue-row .col-4 { text-align: right; flex: 0 0 auto; width: auto; padding-left: 120px; }
-
+.venue-header-block {
+    border-bottom: none;
+}
+.venue-row {
+    border-bottom: none;
+}
+.venue-row:first-of-type {
+    border-top: none;
+}
 /* ========== ATTIRE ========== */
 .attire-guide-section { position: relative; z-index: 20; background: transparent; }
 .attire-card-c { background: #fff; border: 4px solid #fff; box-shadow: 0 15px 35px rgba(49,35,26,0.1); width: 100%; max-width: 800px; margin: 0 auto; }
@@ -628,10 +651,10 @@ h1, h2, h3, h4, h5, h6,
     margin-bottom: 0 !important;      /* remove the upward offset */
 }
 .photo-col {
-    max-width: 120px;                 /* shrink side photos a bit */
+    max-width: 90px;                 /* shrink side photos a bit */
 }
 .photo-col--mid {
-    max-width: 150px;                 /* keep middle photo smaller */
+    max-width: 130px;                 /* keep middle photo smaller */
 }
 
 .faq-boxed {
@@ -697,7 +720,7 @@ footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d
     .tagline-share { font-size: 1rem !important; }
     .btn-share-placeholder { font-size: 0.8rem !important;      }
     .hashtag-eb-share { font-size: 1.4rem !important; }
-    .venue-section { padding: 30px 0; margin-top: 40px; margin-bottom: -5px; }
+    .venue-section { padding: 0px 0; margin-top: 20px; margin-bottom: -5px; }
     .venue-main-heading { font-size: 18px; }
     .venue-row { padding: 12px 0; }
     .venue-label { font-size: 7px; letter-spacing: 1px; }
@@ -741,3 +764,55 @@ footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d
 
 /* Anchor spacing */
 #proposal-gallery-section, #prenup-gallery-section, #details-section, #rsvp-section { scroll-margin-top: 80px; }
+
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    user-select: none;
+}
+
+.dropdown-selected {
+    border: none;
+    border-bottom: 1px solid rgba(49,35,26,0.25);
+    padding: 0.8rem 1.5rem 0.8rem 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--dark-charcoal);
+    cursor: pointer;
+    background: url("data:image/svg+xml;utf8,<svg fill='%2331231a' height='12' viewBox='0 0 24 24' width='12'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right center;
+    background-size: 14px;
+}
+
+.dropdown-options {
+    display: none;                        /* hidden by default */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid rgba(49,35,26,0.15);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+.custom-dropdown.open .dropdown-options {
+    display: block;                       /* show when open class added */
+}
+
+.dropdown-options li {
+    padding: 0.7rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--dark-charcoal);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dropdown-options li:hover {
+    background: #fdf0f1;
+}

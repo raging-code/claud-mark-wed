@@ -431,14 +431,19 @@
                                 </div>
 
                                 <!-- Attending dropdown with static label -->
-                                <div class="message-group">
-                                    <label for="attending" class="message-label">Are you attending? *</label>
-                                    <select class="attending-select" id="attending" name="attending" required>
-                                        <option value="" disabled selected>Please choose an option</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                </div>
+                              <div class="message-group">
+    <label class="message-label">Are you attending? *</label>
+    <div class="custom-dropdown" id="attendingDropdown">
+        <div class="dropdown-selected" data-value="">
+            Please choose an option     ↓
+        </div>
+        <ul class="dropdown-options">
+            <li data-value="yes">Yes</li>
+            <li data-value="no">No</li>
+        </ul>
+    </div>
+    <input type="hidden" id="attending" name="attending" value="" required>
+</div>
 
                                 <div class="message-group">
                                     <label for="message" class="message-label">Message</label>
