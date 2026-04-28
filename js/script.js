@@ -6,8 +6,8 @@ const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 
 let isScrubbing = false;
+let pendingSeekTime = 0;
 
-// Detect Facebook / Messenger WebView
 const isFacebookBrowser = /FBAN|FBAV|Messenger/.test(navigator.userAgent);
 
 function formatTime(seconds) {
@@ -59,42 +59,33 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // ----- SEEK HANDLING (variant for Messenger) -----
-    if (isFacebookBrowser) {
-        // In Facebook/Messenger WebView, use 'change' only to avoid glitching
-        seekSlider?.addEventListener('change', (e) => {
-            if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-                const newTime = parseFloat(e.target.value) * audio.duration;
-                if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
-                    audio.currentTime = newTime;
-                    currentTimeSpan.textContent = formatTime(newTime);
-                }
+    // ----- SEEK HANDLING -----
+    seekSlider?.addEventListener('input', (e) => {
+        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+            isScrubbing = true;
+            const fraction = parseFloat(e.target.value);
+            pendingSeekTime = fraction * audio.duration;
+            if (!isNaN(pendingSeekTime) && isFinite(pendingSeekTime)) {
+                currentTimeSpan.textContent = formatTime(pendingSeekTime);
             }
-        });
-    } else {
-        // Normal browsers: smooth seeking on 'input'
-        seekSlider?.addEventListener('input', (e) => {
-            if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-                isScrubbing = true;
-                const newTime = parseFloat(e.target.value) * audio.duration;
-                if (!isNaN(newTime) && isFinite(newTime) && newTime >= 0 && newTime <= audio.duration) {
-                    audio.currentTime = newTime;
-                    currentTimeSpan.textContent = formatTime(newTime);
-                }
-            }
-        });
-        
-        seekSlider?.addEventListener('change', () => {
-            isScrubbing = false;
-        });
-    }
+        }
+    });
     
-    // Touch support for mobile (keep these)
+    seekSlider?.addEventListener('change', () => {
+        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+            if (pendingSeekTime) {
+                audio.currentTime = pendingSeekTime;
+            }
+        }
+        isScrubbing = false;
+        pendingSeekTime = 0;
+    });
+    
     seekSlider?.addEventListener('touchstart', () => {
         isScrubbing = true;
     });
     seekSlider?.addEventListener('touchend', () => {
-        isScrubbing = false;
+        // change event will fire soon and reset isScrubbing
     });
     
     audio.addEventListener('ended', () => {
@@ -201,7 +192,6 @@ document.addEventListener('keydown', (e) => {
 })();
 
 // ========== GALLERY BUILDER (fixed direction + restored swipe) ==========
-// Global cache to prevent image discarding
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -228,7 +218,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     img.src = webpSrc;
                 });
                 images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
-                window._galleryImageCache.push(img);  // keep in memory
+                window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
@@ -271,7 +261,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'eager';
+        imgEl.loading = 'lazy';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -288,6 +278,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
+            thumbImg.loading = 'lazy';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
@@ -319,6 +310,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const clamped = Math.min(maxTranslate, Math.max(minTranslate, targetTranslate));
         thumbsTrack.style.transform = `translateX(${clamped}px)`;
     }
+
+    const debouncedUpdateThumb = (() => {
+        let timeout;
+        return () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(updateThumbPosition, 100);
+        };
+    })();
 
     function updateActiveState() {
         slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
@@ -424,11 +423,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         touchEndX = e.changedTouches[0].clientX;
         const deltaX = touchEndX - touchStartX;
         if (Math.abs(deltaX) > 40) {
-            if (deltaX < 0) {
-                goToNext();
-            } else {
-                goToPrevious();
-            }
+            if (deltaX < 0) goToNext();
+            else goToPrevious();
         }
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
@@ -462,18 +458,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     });
 
     stage.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            startAutoAdvance();
-        }
+        if (isDragging) { isDragging = false; startAutoAdvance(); }
     });
-
     stage.addEventListener('mouseenter', stopAutoAdvance);
     stage.addEventListener('mouseleave', () => { if (!isDragging) startAutoAdvance(); });
 
     updateActiveState();
     startAutoAdvance();
-    window.addEventListener('resize', updateThumbPosition);
+    window.addEventListener('resize', debouncedUpdateThumb);
 }
 
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 20);
@@ -537,13 +529,13 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS ==========
+// ========== SAKURA PETALS (optimised for performance) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 15 : 30;
+    const petalCount = isMobile ? 8 : 30;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -560,8 +552,8 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.height = size + 'px';
         petal.style.left = Math.random() * 100 + '%';
         petal.style.top = -Math.random() * 40 + '%';
-        const dur = 12 + Math.random() * 20;
-        const del = Math.random() * 18;
+        const dur = 18 + Math.random() * 25;
+        const del = Math.random() * 20;
         const e = ['linear','ease-in','ease-out','ease-in-out'][Math.floor(Math.random()*4)];
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
@@ -622,31 +614,23 @@ loveStoryItems.forEach((item, idx) => {
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
-
     const selectedDiv = dropdown.querySelector('.dropdown-selected');
     const options = dropdown.querySelectorAll('.dropdown-options li');
     const hiddenInput = document.getElementById('attending');
-
-    // Toggle open/close
     selectedDiv.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdown.classList.toggle('open');
     });
-
-    // Choose an option
     options.forEach(li => {
         li.addEventListener('click', () => {
             const val = li.getAttribute('data-value');
             selectedDiv.textContent = li.textContent;
             selectedDiv.setAttribute('data-value', val);
-            hiddenInput.value = val;          // update the hidden field
+            hiddenInput.value = val;
             dropdown.classList.remove('open');
-            // Trigger validation/change if needed
             hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
         });
     });
-
-    // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         if (!dropdown.contains(e.target)) {
             dropdown.classList.remove('open');

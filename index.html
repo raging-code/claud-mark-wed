@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; frame-src 'self' https://www.youtube.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdnjs.cloudflare.net https://cdn.jsdelivr.net; connect-src 'self' https://uziyzioqazqznjsvhxky.supabase.co https://cdn.jsdelivr.net https://www.youtube; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdnjs.cloudflare.net; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; frame-src 'self' https://www.youtube.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdnjs.cloudflare.net https://cdn.jsdelivr.net; connect-src 'self' https://uziyzioqazqznjsvhxky.supabase.co https://cdn.jsdelivr.net https://www.youtube https://www.google.com https://*.google.com https://i.ytimg.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdnjs.cloudflare.net; img-src 'self' data: https://i.ytimg.com;">
     <meta property="og:title" content="Claudine and Mark Wedding">
     <meta property="og:description" content="OSAKA, JAPAN — APRIL 9, 2025 · The Surprise Proposal">
     <meta property="og:image" content="https://claudineandmarkwedding2026.pages.dev/assets/images/hero-couple.jpg">
@@ -23,10 +23,18 @@
         });
     </script>
     
+    <!-- Preconnect for YouTube + thumbnails to speed up video loading -->
+    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://www.google.com">
+    <link rel="preconnect" href="https://i.ytimg.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload the two video thumbnails so they never appear missing -->
+    <link rel="preload" as="image" href="https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg">
+    <link rel="preload" as="image" href="https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
@@ -130,17 +138,17 @@
              style="max-width: 960px; margin: 0 auto; padding: 10px 10px;">
             <div class="photo-col std-photo-left">
                 <div class="photo-wrap ratio ratio-photo">
-                    <img src="assets/images/06.webp" alt="Save the date left" width="315" height="472" />
+                    <img src="assets/images/06.webp" alt="Save the date left" width="315" height="472" loading="lazy" />
                 </div>
             </div>
             <div class="photo-col photo-col--mid std-photo-mid">
                 <div class="photo-wrap ratio ratio-photo">
-                    <img src="assets/images/25.webp" alt="Save the date center" width="315" height="472" />
+                    <img src="assets/images/25.webp" alt="Save the date center" width="315" height="472" loading="lazy" />
                 </div>
             </div>
             <div class="photo-col std-photo-right">
                 <div class="photo-wrap ratio ratio-photo">
-                    <img src="assets/images/26.webp" alt="Save the date right" width="315" height="472" />
+                    <img src="assets/images/26.webp" alt="Save the date right" width="315" height="472" loading="lazy" />
                 </div>
             </div>
         </div>
@@ -186,8 +194,10 @@
                     <div class="video-facade"
                          data-video-id="CjJX6q6xWs8"
                          style="position:relative; width:280px; height:520px; border-radius:12px; overflow:hidden; background:#000;">
-                        <img src="https://img.youtube.com/vi/CjJX6q6xWs8/hqdefault.jpg" 
+                        <img src="https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg" 
                              alt="Video thumb" 
+                             width="1280" height="720"
+                             crossorigin="anonymous"
                              style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />
                         <button class="video-play-btn" 
                                 style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); 
@@ -201,26 +211,26 @@
         </div>
     </section>
 
-    <!-- ==================== 6. LOVE STORY (with slide animations) ==================== -->
+    <!-- ==================== 6. LOVE STORY ==================== -->
     <section class="new-love-story">
         <div class="love-story-bg"></div>
         <header class="love-story-header">
-            <h1 class="love-story-main-title">Our Journey Together<br></h1>
+            <h1 class="love-story-main-title">Our Love Story<br></h1>
         </header>
         <div class="love-story-container-custom">
             <div class="story-row">
-                <!-- 1: left slide -->
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
-                <!-- 2: right slide -->
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
-                <!-- 3: left slide -->
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
-                <!-- 4: right slide -->
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Years 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
-                <!-- 5: left slide -->
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
-                <!-- 6: right slide -->
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" width="600" height="600"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+                <!-- 1 -->
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
+                <!-- 2 -->
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
+                <!-- 3 -->
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
+                <!-- 4 -->
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Years 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+                <!-- 5 -->
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
+                <!-- 6 -->
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
             </div>
         </div>
         <footer class="love-story-footer-rule">
@@ -268,8 +278,10 @@
                 <div class="video-facade"
                      data-video-id="k-MuPT6nGUY"
                      style="position:absolute; top:0; left:0; width:100%; height:100%; background:#000;">
-                    <img src="https://img.youtube.com/vi/k-MuPT6nGUY/hqdefault.jpg" 
+                    <img src="https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg" 
                          alt="Prenup video"
+                         width="1280" height="720"
+                         crossorigin="anonymous"
                          style="width:100%; height:100%; object-fit:cover;" />
                     <button class="video-play-btn"
                             style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -351,7 +363,7 @@
                                         Don’t forget to tag us and use our hashtag:
                                     </p>
                                     <div class="hashtag-eb-share" style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">
-                                        #ForeverMarkedforClaud 
+                                        #ForeverMarkedforClaud
                                     </div>
                                     <p style="font-family: 'EB Garamond', serif; font-size: 1.3rem; margin-bottom: 0rem;">
                                         Got the perfect shot? We’d love to see it!<br>
