@@ -63,18 +63,18 @@
             <a href="#rsvp-section" class="anchor-link">RSVP</a>
         </div>
     </nav>
-    <section class="hero-section">
+    <section class="hero-section" id="heroSection">
         <div class="hero-image-wrapper">
             <picture>
                 <source srcset="assets/images/hero-couple.webp" type="image/webp">
                 <source srcset="assets/images/hero-couple.jpg">
-                <img src="assets/images/hero-couple.jpg" alt="Bride and Groom" class="hero-img" width="1200" height="800" decoding="async" loading="eager">
+                <img id="heroCoupleImg" src="assets/images/hero-couple.jpg" alt="Bride and Groom" class="hero-img" width="1200" height="800" decoding="async" loading="eager">
             </picture>
             <div class="sakura-overlay"></div>
         </div>
     </section>
-    <div class="wedding-banner">
-        <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager" decoding="sync">
+    <div class="wedding-banner" id="weddingBanner">
+        <img id="headerBannerImg" src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager" decoding="sync">
     </div>
     <div class="countdown-banner">
         <div class="countdown-inner">
@@ -106,9 +106,9 @@
             <h3 class="save-the-date-heading">Save the Date!</h3>
         </div>
         <div class="d-flex flex-row flex-nowrap gap-2 align-items-end justify-content-center w-100 photo-row" style="max-width: 960px; margin: 0 auto; padding: 10px 10px;">
-            <div class="photo-col std-photo-left"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/06.webp" alt="Save the date left" width="315" height="472" loading="eager" decoding="sync" /></div></div>
-            <div class="photo-col photo-col--mid std-photo-mid"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/25.webp" alt="Save the date center" width="315" height="472" loading="eager" decoding="sync" /></div></div>
-            <div class="photo-col std-photo-right"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/26.webp" alt="Save the date right" width="315" height="472" loading="eager" decoding="sync" /></div></div>
+            <div class="photo-col std-photo-left"><div class="photo-wrap ratio ratio-photo"><img id="saveLeftImg" src="assets/images/06.webp" alt="Save the date left" width="315" height="472" loading="eager" decoding="sync" /></div></div>
+            <div class="photo-col photo-col--mid std-photo-mid"><div class="photo-wrap ratio ratio-photo"><img id="saveMidImg" src="assets/images/25.webp" alt="Save the date center" width="315" height="472" loading="eager" decoding="sync" /></div></div>
+            <div class="photo-col std-photo-right"><div class="photo-wrap ratio ratio-photo"><img id="saveRightImg" src="assets/images/26.webp" alt="Save the date right" width="315" height="472" loading="eager" decoding="sync" /></div></div>
         </div>
     </section>
     <section class="proposal-gallery-section py-2" id="proposal-gallery-section">
@@ -132,30 +132,29 @@
             </div>
         </div>
     </section>
-    <section class="video-section py-3">
+    <section class="video-section py-3" id="videoSection1">
         <div class="container text-center">
             <div class="video-frame-wrapper mx-auto">
                 <div class="video-sakura-frame">
                     <div class="video-facade" data-video-id="CjJX6q6xWs8" style="position:relative; width:280px; height:520px; border-radius:12px; overflow:hidden; background:#000;">
-                        <img src="https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg" alt="Video thumb" width="1280" height="720" crossorigin="anonymous" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" loading="eager" decoding="sync" />
+                        <img id="proposalThumbImg" src="https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg" alt="Video thumb" width="1280" height="720" crossorigin="anonymous" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" loading="eager" decoding="sync" />
                         <button class="video-play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); border:none; border-radius:50%; width:60px; height:60px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-play" style="color:#fff; font-size:20px;"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="new-love-story">
+    <section class="new-love-story" id="loveStorySection">
         <div class="love-story-bg"></div>
         <header class="love-story-header"><h1 class="love-story-main-title">Our Love Story<br></h1></header>
         <div class="love-story-container-custom">
             <div class="story-row">
-                <!-- All story images now loading="eager" decoding="sync" -->
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
-                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
-                <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img id="love1" src="assets/images/lovestory.webp" alt="Love story 1" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img id="love2" src="assets/images/lovestory1.webp" alt="Love story 2" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img id="love3" src="assets/images/lovestory2.webp" alt="Love story 3" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img id="love4" src="assets/images/lovestory3.webp" alt="Love story 4" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+                <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img id="love5" src="assets/images/lovestory4.webp" alt="Love story 5" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
+                <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img id="love6" src="assets/images/lovestory5.webp" alt="Love story 6" width="600" height="600" loading="eager" decoding="sync"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
             </div>
         </div>
         <footer class="love-story-footer-rule"><div class="rule"><span></span><span></span></div></footer>
@@ -189,11 +188,11 @@
         </div>
     </div>
 </section>
-    <section class="prenup-fullwidth-video">
+    <section class="prenup-fullwidth-video" id="prenupVideoSection">
         <div class="prenup-video-container">
             <div class="video-ratio-18-9">
                 <div class="video-facade" data-video-id="k-MuPT6nGUY" style="position:absolute; top:0; left:0; width:100%; height:100%; background:#000;">
-                    <img src="https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg" alt="Prenup video" width="1280" height="720" crossorigin="anonymous" style="width:100%; height:100%; object-fit:cover;" loading="eager" decoding="sync" />
+                    <img id="prenupThumbImg" src="https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg" alt="Prenup video" width="1280" height="720" crossorigin="anonymous" style="width:100%; height:100%; object-fit:cover;" loading="eager" decoding="sync" />
                     <button class="video-play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.6); border:none; border-radius:50%; width:70px; height:70px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-play" style="color:#fff; font-size:24px;"></i></button>
                 </div>
             </div>
@@ -206,13 +205,13 @@
             <div class="venue-row"><div class="row align-items-center"><div class="col-8"><p class="venue-label">Reception</p><h3 class="venue-place">City Garden Grand Hotel Makati</h3><p class="venue-address-secondary">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</p><p class="venue-time">4:30pm-8:00pm</p></div><div class="col-4 text-end"><a href="https://maps.google.com/?q=City+Garden+Grand+Hotel,+8008+Makati+Ave,+Makati+City" target="_blank" class="venue-map-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Maps</a></div></div></div>
         </div>
     </div>
-    <section class="attire-guide-section py-2">
+    <section class="attire-guide-section py-2" id="attireGuideSection">
         <div class="container">
             <div class="attire-card-c">
                 <div class="attire-inner-bg">
                     <div class="attire-c-inner">
                         <div class="attire-photo" id="attirePhotoContainer">
-                            <img src="assets/images/dresscode.webp" alt="Dress Code" class="attire-img" loading="eager" decoding="sync" onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
+                            <img id="dressCodeImg" src="assets/images/dresscode.webp" alt="Dress Code" class="attire-img" loading="eager" decoding="sync" onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
                             <div class="photo-placeholder" style="display: none;">
                                 <svg width="55" height="55" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#bba898" stroke-width="1.2" fill="none"/><circle cx="8.5" cy="9.5" r="1.5" stroke="#bba898" stroke-width="1.2"/><path d="M22 14L17 10L9 16L5 13L2 15" stroke="#bba898" stroke-width="1.2"/></svg>
                                 <span>dresscode.webp</span>
@@ -294,24 +293,32 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" integrity="sha384-2UI1PfnXFjVMQ7/ZDEF70CR943oH3v6uZrFQGGqJYlvhh4g6z6uVktxYbOlAczav" crossorigin="anonymous"></script>
     <script src="js/script.js" defer></script>
     <script>
-        const WEDDING = new Date(2026, 5, 24, 10, 30, 0);
-        const pad = n => String(n).padStart(2, '0');
-        function updateCountdown() {
-            const diff = WEDDING - new Date();
-            if (diff <= 0) {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('mins').textContent = '00';
-                document.getElementById('secs').textContent = '00';
-                return;
+        // Countdown with requestAnimationFrame to avoid constant style recalcs
+        (function() {
+            const WEDDING = new Date(2026, 5, 24, 10, 30, 0);
+            const pad = n => String(n).padStart(2, '0');
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minsEl = document.getElementById('mins');
+            const secsEl = document.getElementById('secs');
+            let rafId;
+            function update() {
+                const diff = WEDDING - new Date();
+                if (diff <= 0) {
+                    daysEl.textContent = '00';
+                    hoursEl.textContent = '00';
+                    minsEl.textContent = '00';
+                    secsEl.textContent = '00';
+                    return;
+                }
+                daysEl.textContent  = pad(Math.floor(diff / 86400000));
+                hoursEl.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+                minsEl.textContent  = pad(Math.floor((diff % 3600000) / 60000));
+                secsEl.textContent  = pad(Math.floor((diff % 60000) / 1000));
+                rafId = requestAnimationFrame(update);
             }
-            document.getElementById('days').textContent  = pad(Math.floor(diff / 86400000));
-            document.getElementById('hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
-            document.getElementById('mins').textContent  = pad(Math.floor((diff % 3600000) / 60000));
-            document.getElementById('secs').textContent  = pad(Math.floor((diff % 60000) / 1000));
-        }
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+            rafId = requestAnimationFrame(update);
+        })();
     </script>
 </body>
 </html>

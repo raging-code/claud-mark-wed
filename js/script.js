@@ -41,7 +41,6 @@ if (audio) {
         currentTimeSpan.textContent = formatTime(audio.currentTime);
     });
 
-    // Play/Pause
     playPauseBtn?.addEventListener('click', () => {
         if (audio.paused) {
             audio.play().catch(() => {});
@@ -52,14 +51,12 @@ if (audio) {
         }
     });
 
-    // Mute toggle (starts unmuted)
     audio.muted = false;
     muteBtn?.addEventListener('click', () => {
         audio.muted = !audio.muted;
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
 
-    // Seek slider
     seekSlider?.addEventListener('input', () => {
         if (durationReady) {
             isScrubbing = true;
@@ -85,7 +82,6 @@ if (audio) {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    // Unmuted autoplay with user gesture fallback
     function tryUnmutedPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -118,6 +114,16 @@ if (audio) {
         }
     }, 2000);
 }
+
+// ----- KEEP ALL STATIC IMAGE REFERENCES FOREVER (prevents discarding) -----
+window.__pinnedImages = [];
+document.querySelectorAll('img[loading="eager"], img[decoding="sync"], img[loading="eager"][decoding="sync"]').forEach(img => {
+    window.__pinnedImages.push(img);
+});
+// Also pin the hero image (it may be a picture element – grab the current image)
+const heroImg = document.querySelector('.hero-img');
+if (heroImg) window.__pinnedImages.push(heroImg);
+// Ensure gallery cached images stay alive (they already are via window._galleryImageCache)
 
 // ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
@@ -210,7 +216,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const webpSrc = `${basePath}${prefix}${i}.webp`;
             const jpgSrc = `${basePath}${prefix}${i}.jpg`;
             let img = new Image();
-            img.decoding = 'sync';  // force sync decoding
+            img.decoding = 'sync';
             try {
                 await new Promise((resolve, reject) => {
                     img.onload = () => resolve();
@@ -337,22 +343,19 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
-        // First make the new slide active and fully visible
         const incomingSlide = slides[currentIndex];
         incomingSlide.classList.add('active');
         incomingSlide.style.transform = '';
         incomingSlide.style.opacity = '';
 
-        // Then fade out the old slide
         const oldSlide = slides[previousIndex];
         oldSlide.style.opacity = '0';
-        // Keep old slide in place during fade
         setTimeout(() => {
             oldSlide.classList.remove('active');
             oldSlide.style.transform = '';
             oldSlide.style.opacity = '';
             isAnimating = false;
-        }, 400);  // matches CSS transition 0.4s
+        }, 400);
 
         updateActiveState();
     }
@@ -385,24 +388,17 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchActive = false;
+    let touchStartX = 0, touchEndX = 0, touchActive = false;
 
     stage.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchActive = true;
         stopAutoAdvance();
     }, { passive: true });
-
     stage.addEventListener('touchmove', (e) => {
         if (!touchActive) return;
-        const deltaX = e.touches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > 20) {
-            e.preventDefault();
-        }
+        if (Math.abs(e.touches[0].clientX - touchStartX) > 20) e.preventDefault();
     }, { passive: false });
-
     stage.addEventListener('touchend', (e) => {
         if (!touchActive) return;
         touchActive = false;
@@ -415,23 +411,19 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
-
     stage.addEventListener('touchcancel', () => {
         touchActive = false;
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    let mouseStartX = 0;
-    let isDragging = false;
-
+    let mouseStartX = 0, isDragging = false;
     stage.addEventListener('mousedown', (e) => {
         if (e.target.closest('.nav-arrow')) return;
         mouseStartX = e.clientX;
         isDragging = true;
         stopAutoAdvance();
     });
-
     window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
@@ -442,7 +434,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
         startAutoAdvance();
     });
-
     stage.addEventListener('mouseleave', () => {
         if (isDragging) { isDragging = false; startAutoAdvance(); }
     });
@@ -459,8 +450,7 @@ createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
 // ========== LOVE STORY LIGHTBOX ==========
 const loveStoryImages = [];
-const loveStoryItems = document.querySelectorAll('.new-love-story .item');
-loveStoryItems.forEach((item, idx) => {
+document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
     const img = item.querySelector('.photo img');
     if (img) {
         loveStoryImages.push(img.src);
