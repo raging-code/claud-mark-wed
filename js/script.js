@@ -58,37 +58,31 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // ----- SEEK HANDLING (fixed for mobile) -----
+    // ----- FIXED SEEK: real‑time scrubbing on input -----
     seekSlider?.addEventListener('input', (e) => {
-        // Just update the displayed time while dragging, do NOT seek yet.
-        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-            isScrubbing = true;
-            const fraction = parseFloat(e.target.value);
-            const previewTime = fraction * audio.duration;
-            if (!isNaN(previewTime) && isFinite(previewTime)) {
-                currentTimeSpan.textContent = formatTime(previewTime);
-            }
+        if (!audio.duration || !isFinite(audio.duration) || isNaN(audio.duration)) return;
+        isScrubbing = true;
+        const fraction = parseFloat(e.target.value);
+        const targetTime = fraction * audio.duration;
+        if (!isNaN(targetTime) && isFinite(targetTime)) {
+            audio.currentTime = targetTime;
+            currentTimeSpan.textContent = formatTime(targetTime);
         }
     });
     
     seekSlider?.addEventListener('change', () => {
-        // Actually seek to the final slider position.
-        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-            const fraction = parseFloat(seekSlider.value);
-            const targetTime = fraction * audio.duration;
-            if (!isNaN(targetTime) && isFinite(targetTime)) {
-                audio.currentTime = targetTime;
-            }
-        }
+        // Seek has already been applied during input; just release scrubbing lock
         isScrubbing = false;
     });
     
-    // Touch events
+    // Touch events: ensure scrubbing flag is reset even if change event is delayed
     seekSlider?.addEventListener('touchstart', () => {
         isScrubbing = true;
     });
     seekSlider?.addEventListener('touchend', () => {
-        // The 'change' event will reset isScrubbing after seeking.
+        // The change event will fire shortly after and reset isScrubbing
+        // but if it doesn't, we force it after a short delay
+        setTimeout(() => { isScrubbing = false; }, 300);
     });
     
     audio.addEventListener('ended', () => {
@@ -101,13 +95,14 @@ if (audio) {
         }
     }, 2000);
     
-    // ========== AUTO‑PLAY AFTER 5 SECONDS ==========
-    setTimeout(() => {
+    // ========== IMMEDIATE AUTO‑PLAY (no delay) ==========
+    function attemptPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }).catch(() => {
+                // Browser blocked autoplay – wait for first user gesture
                 function playOnInteraction() {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -119,7 +114,14 @@ if (audio) {
                 document.addEventListener('touchstart', playOnInteraction, { once: true });
             });
         }
-    }, 5000);
+    }
+    
+    // Try to play as soon as possible
+    if (document.readyState === 'complete') {
+        attemptPlay();
+    } else {
+        window.addEventListener('DOMContentLoaded', attemptPlay);
+    }
 }
 
 // ========== GLOBAL LIGHTBOX ==========
