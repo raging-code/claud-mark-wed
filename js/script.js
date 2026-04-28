@@ -115,48 +115,71 @@ if (audio) {
     }, 2000);
 }
 
-// ===== IMAGE BITMAP PINNING (keeps decoded pixel data permanently) =====
-window._imageBitmaps = [];
-async function pinImageAsBitmap(img) {
-    if (!img || !img.complete || img.naturalWidth === 0) return;
+// ===== BLOB‑BASED IMAGE PINNING (permanently locks decoded pixels) =====
+window.__blobURLs = [];
+window.__imageBlobs = [];
+
+async function lockImagePixels(imgElement, src, isCrossOrigin = false) {
+    if (imgElement.src && imgElement.src.startsWith('blob:')) return;
+
+    const img = new Image();
+    if (isCrossOrigin) img.crossOrigin = 'anonymous';
+    img.decoding = 'sync';
+    img.src = src;
+
     try {
-        // For cross‑origin images, createImageBitmap may fail if CORS isn't set.
-        // We set crossOrigin = 'anonymous' before loading, so it should work.
-        const bitmap = await createImageBitmap(img);
-        window._imageBitmaps.push(bitmap);
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 1;
+        canvas.height = img.naturalHeight || 1;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+        if (!blob) throw new Error('Blob creation failed');
+
+        const url = URL.createObjectURL(blob);
+        window.__imageBlobs.push(blob);
+        window.__blobURLs.push(url);
+        imgElement.src = url;
     } catch (e) {
-        // If it fails (e.g., strict CORS), we still keep the Image reference.
-        // This is better than nothing.
+        console.warn('Image blob pinning failed for', src, e);
     }
 }
 
-// Preload an image and automatically pin it as a bitmap when ready
-function preloadAndPin(src, options = {}) {
-    const img = new Image();
-    if (options.crossOrigin) img.crossOrigin = options.crossOrigin; // for YouTube thumbnails
-    img.decoding = 'sync';
-    img.src = src;
-    window.__pinnedImages = window.__pinnedImages || [];
-    window.__pinnedImages.push(img);
-    img.addEventListener('load', () => pinImageAsBitmap(img), { once: true });
+function lockStaticImages() {
+    const pairs = [
+        { id: 'heroCoupleImg', src: 'assets/images/hero-couple.jpg' },
+        { id: 'headerBannerImg', src: 'assets/images/header-banner.webp' },
+        { id: 'saveLeftImg', src: 'assets/images/06.webp' },
+        { id: 'saveMidImg', src: 'assets/images/25.webp' },
+        { id: 'saveRightImg', src: 'assets/images/26.webp' },
+        { id: 'love1', src: 'assets/images/lovestory.webp' },
+        { id: 'love2', src: 'assets/images/lovestory1.webp' },
+        { id: 'love3', src: 'assets/images/lovestory2.webp' },
+        { id: 'love4', src: 'assets/images/lovestory3.webp' },
+        { id: 'love5', src: 'assets/images/lovestory4.webp' },
+        { id: 'love6', src: 'assets/images/lovestory5.webp' },
+        { id: 'proposalThumbImg', src: 'https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg', crossOrigin: true },
+        { id: 'prenupThumbImg', src: 'https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg', crossOrigin: true },
+        { id: 'dressCodeImg', src: 'assets/images/dresscode.webp' }
+    ];
+
+    pairs.forEach(({ id, src, crossOrigin }) => {
+        const el = document.getElementById(id);
+        if (el) lockImagePixels(el, src, crossOrigin);
+    });
 }
 
-// Preload all static images (with crossOrigin='anonymous' for YouTube)
-preloadAndPin('assets/images/hero-couple.jpg');
-preloadAndPin('assets/images/hero-couple.webp');
-preloadAndPin('assets/images/header-banner.webp');
-preloadAndPin('assets/images/06.webp');
-preloadAndPin('assets/images/25.webp');
-preloadAndPin('assets/images/26.webp');
-preloadAndPin('assets/images/lovestory.webp');
-preloadAndPin('assets/images/lovestory1.webp');
-preloadAndPin('assets/images/lovestory2.webp');
-preloadAndPin('assets/images/lovestory3.webp');
-preloadAndPin('assets/images/lovestory4.webp');
-preloadAndPin('assets/images/lovestory5.webp');
-preloadAndPin('assets/images/dresscode.webp');
-preloadAndPin('https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg', { crossOrigin: 'anonymous' });
-preloadAndPin('https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg', { crossOrigin: 'anonymous' });
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', lockStaticImages);
+} else {
+    lockStaticImages();
+}
 
 // ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
@@ -229,7 +252,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (now creates ImageBitmap for every image) ==========
+// ========== GALLERY BUILDER (with blob pinning for every image) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -240,63 +263,63 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     const thumbsTrack = document.getElementById(galleryId + 'ThumbsTrack');
     if (!stage) return;
 
-    async function loadImages() {
-        const images = [];
-        let i = startIndex;
-        let consecutiveFailures = 0;
-        const MAX_CONSECUTIVE_FAILURES = 3;
-        while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
-            const webpSrc = `${basePath}${prefix}${i}.webp`;
-            const jpgSrc = `${basePath}${prefix}${i}.jpg`;
-            let img = new Image();
-            img.decoding = 'sync';
-            // Mark as eager so browser prioritises it
-            try {
-                await new Promise((resolve, reject) => {
-                    img.onload = () => resolve();
-                    img.onerror = () => reject();
-                    img.src = webpSrc;
-                });
-                // Create bitmap to lock decoded data
-                pinImageAsBitmap(img);
-                images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
-                window._galleryImageCache.push(img);
-                consecutiveFailures = 0;
-            } catch (e) {
-                try {
-                    img.decoding = 'sync';
-                    await new Promise((resolve, reject) => {
-                        img.onload = () => resolve();
-                        img.onerror = () => reject();
-                        img.src = jpgSrc;
-                    });
-                    pinImageAsBitmap(img);
-                    images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
-                    window._galleryImageCache.push(img);
-                    consecutiveFailures = 0;
-                } catch (e2) {
-                    consecutiveFailures++;
-                }
-            }
-            i++;
+    async function loadAndLock(src) {
+        const img = new Image();
+        img.decoding = 'sync';
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = src;
+        });
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 1;
+        canvas.height = img.naturalHeight || 1;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+        if (blob) {
+            const url = URL.createObjectURL(blob);
+            window.__imageBlobs.push(blob);
+            window.__blobURLs.push(url);
+            return { originalSrc: src, blobUrl: url, img: img };
         }
-        if (images.length === 0) {
-            let fallback = new Image();
-            fallback.src = 'https://picsum.photos/id/42/1200/960';
-            fallback.decoding = 'sync';
-            await new Promise((resolve) => { fallback.onload = resolve; });
-            pinImageAsBitmap(fallback);
-            images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
-            window._galleryImageCache.push(fallback);
-        }
-        return images;
+        return { originalSrc: src, blobUrl: src, img: img };
     }
 
-    const imagesData = await loadImages();
+    const imagesData = [];
+    let i = startIndex;
+    let consecutiveFailures = 0;
+    const MAX_CONSECUTIVE_FAILURES = 3;
+    while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
+        const webpSrc = `${basePath}${prefix}${i}.webp`;
+        const jpgSrc = `${basePath}${prefix}${i}.jpg`;
+        try {
+            const data = await loadAndLock(webpSrc);
+            imagesData.push({ src: data.blobUrl, alt: `${prefix} ${i}`, original: data.originalSrc });
+            window._galleryImageCache.push(data.img);
+            consecutiveFailures = 0;
+        } catch (e) {
+            try {
+                const data = await loadAndLock(jpgSrc);
+                imagesData.push({ src: data.blobUrl, alt: `${prefix} ${i}`, original: data.originalSrc });
+                window._galleryImageCache.push(data.img);
+                consecutiveFailures = 0;
+            } catch (e2) {
+                consecutiveFailures++;
+            }
+        }
+        i++;
+    }
+    if (imagesData.length === 0) {
+        const fallData = await loadAndLock('https://picsum.photos/id/42/1200/960');
+        imagesData.push({ src: fallData.blobUrl, alt: 'Fallback', original: fallData.originalSrc });
+        window._galleryImageCache.push(fallData.img);
+    }
+
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
-    const fullImageSrcs = imagesData.map(data => data.src);
+    const fullImageSrcs = imagesData.map(d => d.src);
     const slides = [];
     const thumbElements = [];
 

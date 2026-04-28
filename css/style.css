@@ -80,17 +80,13 @@ h1, h2, h3, h4, h5, h6,
     .anchor-link { font-size: 0.75rem; }
 }
 
-/* ===== HERO SECTION ===== */
-/* Locked into its own painted layer */
+/* Hero Section */
 .hero-section {
     width: 100%;
     margin-bottom: -8px;
     height: auto;
     position: relative;
     z-index: 20;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
 }
 .hero-image-wrapper {
     width: 100%;
@@ -110,16 +106,13 @@ h1, h2, h3, h4, h5, h6,
     pointer-events: none;
 }
 
-/* ===== WEDDING BANNER ===== */
+/* Banner */
 .wedding-banner {
     width: 100%;
     line-height: 0;
     position: relative;
     z-index: 20;
     background: #fff0f1;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
 }
 .wedding-banner-img {
     width: 100%;
@@ -135,7 +128,7 @@ h1, h2, h3, h4, h5, h6,
     }
 }
 
-/* ===== AUDIO CARD (already simple, no change) ===== */
+/* Audio Card */
 .audio-card {
     border: 1px solid #ffe0e0;
     background: white !important;
@@ -190,7 +183,7 @@ h1, h2, h3, h4, h5, h6,
 .form-range::-webkit-slider-thumb { background: var(--sakura-dark); }
 .form-range::-webkit-slider-thumb:hover { background: var(--japan-red); }
 
-/* ===== COUNTDOWN ===== */
+/* Countdown */
 .countdown-banner {
     width: 100%;
     background: #31231a;
@@ -278,13 +271,9 @@ h1, h2, h3, h4, h5, h6,
     transform: translate(0, 0);
 }
 
-/* ========== GALLERY SECTIONS ========== */
-/* Both proposal and prenup galleries are now fully contained */
+/* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
 .proposal-gallery-section,
 .prenup-gallery-section {
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
     position: relative;
     z-index: 20;
 }
@@ -305,7 +294,6 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
-    /* No extra GPU layer here – the parent already does containment */
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
@@ -453,9 +441,6 @@ h1, h2, h3, h4, h5, h6,
     font-family: 'Inter', sans-serif;
     color: #2e2620;
     padding: 0 0 0rem 0; margin: 0;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
 }
 .love-story-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -528,15 +513,10 @@ h1, h2, h3, h4, h5, h6,
     content: '◆'; font-size: 0.24rem; color: #c8b49a; font-family: system-ui, sans-serif;
 }
 
-/* ========== VIDEO SECTION (proposal video) ========== */
+/* ========== VIDEO SECTION ========== */
 .video-section {
     padding: 1rem 0 !important;
-    margin: 0 !important;
-    position: relative;
-    z-index: 20;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    margin: 0 !important; position: relative; z-index: 20;
 }
 .video-frame-wrapper { max-width: 300px; margin: 0 auto; }
 .video-sakura-frame {
@@ -559,15 +539,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ========== PRENUP FULL WIDTH VIDEO ========== */
-.prenup-fullwidth-video {
-    width: 100%; margin: 0; padding: 0;
-    background: #000;
-    position: relative;
-    z-index: 20;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
+.prenup-fullwidth-video { width: 100%; margin: 0; padding: 0; background: #000; position: relative; z-index: 20; }
 .prenup-video-container { width: 100%; margin: 0 auto; padding: 0; line-height: 0; }
 .video-ratio-18-9 { position: relative; width: 100%; aspect-ratio: 18 / 9; background: #000; overflow: hidden; }
 .prenup-video-iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 0 !important; display: block; }
@@ -612,15 +584,8 @@ h1, h2, h3, h4, h5, h6,
 .venue-row { border-bottom: none; }
 .venue-row:first-of-type { border-top: none; }
 
-/* ========== ATTIRE GUIDE ========== */
-.attire-guide-section {
-    position: relative;
-    z-index: 20;
-    background: transparent;
-    contain: layout style paint;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
+/* ========== ATTIRE ========== */
+.attire-guide-section { position: relative; z-index: 20; background: transparent; }
 .attire-card-c { background: #fff; border: 4px solid #fff; box-shadow: 0 15px 35px rgba(49,35,26,0.1); width: 100%; max-width: 800px; margin: 0 auto; }
 .attire-inner-bg { background: #ffffff; padding: 15px 25px; border: 1px solid #f5eae6; }
 .attire-photo {
