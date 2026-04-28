@@ -115,37 +115,48 @@ if (audio) {
     }, 2000);
 }
 
-// ===== PRELOAD AND KEEP ALL STATIC IMAGES FOREVER =====
-window.__pinnedImages = [];
-function preloadImage(src) {
+// ===== IMAGE BITMAP PINNING (keeps decoded pixel data permanently) =====
+window._imageBitmaps = [];
+async function pinImageAsBitmap(img) {
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+    try {
+        // For cross‑origin images, createImageBitmap may fail if CORS isn't set.
+        // We set crossOrigin = 'anonymous' before loading, so it should work.
+        const bitmap = await createImageBitmap(img);
+        window._imageBitmaps.push(bitmap);
+    } catch (e) {
+        // If it fails (e.g., strict CORS), we still keep the Image reference.
+        // This is better than nothing.
+    }
+}
+
+// Preload an image and automatically pin it as a bitmap when ready
+function preloadAndPin(src, options = {}) {
     const img = new Image();
+    if (options.crossOrigin) img.crossOrigin = options.crossOrigin; // for YouTube thumbnails
     img.decoding = 'sync';
     img.src = src;
+    window.__pinnedImages = window.__pinnedImages || [];
     window.__pinnedImages.push(img);
+    img.addEventListener('load', () => pinImageAsBitmap(img), { once: true });
 }
-// Hero
-preloadImage('assets/images/hero-couple.jpg');
-preloadImage('assets/images/hero-couple.webp');
-// Banner
-preloadImage('assets/images/header-banner.webp');
-// Save the date photos
-preloadImage('assets/images/06.webp');
-preloadImage('assets/images/25.webp');
-preloadImage('assets/images/26.webp');
-// Love story photos
-preloadImage('assets/images/lovestory.webp');
-preloadImage('assets/images/lovestory1.webp');
-preloadImage('assets/images/lovestory2.webp');
-preloadImage('assets/images/lovestory3.webp');
-preloadImage('assets/images/lovestory4.webp');
-preloadImage('assets/images/lovestory5.webp');
-// Video thumbnails
-preloadImage('https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg');
-preloadImage('https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg');
-// Dress code
-preloadImage('assets/images/dresscode.webp');
 
-document.querySelectorAll('img[loading="eager"]').forEach(img => window.__pinnedImages.push(img));
+// Preload all static images (with crossOrigin='anonymous' for YouTube)
+preloadAndPin('assets/images/hero-couple.jpg');
+preloadAndPin('assets/images/hero-couple.webp');
+preloadAndPin('assets/images/header-banner.webp');
+preloadAndPin('assets/images/06.webp');
+preloadAndPin('assets/images/25.webp');
+preloadAndPin('assets/images/26.webp');
+preloadAndPin('assets/images/lovestory.webp');
+preloadAndPin('assets/images/lovestory1.webp');
+preloadAndPin('assets/images/lovestory2.webp');
+preloadAndPin('assets/images/lovestory3.webp');
+preloadAndPin('assets/images/lovestory4.webp');
+preloadAndPin('assets/images/lovestory5.webp');
+preloadAndPin('assets/images/dresscode.webp');
+preloadAndPin('https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg', { crossOrigin: 'anonymous' });
+preloadAndPin('https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg', { crossOrigin: 'anonymous' });
 
 // ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
@@ -218,7 +229,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER ==========
+// ========== GALLERY BUILDER (now creates ImageBitmap for every image) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -239,12 +250,15 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const jpgSrc = `${basePath}${prefix}${i}.jpg`;
             let img = new Image();
             img.decoding = 'sync';
+            // Mark as eager so browser prioritises it
             try {
                 await new Promise((resolve, reject) => {
                     img.onload = () => resolve();
                     img.onerror = () => reject();
                     img.src = webpSrc;
                 });
+                // Create bitmap to lock decoded data
+                pinImageAsBitmap(img);
                 images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
                 window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
@@ -256,6 +270,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                         img.onerror = () => reject();
                         img.src = jpgSrc;
                     });
+                    pinImageAsBitmap(img);
                     images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
                     window._galleryImageCache.push(img);
                     consecutiveFailures = 0;
@@ -270,6 +285,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             fallback.src = 'https://picsum.photos/id/42/1200/960';
             fallback.decoding = 'sync';
             await new Promise((resolve) => { fallback.onload = resolve; });
+            pinImageAsBitmap(fallback);
             images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
             window._galleryImageCache.push(fallback);
         }

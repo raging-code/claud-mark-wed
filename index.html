@@ -289,11 +289,15 @@
         <img class="lightbox-img" id="lightboxImg" alt="Fullscreen view">
         <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
+
+    <!-- Hidden canvas to keep all images permanently pinned -->
+    <canvas id="pinCanvas" width="1" height="1" style="position:fixed;top:-100px;left:-100px;opacity:0;pointer-events:none;"></canvas>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" integrity="sha384-2UI1PfnXFjVMQ7/ZDEF70CR943oH3v6uZrFQGGqJYlvhh4g6z6uVktxYbOlAczav" crossorigin="anonymous"></script>
     <script src="js/script.js" defer></script>
     <script>
-        // Countdown – gentle setInterval (1 sec) to avoid repaint flood
+        // Countdown – gentle setInterval (1 sec)
         const WEDDING = new Date(2026, 5, 24, 10, 30, 0);
         const pad = n => String(n).padStart(2, '0');
         function updateCountdown() {
