@@ -71,17 +71,13 @@ if (audio) {
     });
     
     seekSlider?.addEventListener('change', () => {
-        // Seek has already been applied during input; just release scrubbing lock
         isScrubbing = false;
     });
     
-    // Touch events: ensure scrubbing flag is reset even if change event is delayed
     seekSlider?.addEventListener('touchstart', () => {
         isScrubbing = true;
     });
     seekSlider?.addEventListener('touchend', () => {
-        // The change event will fire shortly after and reset isScrubbing
-        // but if it doesn't, we force it after a short delay
         setTimeout(() => { isScrubbing = false; }, 300);
     });
     
@@ -102,7 +98,6 @@ if (audio) {
             playPromise.then(() => {
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }).catch(() => {
-                // Browser blocked autoplay – wait for first user gesture
                 function playOnInteraction() {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -116,7 +111,6 @@ if (audio) {
         }
     }
     
-    // Try to play as soon as possible
     if (document.readyState === 'complete') {
         attemptPlay();
     } else {
@@ -196,7 +190,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (fixed direction + restored swipe) ==========
+// ========== GALLERY BUILDER – images loaded immediately (no lazy loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -266,7 +260,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'lazy';
+        // NO loading="lazy" – loaded immediately
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -283,7 +277,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'lazy';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
@@ -534,13 +527,13 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS (optimised for performance) ==========
+// ========== SAKURA PETALS (lightweight, one layer) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 8 : 30;
+    const petalCount = isMobile ? 8 : 20;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -563,7 +556,6 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
-        petal.style.willChange = 'transform';
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -615,7 +607,7 @@ loveStoryItems.forEach((item, idx) => {
     observer.observe(document.querySelector('.photo-row'));
 })();
 
-// Custom dropdown logic (always drops down)
+// Custom dropdown logic
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
