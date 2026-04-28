@@ -34,7 +34,6 @@ if (audio) {
     audio.addEventListener('durationchange', updateDurationDisplay);
     audio.addEventListener('canplay', updateDurationDisplay);
 
-    // Update slider and time display while playing
     audio.addEventListener('timeupdate', () => {
         if (!isScrubbing && durationReady) {
             seekSlider.value = audio.currentTime;
@@ -53,13 +52,14 @@ if (audio) {
         }
     });
 
-    // Mute toggle
+    // Mute toggle (starts unmuted)
+    audio.muted = false;
     muteBtn?.addEventListener('click', () => {
         audio.muted = !audio.muted;
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
 
-    // Seek slider – use seconds now
+    // Seek slider
     seekSlider?.addEventListener('input', () => {
         if (durationReady) {
             isScrubbing = true;
@@ -78,41 +78,46 @@ if (audio) {
         isScrubbing = false;
     });
 
-    // Prevent touch drag from being interrupted
     seekSlider?.addEventListener('touchstart', () => { isScrubbing = true; });
-    seekSlider?.addEventListener('touchend', () => {
-        // change event will reset isScrubbing after seeking
-    });
+    seekSlider?.addEventListener('touchend', () => {});
 
-    // Reset play button on end
     audio.addEventListener('ended', () => {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    // Try to play immediately, then fallback to user gesture
-    const attemptAutoplay = () => {
+    // ===================== AUTOPLAY (UNMUTED, WITH USER GESTURE FALLBACK) =====================
+    function tryUnmutedPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
+                // Success! Unmuted playback started automatically.
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }).catch(() => {
-                // Autoplay blocked; wait for first interaction
+                // Unmuted autoplay blocked. We'll wait for the first user interaction.
+                // The user will naturally tap / click / scroll within a second.
                 const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                     }).catch(() => {});
+                    // Clean up all listeners after the first successful interaction
                     document.removeEventListener('click', playOnInteraction);
                     document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('keydown', playOnInteraction);
                 };
                 document.addEventListener('click', playOnInteraction, { once: true });
                 document.addEventListener('touchstart', playOnInteraction, { once: true });
+                document.addEventListener('keydown', playOnInteraction, { once: true });
             });
         }
-    };
-    // Immediate attempt (no delay)
-    attemptAutoplay();
+    }
 
-    // Make sure slider updates once duration becomes known
+    // Try immediately, and again when audio can play
+    tryUnmutedPlay();
+    audio.addEventListener('canplay', tryUnmutedPlay, { once: true });
+
+    // Extra safety delay
     setTimeout(() => {
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             updateDurationDisplay();
@@ -120,7 +125,7 @@ if (audio) {
     }, 2000);
 }
 
-// ========== GLOBAL LIGHTBOX ==========
+// ========== GLOBAL LIGHTBOX (unchanged) ==========
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -165,7 +170,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES ==========
+// ========== VIDEO FACADES (unchanged) ==========
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -191,7 +196,8 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER ==========
+
+// ========== GALLERY BUILDER (now with eager loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -261,7 +267,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'lazy';
+        imgEl.loading = 'eager';   // <-- changed from 'lazy' to 'eager'
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -278,13 +284,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'lazy';
+            thumbImg.loading = 'eager';   // eager thumbs too
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
         }
     });
 
+    // ... rest of gallery logic remains identical (no changes needed) ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;

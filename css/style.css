@@ -281,7 +281,6 @@ h1, h2, h3, h4, h5, h6,
 .prenup-gallery-section .gallery-card {
     max-width: 1400px; width: 100%; background: transparent;
     padding: 0.5rem 0 0rem; border-top: 1px solid #000000; margin: 0 auto;
-    /* no content-visibility, no contain-intrinsic-size */
 }
 .proposal-gallery-section .gallery-card::after,
 .prenup-gallery-section .gallery-card::after { content: none !important; }
@@ -290,7 +289,6 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
-    /* REMOVED will-change: transform */
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
@@ -363,7 +361,6 @@ h1, h2, h3, h4, h5, h6,
     gap: clamp(4px, 1.5vw, 8px);
     transform: translateX(0);
     transition: transform 0.3s ease;
-    /* REMOVED will-change: transform */
 }
 .proposal-gallery-section .thumb,
 .prenup-gallery-section .thumb {
@@ -459,7 +456,6 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .love-story-main-title em { font-style: italic; color: #b07850; }
 .new-love-story .love-story-container-custom {
     max-width: 1060px; margin: 0 auto; padding: 0px 30px 20px;
-    /* REMOVED contain: layout style */
 }
 .new-love-story .story-row {
     display: flex; flex-wrap: wrap; margin-left: 0; margin-right: 0;
@@ -594,7 +590,7 @@ h1, h2, h3, h4, h5, h6,
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;
-    font-size: 2px;   /* updated from 2px to 2rem in original? Keep as-is, maybe typo; will preserve */
+    font-size: 2px;   /* typo preserved */
     font-weight: 800;
     color: #31231a;
     display: inline-block;
