@@ -58,7 +58,7 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // ----- FIXED SEEK: real‑time scrubbing on input -----
+    // FIXED SEEK: real‑time scrubbing on input
     seekSlider?.addEventListener('input', (e) => {
         if (!audio.duration || !isFinite(audio.duration) || isNaN(audio.duration)) return;
         isScrubbing = true;
@@ -91,7 +91,7 @@ if (audio) {
         }
     }, 2000);
     
-    // ========== IMMEDIATE AUTO‑PLAY (no delay) ==========
+    // IMMEDIATE AUTO‑PLAY
     function attemptPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -190,7 +190,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER – images loaded immediately (no lazy loading) ==========
+// ========== GALLERY BUILDER (with eager loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -260,7 +260,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        // NO loading="lazy" – loaded immediately
+        // --- FORCE EAGER LOADING ---
+        imgEl.loading = 'eager';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -277,6 +278,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
+            thumbImg.loading = 'eager';   // eager here as well
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
@@ -527,13 +529,13 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS (lightweight, one layer) ==========
+// ========== SAKURA PETALS (optimised without will‑change) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 8 : 20;
+    const petalCount = isMobile ? 8 : 15;   // reduced from 30 to 15 for performance
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -556,6 +558,7 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
+        // REMOVED will‑change: transform
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -607,7 +610,7 @@ loveStoryItems.forEach((item, idx) => {
     observer.observe(document.querySelector('.photo-row'));
 })();
 
-// Custom dropdown logic
+// Custom dropdown logic (always drops down)
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;

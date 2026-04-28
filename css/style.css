@@ -289,6 +289,7 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
+    /* REMOVED will-change to prevent rendering issues */
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
@@ -361,7 +362,7 @@ h1, h2, h3, h4, h5, h6,
     gap: clamp(4px, 1.5vw, 8px);
     transform: translateX(0);
     transition: transform 0.3s ease;
-    will-change: transform;
+    /* REMOVED will-change to prevent compositing overload */
 }
 .proposal-gallery-section .thumb,
 .prenup-gallery-section .thumb {
@@ -457,6 +458,7 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .love-story-main-title em { font-style: italic; color: #b07850; }
 .new-love-story .love-story-container-custom {
     max-width: 1060px; margin: 0 auto; padding: 0px 30px 20px;
+    /* removed contain: layout style to prevent content disappearing */
 }
 .new-love-story .story-row {
     display: flex; flex-wrap: wrap; margin-left: 0; margin-right: 0;
@@ -583,8 +585,7 @@ h1, h2, h3, h4, h5, h6,
 .attire-photo {
     width: calc(100% + 50px) !important; margin-left: -25px !important; margin-right: -25px !important;
     aspect-ratio: 3150 / 1950 !important; margin-bottom: 10px; background: #ffffff;
-    border-radius: 0 !important; overflow: hidden; opacity: 0; transform: translateX(-15px);
-    border-bottom: 2px solid #ffb7c5;
+    border-radius: 0 !important; overflow: hidden; opacity: 0; transform: translateX(-15px); border-bottom: 2px solid #ffb7c5;
 }
 .attire-photo img.attire-img { width: 100%; height: auto; display: block; }
 .attire-card-c.animate-entrance .attire-photo { animation: attireSlideLeftIn 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; animation-delay: 0.2s; }
@@ -592,7 +593,7 @@ h1, h2, h3, h4, h5, h6,
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;
-    font-size: 2rem;
+    font-size: 2px;
     font-weight: 800;
     color: #31231a;
     display: inline-block;
@@ -669,15 +670,10 @@ h1, h2, h3, h4, h5, h6,
 .btn-submit { font-family: 'Inter', sans-serif; background-color: var(--dark-charcoal); color: #ffffff; border: none; width: 100%; padding: 0.6rem; margin-top: 0.6rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; font-size: 0.75rem; transition: all 0.3s ease; }
 .btn-submit:hover { background-color: var(--sakura-pink); color: var(--dark-charcoal); }
 
-/* ========== SAKURA PETALS – one layer only ========== */
-.sakura-petals {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    pointer-events: none; z-index: 10; overflow: hidden; background: transparent;
-    will-change: transform;
-}
-.sakura-petals div {
-    backface-visibility: hidden;
-}
+/* ========== SAKURA PETALS ========== */
+.sakura-petals { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 10; overflow: hidden; background: transparent; }
+/* REMOVED will-change from petal divs – handled via JS removal */
+.sakura-petals div { backface-visibility: hidden; }
 .sakura-petals.paused div { animation-play-state: paused !important; }
 footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d9; position: relative; z-index: 20; }
 
