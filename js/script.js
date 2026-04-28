@@ -115,15 +115,38 @@ if (audio) {
     }, 2000);
 }
 
-// ----- KEEP ALL STATIC IMAGE REFERENCES FOREVER (prevents discarding) -----
+// ===== PRELOAD AND KEEP ALL STATIC IMAGES FOREVER =====
 window.__pinnedImages = [];
-document.querySelectorAll('img[loading="eager"], img[decoding="sync"], img[loading="eager"][decoding="sync"]').forEach(img => {
+function preloadImage(src) {
+    const img = new Image();
+    img.decoding = 'sync';
+    img.src = src;
     window.__pinnedImages.push(img);
-});
-// Also pin the hero image (it may be a picture element – grab the current image)
-const heroImg = document.querySelector('.hero-img');
-if (heroImg) window.__pinnedImages.push(heroImg);
-// Ensure gallery cached images stay alive (they already are via window._galleryImageCache)
+}
+// Hero (note: picture element may use one of the sources, we preload both)
+preloadImage('assets/images/hero-couple.jpg');
+preloadImage('assets/images/hero-couple.webp');
+// Banner
+preloadImage('assets/images/header-banner.webp');
+// Save the date photos
+preloadImage('assets/images/06.webp');
+preloadImage('assets/images/25.webp');
+preloadImage('assets/images/26.webp');
+// Love story photos
+preloadImage('assets/images/lovestory.webp');
+preloadImage('assets/images/lovestory1.webp');
+preloadImage('assets/images/lovestory2.webp');
+preloadImage('assets/images/lovestory3.webp');
+preloadImage('assets/images/lovestory4.webp');
+preloadImage('assets/images/lovestory5.webp');
+// Video thumbnails (cross-origin but we still preload)
+preloadImage('https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg');
+preloadImage('https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg');
+// Dress code
+preloadImage('assets/images/dresscode.webp');
+
+// Also keep references to existing DOM images (additional safety)
+document.querySelectorAll('img[loading="eager"]').forEach(img => window.__pinnedImages.push(img));
 
 // ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
@@ -196,7 +219,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (with eager + sync decoding) ==========
+// ========== GALLERY BUILDER (with eager + sync decoding, all images kept in cache) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
