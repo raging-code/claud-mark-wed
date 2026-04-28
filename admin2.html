@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Wedding RSVP Admin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; margin: 0; background: #f3f4f6; }
+        .container { max-width: 1300px; margin: 20px auto; background: white; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #7c3aed; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .logout-btn { background: #4c1d95; border: none; color: white; padding: 8px 18px; border-radius: 30px; cursor: pointer; }
+        .add-section { background: #f5f3ff; padding: 20px 30px; }
+        .add-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+        .add-form input, .add-form select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; }
+        .add-form button { background: #10b981; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; }
+        .table-wrapper { overflow-x: auto; padding: 0 20px 20px 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+        th { background: #f9fafb; }
+        .delete-btn { background: #ef4444; color: white; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+        .login-card { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 20px; text-align: center; }
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #d1d5db; border-radius: 10px; }
+        .login-card button { width: 100%; background: #7c3aed; color: white; padding: 12px; border: none; border-radius: 30px; cursor: pointer; }
+        .status { margin-top: 15px; padding: 8px; border-radius: 8px; }
+        .status.success { background: #d1fae5; color: #065f46; }
+        .status.error { background: #fee2e2; color: #991b1b; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+    // Force version check
+    const APP_VERSION = '2026-04-28-v3';
+    console.log('Admin panel version:', APP_VERSION);
+    
+    const SUPABASE_URL = 'https://uziyzioqazqznjsvhxky.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6aXl6aW9xYXpxem5qc3ZoeGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzYyNzgsImV4cCI6MjA5MjM1MjI3OH0.w57BWU-mUK8qBrqJODNv3OZdvZa57_Ql4iz-P3KbUZQ';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function normalizeAttending(val) {
+        if (val === true || val === false) return val;
+        if (typeof val === 'string') return val.toLowerCase().trim() === 'true' || val === 't' || val === '1' || val === 'yes';
+        if (typeof val === 'number') return val === 1;
+        return false;
+    }
+
+    async function checkSession() {
+        const { data: { session } } = await supabase.auth.getSession();
+        session ? renderAdminPanel(session) : renderLogin();
+    }
+
+    function renderLogin() {
+        document.getElementById('root').innerHTML = `
+            <div class="login-card">
+                <h2>🔐 Admin Login</h2>
+                <input type="email" id="email" placeholder="Email">
+                <input type="password" id="password" placeholder="Password">
+                <button id="loginBtn">Sign In</button>
+                <div id="loginStatus" class="status"></div>
+            </div>
+        `;
+        document.getElementById('loginBtn').onclick = async () => {
+            const { error } = await supabase.auth.signInWithPassword({
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            });
+            if (error) {
+                const s = document.getElementById('loginStatus');
+                s.textContent = '❌ ' + error.message;
+                s.className = 'status error';
+            } else checkSession();
+        };
+    }
+
+    async function renderAdminPanel(session) {
+        document.getElementById('root').innerHTML = `
+            <div class="container">
+                <div class="header">
+                    <h1>💍 Wedding RSVP Manager (v${APP_VERSION})</h1>
+                    <button class="logout-btn" id="logoutBtn">Logout (${escapeHtml(session.user.email)})</button>
+                </div>
+                <div class="add-section">
+                    <div class="add-form">
+                        <input type="text" id="addName" placeholder="Full name *">
+                        <input type="email" id="addEmail" placeholder="Email *">
+                        <input type="tel" id="addPhone" placeholder="Phone">
+                        <input type="text" id="addMessage" placeholder="Message">
+                        <select id="addAttending">
+                            <option value="true">✅ Yes</option>
+                            <option value="false">❌ No</option>
+                        </select>
+                        <button id="addRsvpBtn">+ Add</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="rsvpTable">
+                        <thead>
+                            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Attending</th><th>Raw Value (debug)</th><th>Submitted</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="rsvpTableBody"><tr><td colspan="9" class="loading">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+                <div id="adminStatus" class="status"></div>
+            </div>
+        `;
+        
+        document.getElementById('logoutBtn').onclick = async () => {
+            await supabase.auth.signOut();
+            checkSession();
+        };
+        
+        document.getElementById('addRsvpBtn').onclick = async () => {
+            const name = document.getElementById('addName').value.trim();
+            const email = document.getElementById('addEmail').value.trim();
+            const phone = document.getElementById('addPhone').value.trim();
+            const message = document.getElementById('addMessage').value.trim();
+            const attending = document.getElementById('addAttending').value === 'true';
+            if (!name || !email) return showStatus('adminStatus', 'Name and email required', 'error');
+            const { error } = await supabase.from('rsvp').insert([{ name, email, phone, message, attending }]);
+            if (error) showStatus('adminStatus', 'Error: ' + error.message, 'error');
+            else {
+                showStatus('adminStatus', '✅ Added', 'success');
+                document.getElementById('addName').value = '';
+                document.getElementById('addEmail').value = '';
+                document.getElementById('addPhone').value = '';
+                document.getElementById('addMessage').value = '';
+                await loadRsvps();
+            }
+        };
+        
+        await loadRsvps();
+    }
+
+    async function loadRsvps() {
+        const tbody = document.getElementById('rsvpTableBody');
+        if (!tbody) return;
+        const { data, error } = await supabase.from('rsvp').select('*').order('created_at', { ascending: false });
+        if (error) return tbody.innerHTML = `<tr><td colspan="9">❌ ${escapeHtml(error.message)}</td></tr>`;
+        if (!data || data.length === 0) return tbody.innerHTML = '<tr><td colspan="9">📭 No RSVPs</td></tr>';
+        
+        tbody.innerHTML = '';
+        for (const row of data) {
+            console.log(`[DEBUG] ID ${row.id}: attending =`, row.attending, typeof row.attending);
+            const isAttending = normalizeAttending(row.attending);
+            const rawJson = JSON.stringify(row.attending);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.id}</td>
+                <td>${escapeHtml(row.name)}</td>
+                <td>${escapeHtml(row.email)}</td>
+                <td>${escapeHtml(row.phone || '—')}</td>
+                <td>${escapeHtml(row.message || '—')}</td>
+                <td>${isAttending ? '✅ Yes' : '❌ No'}</td>
+                <td style="font-family:monospace; font-size:0.8rem;">${escapeHtml(rawJson)}</td>
+                <td>${new Date(row.created_at).toLocaleString()}</td>
+                <td><button class="delete-btn" data-id="${row.id}">Delete</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = async () => {
+                if (!confirm('Delete?')) return;
+                const id = parseInt(btn.dataset.id);
+                const { error } = await supabase.from('rsvp').delete().eq('id', id);
+                if (error) showStatus('adminStatus', 'Delete failed: ' + error.message, 'error');
+                else { showStatus('adminStatus', '🗑️ Deleted', 'success'); await loadRsvps(); }
+            };
+        });
+    }
+
+    function showStatus(id, msg, type) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = msg; el.className = `status ${type}`; setTimeout(() => el.textContent = '', 3000); }
+    }
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+    checkSession();
+</script>
+</body>
+</html>

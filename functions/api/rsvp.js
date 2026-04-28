@@ -95,6 +95,7 @@ export async function onRequest(context) {
         });
     }
 
+    // Store attending as boolean (true for 'yes', false for 'no')
     const insertData = {
         name,
         email,

@@ -272,6 +272,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
+/* REMOVED content-visibility: auto and contain-intrinsic-size to prevent re-rendering */
 .proposal-gallery-section .viewer-wrap,
 .prenup-gallery-section .viewer-wrap {
     width: 100%; max-width: 1000px; margin: 0 auto;
@@ -281,8 +282,7 @@ h1, h2, h3, h4, h5, h6,
 .prenup-gallery-section .gallery-card {
     max-width: 1400px; width: 100%; background: transparent;
     padding: 0.5rem 0 0rem; border-top: 1px solid #000000; margin: 0 auto;
-    content-visibility: auto;
-    contain-intrinsic-size: 1000px 667px;
+    /* no content-visibility, no contain-intrinsic-size */
 }
 .proposal-gallery-section .gallery-card::after,
 .prenup-gallery-section .gallery-card::after { content: none !important; }
@@ -460,9 +460,8 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .love-story-main-title em { font-style: italic; color: #b07850; }
 .new-love-story .love-story-container-custom {
     max-width: 1060px; margin: 0 auto; padding: 0px 30px 20px;
-    contain: layout style;
-    content-visibility: auto;
-    contain-intrinsic-size: 1000px 500px;
+    contain: layout style;   /* only layout/style containment, no content-visibility */
+    /* no content-visibility, no contain-intrinsic-size */
 }
 .new-love-story .story-row {
     display: flex; flex-wrap: wrap; margin-left: 0; margin-right: 0;

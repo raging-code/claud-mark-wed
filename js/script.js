@@ -6,7 +6,6 @@ const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 
 let isScrubbing = false;
-let pendingSeekTime = 0;
 
 const isFacebookBrowser = /FBAN|FBAV|Messenger/.test(navigator.userAgent);
 
@@ -59,33 +58,37 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // ----- SEEK HANDLING -----
+    // ----- SEEK HANDLING (fixed for mobile) -----
     seekSlider?.addEventListener('input', (e) => {
+        // Just update the displayed time while dragging, do NOT seek yet.
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             isScrubbing = true;
             const fraction = parseFloat(e.target.value);
-            pendingSeekTime = fraction * audio.duration;
-            if (!isNaN(pendingSeekTime) && isFinite(pendingSeekTime)) {
-                currentTimeSpan.textContent = formatTime(pendingSeekTime);
+            const previewTime = fraction * audio.duration;
+            if (!isNaN(previewTime) && isFinite(previewTime)) {
+                currentTimeSpan.textContent = formatTime(previewTime);
             }
         }
     });
     
     seekSlider?.addEventListener('change', () => {
+        // Actually seek to the final slider position.
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-            if (pendingSeekTime) {
-                audio.currentTime = pendingSeekTime;
+            const fraction = parseFloat(seekSlider.value);
+            const targetTime = fraction * audio.duration;
+            if (!isNaN(targetTime) && isFinite(targetTime)) {
+                audio.currentTime = targetTime;
             }
         }
         isScrubbing = false;
-        pendingSeekTime = 0;
     });
     
+    // Touch events
     seekSlider?.addEventListener('touchstart', () => {
         isScrubbing = true;
     });
     seekSlider?.addEventListener('touchend', () => {
-        // change event will fire soon and reset isScrubbing
+        // The 'change' event will reset isScrubbing after seeking.
     });
     
     audio.addEventListener('ended', () => {
