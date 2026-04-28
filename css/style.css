@@ -289,6 +289,8 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
@@ -296,16 +298,17 @@ h1, h2, h3, h4, h5, h6,
 .prenup-gallery-section .slide {
     position: absolute; inset: 0;
     opacity: 0;
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.4s ease;
     transform: none;
     display: flex; align-items: center; justify-content: center;
-    background: #000;
+    background: transparent;
 }
 .proposal-gallery-section .slide.active,
-.prenup-gallery-section .slide.active { opacity: 1; transform: translateX(0); z-index: 2; }
-.proposal-gallery-section .slide.exit-left,
-.prenup-gallery-section .slide.exit-left { opacity: 0; }
+.prenup-gallery-section .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 2;
+}
 .proposal-gallery-section .slide img,
 .prenup-gallery-section .slide img {
     position: relative; z-index: 1;
@@ -361,6 +364,8 @@ h1, h2, h3, h4, h5, h6,
     gap: clamp(4px, 1.5vw, 8px);
     transform: translateX(0);
     transition: transform 0.3s ease;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .proposal-gallery-section .thumb,
 .prenup-gallery-section .thumb {
@@ -441,7 +446,13 @@ h1, h2, h3, h4, h5, h6,
 }
 .new-love-story .love-story-header,
 .new-love-story .love-story-container-custom,
-.new-love-story .love-story-footer-rule { position: relative; z-index: 20; }
+.new-love-story .love-story-footer-rule {
+    position: relative; z-index: 20;
+}
+.new-love-story .love-story-container-custom {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
 .new-love-story .love-story-header { text-align: center; padding: 16px 20px 2px; }
 .new-love-story .love-story-header::after {
     content: ''; display: block; width: 1px; height: 8px;
@@ -477,6 +488,8 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .photo {
     width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
     position: relative; background: #f1ede8; cursor: pointer;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .new-love-story .photo img {
     width: 100%; height: 100%; object-fit: cover; display: block;
@@ -516,6 +529,8 @@ h1, h2, h3, h4, h5, h6,
     border-radius: 16px;
     box-shadow: 0 0 0 3px #fff0f1, 0 0 0 6px #ffb7c5, 0 12px 30px rgba(188,63,46,0.12);
     display: inline-block; line-height: 0;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .video-sakura-frame iframe {
     width: 280px; height: 520px; border-radius: 12px; display: block; object-fit: cover;
@@ -590,7 +605,7 @@ h1, h2, h3, h4, h5, h6,
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;
-    font-size: 2px;   /* typo preserved */
+    font-size: 2px;
     font-weight: 800;
     color: #31231a;
     display: inline-block;

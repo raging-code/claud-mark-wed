@@ -85,23 +85,19 @@ if (audio) {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    // ===================== AUTOPLAY (UNMUTED, WITH USER GESTURE FALLBACK) =====================
+    // Unmuted autoplay with user gesture fallback
     function tryUnmutedPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                // Success! Unmuted playback started automatically.
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }).catch(() => {
-                // Unmuted autoplay blocked. We'll wait for the first user interaction.
-                // The user will naturally tap / click / scroll within a second.
                 const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                         if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                     }).catch(() => {});
-                    // Clean up all listeners after the first successful interaction
                     document.removeEventListener('click', playOnInteraction);
                     document.removeEventListener('touchstart', playOnInteraction);
                     document.removeEventListener('keydown', playOnInteraction);
@@ -113,11 +109,9 @@ if (audio) {
         }
     }
 
-    // Try immediately, and again when audio can play
     tryUnmutedPlay();
     audio.addEventListener('canplay', tryUnmutedPlay, { once: true });
 
-    // Extra safety delay
     setTimeout(() => {
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             updateDurationDisplay();
@@ -125,7 +119,7 @@ if (audio) {
     }, 2000);
 }
 
-// ========== GLOBAL LIGHTBOX (unchanged) ==========
+// ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -170,7 +164,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES (unchanged) ==========
+// ========== VIDEO FACADES ==========
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -196,8 +190,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-
-// ========== GALLERY BUILDER (now with eager loading) ==========
+// ========== GALLERY BUILDER (with eager + sync decoding) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -217,6 +210,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const webpSrc = `${basePath}${prefix}${i}.webp`;
             const jpgSrc = `${basePath}${prefix}${i}.jpg`;
             let img = new Image();
+            img.decoding = 'sync';  // force sync decoding
             try {
                 await new Promise((resolve, reject) => {
                     img.onload = () => resolve();
@@ -228,6 +222,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
+                    img.decoding = 'sync';
                     await new Promise((resolve, reject) => {
                         img.onload = () => resolve();
                         img.onerror = () => reject();
@@ -245,6 +240,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (images.length === 0) {
             let fallback = new Image();
             fallback.src = 'https://picsum.photos/id/42/1200/960';
+            fallback.decoding = 'sync';
             await new Promise((resolve) => { fallback.onload = resolve; });
             images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
             window._galleryImageCache.push(fallback);
@@ -267,7 +263,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'eager';   // <-- changed from 'lazy' to 'eager'
+        imgEl.loading = 'eager';
+        imgEl.decoding = 'sync';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -284,14 +281,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'eager';   // eager thumbs too
+            thumbImg.loading = 'eager';
+            thumbImg.decoding = 'sync';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
         }
     });
 
-    // ... rest of gallery logic remains identical (no changes needed) ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
@@ -340,38 +337,23 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
-        let exitX, incomingX;
-        if (direction === -1) {
-            exitX = 40;
-            incomingX = -40;
-        } else {
-            exitX = -40;
-            incomingX = 40;
-        }
-
-        slides[previousIndex].classList.remove('active');
-        slides[previousIndex].classList.add('exit-left');
-        slides[previousIndex].style.transform = `translateX(${exitX}px)`;
-        slides[previousIndex].style.opacity = '0';
-
+        // First make the new slide active and fully visible
         const incomingSlide = slides[currentIndex];
-        incomingSlide.style.transform = `translateX(${incomingX}px)`;
-        incomingSlide.style.opacity = '0';
         incomingSlide.classList.add('active');
+        incomingSlide.style.transform = '';
+        incomingSlide.style.opacity = '';
 
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                incomingSlide.style.transform = '';
-                incomingSlide.style.opacity = '';
-            });
-        });
-
+        // Then fade out the old slide
+        const oldSlide = slides[previousIndex];
+        oldSlide.style.opacity = '0';
+        // Keep old slide in place during fade
         setTimeout(() => {
-            slides[previousIndex].classList.remove('exit-left');
-            slides[previousIndex].style.transform = '';
-            slides[previousIndex].style.opacity = '';
+            oldSlide.classList.remove('active');
+            oldSlide.style.transform = '';
+            oldSlide.style.opacity = '';
             isAnimating = false;
-        }, 800);
+        }, 400);  // matches CSS transition 0.4s
+
         updateActiveState();
     }
 
