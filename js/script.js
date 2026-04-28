@@ -1,13 +1,16 @@
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const muteBtn = document.getElementById('muteBtn');
-const seekSlider = document.getElementById('seekSlider');
 const currentTimeSpan = document.getElementById('currentTime');
 const durationSpan = document.getElementById('duration');
 
-let isScrubbing = false;
+const progressContainer = document.getElementById('progressContainer');
+const seekTrack = document.getElementById('seekTrack');
+const seekFill = document.getElementById('seekFill');
+const seekThumb = document.getElementById('seekThumb');
+const seekSlider = document.getElementById('seekSlider'); // hidden native input
 
-const isFacebookBrowser = /FBAN|FBAV|Messenger/.test(navigator.userAgent);
+let isSeeking = false;
 
 function formatTime(seconds) {
     if (isNaN(seconds) || !isFinite(seconds) || seconds < 0) return "0:00";
@@ -16,31 +19,89 @@ function formatTime(seconds) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-function updateSeekMax() {
-    if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-        seekSlider.max = 1;
-        durationSpan.textContent = formatTime(audio.duration);
-    } else {
-        seekSlider.max = 1;
-        durationSpan.textContent = "0:00";
+function updateSeekUI(percent) {
+    percent = Math.min(1, Math.max(0, percent));
+    seekFill.style.width = `${percent * 100}%`;
+    seekThumb.style.left = `${percent * 100}%`;
+    if (!isSeeking) {
+        seekSlider.value = percent;
     }
+    currentTimeSpan.textContent = formatTime(percent * (audio.duration || 0));
 }
 
+function setAudioFromPercent(percent) {
+    if (!audio.duration || !isFinite(audio.duration)) return;
+    audio.currentTime = percent * audio.duration;
+}
+
+// -------- custom seek bar pointer handling --------
+function getPercentFromEvent(e) {
+    const rect = seekTrack.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    let percent = (clientX - rect.left) / rect.width;
+    return Math.min(1, Math.max(0, percent));
+}
+
+function onSeekStart(e) {
+    e.preventDefault();
+    isSeeking = true;
+    const percent = getPercentFromEvent(e);
+    updateSeekUI(percent);
+    setAudioFromPercent(percent);
+    seekTrack.setPointerCapture(e.pointerId);
+}
+
+function onSeekMove(e) {
+    if (!isSeeking) return;
+    e.preventDefault();
+    const percent = getPercentFromEvent(e);
+    updateSeekUI(percent);
+    setAudioFromPercent(percent);
+}
+
+function onSeekEnd(e) {
+    if (!isSeeking) return;
+    isSeeking = false;
+    const percent = getPercentFromEvent(e);
+    updateSeekUI(percent);
+    setAudioFromPercent(percent);
+    seekTrack.releasePointerCapture(e.pointerId);
+}
+
+seekTrack.addEventListener('pointerdown', onSeekStart);
+seekTrack.addEventListener('pointermove', onSeekMove);
+seekTrack.addEventListener('pointerup', onSeekEnd);
+seekTrack.addEventListener('pointercancel', onSeekEnd);
+
+// Also listen to the container for clicks on the time display area
+progressContainer.addEventListener('pointerdown', (e) => {
+    if (e.target === seekTrack || e.target.closest('.seek-thumb') || e.target.closest('.seek-fill')) return;
+    const percent = getPercentFromEvent(e);
+    updateSeekUI(percent);
+    setAudioFromPercent(percent);
+});
+
+// Keep the hidden native range in sync for keyboard users
+seekSlider.addEventListener('input', () => {
+    if (!isSeeking) {
+        const percent = parseFloat(seekSlider.value);
+        updateSeekUI(percent);
+        setAudioFromPercent(percent);
+    }
+});
+
+// Audio events
 if (audio) {
-    audio.addEventListener('loadedmetadata', updateSeekMax);
-    audio.addEventListener('durationchange', updateSeekMax);
-    audio.addEventListener('canplay', updateSeekMax);
+    audio.addEventListener('loadedmetadata', () => {
+        durationSpan.textContent = formatTime(audio.duration);
+    });
     
     audio.addEventListener('timeupdate', () => {
-        if (!isScrubbing && audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
+        if (!isSeeking && audio.duration) {
             const percent = audio.currentTime / audio.duration;
-            if (!isNaN(percent) && isFinite(percent)) {
-                seekSlider.value = percent;
-            }
-            currentTimeSpan.textContent = formatTime(audio.currentTime);
-        } else if (!isScrubbing) {
-            currentTimeSpan.textContent = formatTime(audio.currentTime);
+            updateSeekUI(percent);
         }
+        currentTimeSpan.textContent = formatTime(audio.currentTime);
     });
     
     playPauseBtn?.addEventListener('click', () => {
@@ -58,40 +119,11 @@ if (audio) {
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
     
-    // FIXED SEEK: real‑time scrubbing on input
-    seekSlider?.addEventListener('input', (e) => {
-        if (!audio.duration || !isFinite(audio.duration) || isNaN(audio.duration)) return;
-        isScrubbing = true;
-        const fraction = parseFloat(e.target.value);
-        const targetTime = fraction * audio.duration;
-        if (!isNaN(targetTime) && isFinite(targetTime)) {
-            audio.currentTime = targetTime;
-            currentTimeSpan.textContent = formatTime(targetTime);
-        }
-    });
-    
-    seekSlider?.addEventListener('change', () => {
-        isScrubbing = false;
-    });
-    
-    seekSlider?.addEventListener('touchstart', () => {
-        isScrubbing = true;
-    });
-    seekSlider?.addEventListener('touchend', () => {
-        setTimeout(() => { isScrubbing = false; }, 300);
-    });
-    
     audio.addEventListener('ended', () => {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
     
-    setTimeout(() => {
-        if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
-            updateSeekMax();
-        }
-    }, 2000);
-    
-    // IMMEDIATE AUTO‑PLAY
+    // Autoplay
     function attemptPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -163,7 +195,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES (click to load iframe) ==========
+// ========== VIDEO FACADES ==========
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -190,8 +222,8 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (with eager loading) ==========
-window._galleryImageCache = window._galleryImageCache || [];
+// ========== GALLERY BUILDER (with image pinning) ==========
+window._pinnedImages = window._pinnedImages || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
@@ -217,7 +249,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     img.src = webpSrc;
                 });
                 images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
-                window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
@@ -227,7 +258,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                         img.src = jpgSrc;
                     });
                     images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
-                    window._galleryImageCache.push(img);
                     consecutiveFailures = 0;
                 } catch (e2) {
                     consecutiveFailures++;
@@ -240,7 +270,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             fallback.src = 'https://picsum.photos/id/42/1200/960';
             await new Promise((resolve) => { fallback.onload = resolve; });
             images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
-            window._galleryImageCache.push(fallback);
         }
         return images;
     }
@@ -260,8 +289,8 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        // --- FORCE EAGER LOADING ---
         imgEl.loading = 'eager';
+        imgEl.decoding = 'sync';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -270,6 +299,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         slideDiv.appendChild(imgEl);
         stage.insertBefore(slideDiv, prevBtn);
         slides.push(slideDiv);
+        window._pinnedImages.push(imgEl);  // prevent discard
 
         if (thumbsTrack) {
             const thumbDiv = document.createElement('div');
@@ -278,10 +308,12 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'eager';   // eager here as well
+            thumbImg.loading = 'eager';
+            thumbImg.decoding = 'sync';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
+            window._pinnedImages.push(thumbImg);
         }
     });
 
@@ -294,17 +326,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (!thumbsTrack || !thumbsRow || thumbElements.length === 0) return;
         const activeThumb = thumbElements[currentIndex];
         if (!activeThumb) return;
-
         const trackWidth = thumbsTrack.scrollWidth;
         const containerWidth = thumbsRow.clientWidth;
         if (containerWidth === 0) return;
-
         const thumbRect = activeThumb.getBoundingClientRect();
         const trackRect = thumbsTrack.getBoundingClientRect();
         const thumbLeft = thumbRect.left - trackRect.left;
         const thumbWidth = thumbRect.width;
         const targetTranslate = containerWidth / 2 - (thumbLeft + thumbWidth / 2);
-
         const maxTranslate = 0;
         const minTranslate = containerWidth - trackWidth;
         const clamped = Math.min(maxTranslate, Math.max(minTranslate, targetTranslate));
@@ -399,64 +428,49 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchActive = false;
-
+    let touchStartX = 0, touchEndX = 0, touchActive = false;
     stage.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchActive = true;
         stopAutoAdvance();
     }, { passive: true });
-
     stage.addEventListener('touchmove', (e) => {
         if (!touchActive) return;
-        const deltaX = e.touches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > 20) {
-            e.preventDefault();
-        }
+        if (Math.abs(e.touches[0].clientX - touchStartX) > 20) e.preventDefault();
     }, { passive: false });
-
     stage.addEventListener('touchend', (e) => {
         if (!touchActive) return;
         touchActive = false;
         touchEndX = e.changedTouches[0].clientX;
-        const deltaX = touchEndX - touchStartX;
-        if (Math.abs(deltaX) > 40) {
-            if (deltaX < 0) goToNext();
+        if (Math.abs(touchEndX - touchStartX) > 40) {
+            if (touchEndX < touchStartX) goToNext();
             else goToPrevious();
         }
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
-
     stage.addEventListener('touchcancel', () => {
         touchActive = false;
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    let mouseStartX = 0;
-    let isDragging = false;
-
+    let mouseStartX = 0, isDragging = false;
     stage.addEventListener('mousedown', (e) => {
         if (e.target.closest('.nav-arrow')) return;
         mouseStartX = e.clientX;
         isDragging = true;
         stopAutoAdvance();
     });
-
     window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
-        const deltaX = e.clientX - mouseStartX;
-        if (Math.abs(deltaX) > 50) {
-            if (deltaX < 0) goToNext();
+        if (Math.abs(e.clientX - mouseStartX) > 50) {
+            if (e.clientX < mouseStartX) goToNext();
             else goToPrevious();
         }
         startAutoAdvance();
     });
-
     stage.addEventListener('mouseleave', () => {
         if (isDragging) { isDragging = false; startAutoAdvance(); }
     });
@@ -473,8 +487,7 @@ createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
 // ========== LOVE STORY LIGHTBOX ==========
 const loveStoryImages = [];
-const loveStoryItems = document.querySelectorAll('.new-love-story .item');
-loveStoryItems.forEach((item, idx) => {
+document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
     const img = item.querySelector('.photo img');
     if (img) {
         loveStoryImages.push(img.src);
@@ -529,13 +542,13 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS (optimised without will‑change) ==========
+// ========== SAKURA PETALS (unchanged) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 8 : 15;   // reduced from 30 to 15 for performance
+    const petalCount = isMobile ? 8 : 15;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -558,7 +571,6 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
-        // REMOVED will‑change: transform
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -610,7 +622,7 @@ loveStoryItems.forEach((item, idx) => {
     observer.observe(document.querySelector('.photo-row'));
 })();
 
-// Custom dropdown logic (always drops down)
+// Custom dropdown
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
@@ -638,10 +650,19 @@ loveStoryItems.forEach((item, idx) => {
     });
 })();
 
-// ========== SHARE PHOTO PLACEHOLDER ==========
+// Share photo placeholder
 const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
 if (sharePhotoBtn) {
     sharePhotoBtn.addEventListener('click', () => {
         console.log('Share photo button clicked - ready for link integration');
     });
 }
+
+// ========== PIN ALL IMAGES TO PREVENT DISCARDING ==========
+window.addEventListener('load', () => {
+    document.querySelectorAll('img').forEach(img => {
+        if (!window._pinnedImages.includes(img)) {
+            window._pinnedImages.push(img);
+        }
+    });
+});
