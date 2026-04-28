@@ -289,8 +289,7 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
-    will-change: transform;
-    backface-visibility: hidden;
+    /* NO will-change or forced GPU layer */
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
@@ -306,7 +305,6 @@ h1, h2, h3, h4, h5, h6,
 .proposal-gallery-section .slide.active,
 .prenup-gallery-section .slide.active {
     opacity: 1;
-    transform: translateX(0);
     z-index: 2;
 }
 .proposal-gallery-section .slide img,
@@ -449,10 +447,7 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .love-story-footer-rule {
     position: relative; z-index: 20;
 }
-.new-love-story .love-story-container-custom {
-    will-change: transform;
-    backface-visibility: hidden;
-}
+/* NO will-change or forced layers */
 .new-love-story .love-story-header { text-align: center; padding: 16px 20px 2px; }
 .new-love-story .love-story-header::after {
     content: ''; display: block; width: 1px; height: 8px;
@@ -488,8 +483,6 @@ h1, h2, h3, h4, h5, h6,
 .new-love-story .photo {
     width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
     position: relative; background: #f1ede8; cursor: pointer;
-    will-change: transform;
-    backface-visibility: hidden;
 }
 .new-love-story .photo img {
     width: 100%; height: 100%; object-fit: cover; display: block;
@@ -529,8 +522,7 @@ h1, h2, h3, h4, h5, h6,
     border-radius: 16px;
     box-shadow: 0 0 0 3px #fff0f1, 0 0 0 6px #ffb7c5, 0 12px 30px rgba(188,63,46,0.12);
     display: inline-block; line-height: 0;
-    will-change: transform;
-    backface-visibility: hidden;
+    /* NO will-change */
 }
 .video-sakura-frame iframe {
     width: 280px; height: 520px; border-radius: 12px; display: block; object-fit: cover;

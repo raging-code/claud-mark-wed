@@ -123,7 +123,7 @@ function preloadImage(src) {
     img.src = src;
     window.__pinnedImages.push(img);
 }
-// Hero (note: picture element may use one of the sources, we preload both)
+// Hero
 preloadImage('assets/images/hero-couple.jpg');
 preloadImage('assets/images/hero-couple.webp');
 // Banner
@@ -139,13 +139,12 @@ preloadImage('assets/images/lovestory2.webp');
 preloadImage('assets/images/lovestory3.webp');
 preloadImage('assets/images/lovestory4.webp');
 preloadImage('assets/images/lovestory5.webp');
-// Video thumbnails (cross-origin but we still preload)
+// Video thumbnails
 preloadImage('https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg');
 preloadImage('https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg');
 // Dress code
 preloadImage('assets/images/dresscode.webp');
 
-// Also keep references to existing DOM images (additional safety)
 document.querySelectorAll('img[loading="eager"]').forEach(img => window.__pinnedImages.push(img));
 
 // ========== GLOBAL LIGHTBOX ==========
@@ -219,7 +218,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (with eager + sync decoding, all images kept in cache) ==========
+// ========== GALLERY BUILDER ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -412,7 +411,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     });
 
     let touchStartX = 0, touchEndX = 0, touchActive = false;
-
     stage.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchActive = true;
