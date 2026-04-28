@@ -41,6 +41,7 @@ if (audio) {
         currentTimeSpan.textContent = formatTime(audio.currentTime);
     });
 
+    // Play/Pause
     playPauseBtn?.addEventListener('click', () => {
         if (audio.paused) {
             audio.play().catch(() => {});
@@ -51,12 +52,14 @@ if (audio) {
         }
     });
 
+    // Mute toggle (starts unmuted)
     audio.muted = false;
     muteBtn?.addEventListener('click', () => {
         audio.muted = !audio.muted;
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
 
+    // Seek slider
     seekSlider?.addEventListener('input', () => {
         if (durationReady) {
             isScrubbing = true;
@@ -82,18 +85,22 @@ if (audio) {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
+    // ===================== AUTOPLAY (UNMUTED, WITH USER GESTURE FALLBACK) =====================
     function tryUnmutedPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
+                // Success! Unmuted playback started automatically.
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }).catch(() => {
+                // Unmuted autoplay blocked. We'll wait for the first user interaction.
                 const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                         if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                     }).catch(() => {});
+                    // Clean up all listeners after the first successful interaction
                     document.removeEventListener('click', playOnInteraction);
                     document.removeEventListener('touchstart', playOnInteraction);
                     document.removeEventListener('keydown', playOnInteraction);
@@ -105,9 +112,11 @@ if (audio) {
         }
     }
 
+    // Try immediately, and again when audio can play
     tryUnmutedPlay();
     audio.addEventListener('canplay', tryUnmutedPlay, { once: true });
 
+    // Extra safety delay
     setTimeout(() => {
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             updateDurationDisplay();
@@ -115,73 +124,7 @@ if (audio) {
     }, 2000);
 }
 
-// ===== BLOB‑BASED IMAGE PINNING (permanently locks decoded pixels) =====
-window.__blobURLs = [];
-window.__imageBlobs = [];
-
-async function lockImagePixels(imgElement, src, isCrossOrigin = false) {
-    if (imgElement.src && imgElement.src.startsWith('blob:')) return;
-
-    const img = new Image();
-    if (isCrossOrigin) img.crossOrigin = 'anonymous';
-    img.decoding = 'sync';
-    img.src = src;
-
-    try {
-        await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-        });
-
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth || 1;
-        canvas.height = img.naturalHeight || 1;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
-        if (!blob) throw new Error('Blob creation failed');
-
-        const url = URL.createObjectURL(blob);
-        window.__imageBlobs.push(blob);
-        window.__blobURLs.push(url);
-        imgElement.src = url;
-    } catch (e) {
-        console.warn('Image blob pinning failed for', src, e);
-    }
-}
-
-function lockStaticImages() {
-    const pairs = [
-        { id: 'heroCoupleImg', src: 'assets/images/hero-couple.jpg' },
-        { id: 'headerBannerImg', src: 'assets/images/header-banner.webp' },
-        { id: 'saveLeftImg', src: 'assets/images/06.webp' },
-        { id: 'saveMidImg', src: 'assets/images/25.webp' },
-        { id: 'saveRightImg', src: 'assets/images/26.webp' },
-        { id: 'love1', src: 'assets/images/lovestory.webp' },
-        { id: 'love2', src: 'assets/images/lovestory1.webp' },
-        { id: 'love3', src: 'assets/images/lovestory2.webp' },
-        { id: 'love4', src: 'assets/images/lovestory3.webp' },
-        { id: 'love5', src: 'assets/images/lovestory4.webp' },
-        { id: 'love6', src: 'assets/images/lovestory5.webp' },
-        { id: 'proposalThumbImg', src: 'https://i.ytimg.com/vi/CjJX6q6xWs8/maxresdefault.jpg', crossOrigin: true },
-        { id: 'prenupThumbImg', src: 'https://i.ytimg.com/vi/k-MuPT6nGUY/maxresdefault.jpg', crossOrigin: true },
-        { id: 'dressCodeImg', src: 'assets/images/dresscode.webp' }
-    ];
-
-    pairs.forEach(({ id, src, crossOrigin }) => {
-        const el = document.getElementById(id);
-        if (el) lockImagePixels(el, src, crossOrigin);
-    });
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', lockStaticImages);
-} else {
-    lockStaticImages();
-}
-
-// ========== GLOBAL LIGHTBOX ==========
+// ========== GLOBAL LIGHTBOX (unchanged) ==========
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -226,7 +169,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES ==========
+// ========== VIDEO FACADES (unchanged) ==========
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -252,7 +195,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (with blob pinning for every image) ==========
+// ========== GALLERY BUILDER (now with eager loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -263,63 +206,55 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     const thumbsTrack = document.getElementById(galleryId + 'ThumbsTrack');
     if (!stage) return;
 
-    async function loadAndLock(src) {
-        const img = new Image();
-        img.decoding = 'sync';
-        await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = src;
-        });
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth || 1;
-        canvas.height = img.naturalHeight || 1;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
-        if (blob) {
-            const url = URL.createObjectURL(blob);
-            window.__imageBlobs.push(blob);
-            window.__blobURLs.push(url);
-            return { originalSrc: src, blobUrl: url, img: img };
-        }
-        return { originalSrc: src, blobUrl: src, img: img };
-    }
-
-    const imagesData = [];
-    let i = startIndex;
-    let consecutiveFailures = 0;
-    const MAX_CONSECUTIVE_FAILURES = 3;
-    while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
-        const webpSrc = `${basePath}${prefix}${i}.webp`;
-        const jpgSrc = `${basePath}${prefix}${i}.jpg`;
-        try {
-            const data = await loadAndLock(webpSrc);
-            imagesData.push({ src: data.blobUrl, alt: `${prefix} ${i}`, original: data.originalSrc });
-            window._galleryImageCache.push(data.img);
-            consecutiveFailures = 0;
-        } catch (e) {
+    async function loadImages() {
+        const images = [];
+        let i = startIndex;
+        let consecutiveFailures = 0;
+        const MAX_CONSECUTIVE_FAILURES = 3;
+        while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
+            const webpSrc = `${basePath}${prefix}${i}.webp`;
+            const jpgSrc = `${basePath}${prefix}${i}.jpg`;
+            let img = new Image();
             try {
-                const data = await loadAndLock(jpgSrc);
-                imagesData.push({ src: data.blobUrl, alt: `${prefix} ${i}`, original: data.originalSrc });
-                window._galleryImageCache.push(data.img);
+                await new Promise((resolve, reject) => {
+                    img.onload = () => resolve();
+                    img.onerror = () => reject();
+                    img.src = webpSrc;
+                });
+                images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
+                window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
-            } catch (e2) {
-                consecutiveFailures++;
+            } catch (e) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        img.onload = () => resolve();
+                        img.onerror = () => reject();
+                        img.src = jpgSrc;
+                    });
+                    images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
+                    window._galleryImageCache.push(img);
+                    consecutiveFailures = 0;
+                } catch (e2) {
+                    consecutiveFailures++;
+                }
             }
+            i++;
         }
-        i++;
-    }
-    if (imagesData.length === 0) {
-        const fallData = await loadAndLock('https://picsum.photos/id/42/1200/960');
-        imagesData.push({ src: fallData.blobUrl, alt: 'Fallback', original: fallData.originalSrc });
-        window._galleryImageCache.push(fallData.img);
+        if (images.length === 0) {
+            let fallback = new Image();
+            fallback.src = 'https://picsum.photos/id/42/1200/960';
+            await new Promise((resolve) => { fallback.onload = resolve; });
+            images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
+            window._galleryImageCache.push(fallback);
+        }
+        return images;
     }
 
+    const imagesData = await loadImages();
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
-    const fullImageSrcs = imagesData.map(d => d.src);
+    const fullImageSrcs = imagesData.map(data => data.src);
     const slides = [];
     const thumbElements = [];
 
@@ -331,7 +266,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
         imgEl.loading = 'eager';
-        imgEl.decoding = 'sync';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -349,13 +283,13 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
             thumbImg.loading = 'eager';
-            thumbImg.decoding = 'sync';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
         }
     });
 
+    // ... rest of gallery logic remains identical ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
@@ -404,20 +338,38 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
+        let exitX, incomingX;
+        if (direction === -1) {
+            exitX = 40;
+            incomingX = -40;
+        } else {
+            exitX = -40;
+            incomingX = 40;
+        }
+
+        slides[previousIndex].classList.remove('active');
+        slides[previousIndex].classList.add('exit-left');
+        slides[previousIndex].style.transform = `translateX(${exitX}px)`;
+        slides[previousIndex].style.opacity = '0';
+
         const incomingSlide = slides[currentIndex];
+        incomingSlide.style.transform = `translateX(${incomingX}px)`;
+        incomingSlide.style.opacity = '0';
         incomingSlide.classList.add('active');
-        incomingSlide.style.transform = '';
-        incomingSlide.style.opacity = '';
 
-        const oldSlide = slides[previousIndex];
-        oldSlide.style.opacity = '0';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                incomingSlide.style.transform = '';
+                incomingSlide.style.opacity = '';
+            });
+        });
+
         setTimeout(() => {
-            oldSlide.classList.remove('active');
-            oldSlide.style.transform = '';
-            oldSlide.style.opacity = '';
+            slides[previousIndex].classList.remove('exit-left');
+            slides[previousIndex].style.transform = '';
+            slides[previousIndex].style.opacity = '';
             isAnimating = false;
-        }, 400);
-
+        }, 800);
         updateActiveState();
     }
 
@@ -449,16 +401,24 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0, touchEndX = 0, touchActive = false;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchActive = false;
+
     stage.addEventListener('touchstart', (e) => {
         touchStartX = e.touches[0].clientX;
         touchActive = true;
         stopAutoAdvance();
     }, { passive: true });
+
     stage.addEventListener('touchmove', (e) => {
         if (!touchActive) return;
-        if (Math.abs(e.touches[0].clientX - touchStartX) > 20) e.preventDefault();
+        const deltaX = e.touches[0].clientX - touchStartX;
+        if (Math.abs(deltaX) > 20) {
+            e.preventDefault();
+        }
     }, { passive: false });
+
     stage.addEventListener('touchend', (e) => {
         if (!touchActive) return;
         touchActive = false;
@@ -471,19 +431,23 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
+
     stage.addEventListener('touchcancel', () => {
         touchActive = false;
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    let mouseStartX = 0, isDragging = false;
+    let mouseStartX = 0;
+    let isDragging = false;
+
     stage.addEventListener('mousedown', (e) => {
         if (e.target.closest('.nav-arrow')) return;
         mouseStartX = e.clientX;
         isDragging = true;
         stopAutoAdvance();
     });
+
     window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
@@ -494,6 +458,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
         startAutoAdvance();
     });
+
     stage.addEventListener('mouseleave', () => {
         if (isDragging) { isDragging = false; startAutoAdvance(); }
     });
@@ -510,7 +475,8 @@ createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
 // ========== LOVE STORY LIGHTBOX ==========
 const loveStoryImages = [];
-document.querySelectorAll('.new-love-story .item').forEach((item, idx) => {
+const loveStoryItems = document.querySelectorAll('.new-love-story .item');
+loveStoryItems.forEach((item, idx) => {
     const img = item.querySelector('.photo img');
     if (img) {
         loveStoryImages.push(img.src);
