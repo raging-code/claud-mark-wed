@@ -276,13 +276,6 @@ h1, h2, h3, h4, h5, h6,
 .will-animate .std-photo-mid    { opacity: 0; transform: translateY(60px); }
 .will-animate .std-photo-right  { opacity: 0; transform: translateX(100px); }
 
-/* When slide-in is added, they return to visible, but that's already the base.
-   The transition from the will-animate state to the base state creates the animation. */
-.std-photo-left.slide-in,
-.std-photo-mid.slide-in,
-.std-photo-right.slide-in {
-    /* slide-in merely removes the will-animate class, but we keep this for clarity */
-}
 
 /* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
 .proposal-gallery-section .viewer-wrap,
@@ -309,19 +302,17 @@ h1, h2, h3, h4, h5, h6,
 .prenup-gallery-section .slide {
     position: absolute; inset: 0;
     opacity: 0;
-    /* transition only opacity now – no transform */
+    z-index: 0;
     transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex; align-items: center; justify-content: center;
     background: #000;
+    pointer-events: none;
 }
 .proposal-gallery-section .slide.active,
 .prenup-gallery-section .slide.active {
     opacity: 1;
     z-index: 2;
-}
-.proposal-gallery-section .slide.exit-left,
-.prenup-gallery-section .slide.exit-left {
-    opacity: 0;
+    pointer-events: auto;
 }
 .proposal-gallery-section .slide img,
 .prenup-gallery-section .slide img {
@@ -600,21 +591,15 @@ h1, h2, h3, h4, h5, h6,
     width: calc(100% + 50px) !important; margin-left: -25px !important; margin-right: -25px !important;
     aspect-ratio: 3150 / 1950 !important; margin-bottom: 10px; background: #ffffff;
     border-radius: 0 !important; overflow: hidden;
-    /* Base state: fully visible */
     opacity: 1;
     transform: translateX(0);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
-/* Hidden state only when will-animate is present */
 .attire-card-c.will-animate .attire-photo {
     opacity: 0;
     transform: translateX(-15px);
 }
 .attire-photo img.attire-img { width: 100%; height: auto; display: block; }
-.attire-card-c.animate-entrance .attire-photo {
-    animation: attireSlideLeftIn 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-    animation-delay: 0.2s;
-}
-@keyframes attireSlideLeftIn { 0% { opacity: 0; transform: translateX(-15px); } 100% { opacity: 1; transform: translateX(0); } }
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;

@@ -550,18 +550,15 @@ loveStoryItems.forEach((item, idx) => {
 })();
 
 // ========== ATTIRE CARD ENTRANCE (fixed) ==========
+// ========== ATTIRE CARD ENTRANCE ==========
 (function() {
     const card = document.querySelector('.attire-card-c');
     if (!card) return;
-    // Immediately add will-animate so the photo starts hidden
     card.classList.add('will-animate');
 
     function startAttireAnimation() {
-        // Already animated? skip
-        if (card.classList.contains('animate-entrance')) return;
-        // Remove the will-animate class and start the animation
+        if (!card.classList.contains('will-animate')) return;
         card.classList.remove('will-animate');
-        card.classList.add('animate-entrance');
     }
 
     const observer = new IntersectionObserver((entries) => {
@@ -575,12 +572,10 @@ loveStoryItems.forEach((item, idx) => {
 
     observer.observe(card);
 
-    // If the card is already in view on load, start immediately
     if (card.getBoundingClientRect().top < window.innerHeight - 80) {
         startAttireAnimation();
     }
 })();
-
 // ========== SAVE THE DATE SLIDE ANIMATIONS (fixed) ==========
 (function() {
     const photoRow = document.querySelector('.photo-row');
