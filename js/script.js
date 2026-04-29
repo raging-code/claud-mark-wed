@@ -531,7 +531,8 @@ loveStoryItems.forEach((item, idx) => {
 
 // ========== SAKURA PETALS ==========
 (function() {
-    const petalContainer = document.querySelector('.sakura-petals');
+    // Target the inner wrapper now, not the fixed container directly
+    const petalContainer = document.querySelector('.sakura-petals .petal-inner');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
@@ -558,9 +559,7 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
-        // The following line has been removed to prevent
-        // forced GPU layer promotion which caused content flickering:
-        // petal.style.willChange = 'transform';
+        // will-change removed to prevent forced GPU promotion
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -570,7 +569,9 @@ loveStoryItems.forEach((item, idx) => {
         document.head.appendChild(style);
     }
     document.addEventListener('visibilitychange', () => {
-        petalContainer.classList.toggle('paused', document.hidden);
+        // Toggle paused class on the outer fixed container, which will pause all inner petals
+        const outer = document.querySelector('.sakura-petals');
+        if (outer) outer.classList.toggle('paused', document.hidden);
     });
 })();
 
