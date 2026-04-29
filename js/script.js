@@ -687,10 +687,9 @@ if (sharePhotoBtn) {
             onScrollStart();
         }
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(onScrollEnd, 150); // pause ends 150ms after last scroll movement
+        scrollTimer = setTimeout(onScrollEnd, 150);
     }, { passive: true });
 
-    // Also pause on touchmove (for mobile)
     window.addEventListener('touchmove', () => {
         if (!body.classList.contains('is-scrolling')) {
             onScrollStart();

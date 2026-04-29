@@ -30,39 +30,10 @@ body {
     margin-top: 0;
 }
 
-/* ===== FIX: REMOVED GLOBAL GPU LAYER – SECTIONS GET THEIR OWN SMALL LAYERS ===== */
+/* ===== NO FORCED GPU LAYERS – ONLY NATURAL FLOW ===== */
 #content-root {
     position: relative;
     z-index: 20;
-    overflow: visible;
-}
-
-/* ===== GPU LAYER FOR EACH MAJOR SECTION ===== */
-.hero-section,
-.wedding-banner,
-.countdown-banner,
-.std-section,
-.proposal-gallery-section,
-.video-section,
-.new-love-story,
-.prenup-gallery-section,
-.prenup-fullwidth-video,
-.venue-section,
-.attire-guide-section,
-.faq-boxed,
-.rsvp-section,
-footer {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    will-change: transform;
-}
-
-/* ===== GALLERY STAGES NEED EXPLICIT LAYERS FOR ANIMATIONS ===== */
-.proposal-gallery-section .main-stage,
-.prenup-gallery-section .main-stage {
-    will-change: transform;
-    transform: translateZ(0);
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -85,7 +56,6 @@ h1, h2, h3, h4, h5, h6,
     border-bottom: 1px solid rgba(255,240,241,0.2);
     position: relative;
     z-index: 30;
-    /* already gets layer from section list above */
 }
 .nav-links-container {
     display: flex;
@@ -179,8 +149,6 @@ h1, h2, h3, h4, h5, h6,
     position: relative;
     z-index: 20;
     border-radius: 16px !important;
-    transform: translateZ(0);
-    backface-visibility: hidden;
 }
 .audio-card .audio-controls {
     display: flex; align-items: center; gap: 6px; flex-shrink: 0;
@@ -327,6 +295,9 @@ h1, h2, h3, h4, h5, h6,
     position: relative; border-radius: 2px; overflow: hidden;
     background: #1a120e; aspect-ratio: 2048 / 1365; width: 100%;
     cursor: grab; user-select: none; touch-action: pan-y;
+    /* only minimal GPU hint for smooth dragging */
+    will-change: transform;
+    transform: translateZ(0);
 }
 .proposal-gallery-section .main-stage:active,
 .prenup-gallery-section .main-stage:active { cursor: grabbing; }
