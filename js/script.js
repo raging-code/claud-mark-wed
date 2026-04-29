@@ -442,7 +442,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     window.addEventListener('resize', debouncedUpdateThumb);
 }
 
-createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 20);
+createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 11);
 createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
 // ========== LOVE STORY LIGHTBOX ==========
@@ -509,7 +509,7 @@ loveStoryItems.forEach((item, idx) => {
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 4 : 10;   // drastically reduced
+    const petalCount = isMobile ? 15 : 20;   // drastically reduced
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
