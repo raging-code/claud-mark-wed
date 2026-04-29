@@ -287,13 +287,11 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     });
 
-    // ... rest of gallery logic (identical) ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
 
-    // Store timer in global array for pause/resume
     galleryTimers.push({
         start: function() {
             if (autoTimer) return;
@@ -390,7 +388,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     function goToPrevious() { navigateTo(currentIndex - 1, -1); }
     function goToNext() { navigateTo(currentIndex + 1, 1); }
 
-    // Override start/stop to use timerController
     function startAutoAdvance() { timerController.start(); }
     function stopAutoAdvance() { timerController.stop(); }
 
@@ -417,7 +414,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    // Touch / mouse drag logic unchanged
     let touchStartX = 0;
     let touchEndX = 0;
     let touchActive = false;
