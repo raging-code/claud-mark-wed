@@ -192,7 +192,6 @@ document.addEventListener('keydown', (e) => {
 
 
 // ========== GALLERY BUILDER (opacity-only transitions, eager loading) ==========
-window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
@@ -218,7 +217,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     img.src = webpSrc;
                 });
                 images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
-                window._galleryImageCache.push(img);
                 consecutiveFailures = 0;
             } catch (e) {
                 try {
@@ -228,7 +226,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                         img.src = jpgSrc;
                     });
                     images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
-                    window._galleryImageCache.push(img);
                     consecutiveFailures = 0;
                 } catch (e2) {
                     consecutiveFailures++;
