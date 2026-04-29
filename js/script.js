@@ -90,17 +90,14 @@ if (audio) {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                // Success! Unmuted playback started automatically.
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }).catch(() => {
-                // Unmuted autoplay blocked. We'll wait for the first user interaction.
                 const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                         if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                     }).catch(() => {});
-                    // Clean up all listeners after the first successful interaction
                     document.removeEventListener('click', playOnInteraction);
                     document.removeEventListener('touchstart', playOnInteraction);
                     document.removeEventListener('keydown', playOnInteraction);
@@ -112,11 +109,9 @@ if (audio) {
         }
     }
 
-    // Try immediately, and again when audio can play
     tryUnmutedPlay();
     audio.addEventListener('canplay', tryUnmutedPlay, { once: true });
 
-    // Extra safety delay
     setTimeout(() => {
         if (audio.duration && isFinite(audio.duration) && !isNaN(audio.duration)) {
             updateDurationDisplay();
@@ -195,8 +190,11 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-// ========== GALLERY BUILDER (now with eager loading) ==========
+// ========== GALLERY BUILDER (with eager loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
+
+// Track all gallery auto-advance timers so we can pause them on scroll
+const galleryTimers = [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
@@ -289,11 +287,27 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     });
 
-    // ... rest of gallery logic remains identical ...
+    // ... rest of gallery logic (identical) ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
+
+    // Store timer in global array for pause/resume
+    galleryTimers.push({
+        start: function() {
+            if (autoTimer) return;
+            autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY);
+        },
+        stop: function() {
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        },
+        get isRunning() { return !!autoTimer; }
+    });
+    const timerController = galleryTimers[galleryTimers.length - 1];
 
     function updateThumbPosition() {
         if (!thumbsTrack || !thumbsRow || thumbElements.length === 0) return;
@@ -375,8 +389,10 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
     function goToPrevious() { navigateTo(currentIndex - 1, -1); }
     function goToNext() { navigateTo(currentIndex + 1, 1); }
-    function startAutoAdvance() { stopAutoAdvance(); autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY); }
-    function stopAutoAdvance() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+
+    // Override start/stop to use timerController
+    function startAutoAdvance() { timerController.start(); }
+    function stopAutoAdvance() { timerController.stop(); }
 
     prevBtn.addEventListener('click', e => { e.preventDefault(); stopAutoAdvance(); goToPrevious(); startAutoAdvance(); });
     nextBtn.addEventListener('click', e => { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); });
@@ -401,6 +417,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
+    // Touch / mouse drag logic unchanged
     let touchStartX = 0;
     let touchEndX = 0;
     let touchActive = false;
@@ -612,7 +629,7 @@ loveStoryItems.forEach((item, idx) => {
     observer.observe(document.querySelector('.photo-row'));
 })();
 
-// Custom dropdown logic
+// Custom dropdown
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
@@ -647,3 +664,38 @@ if (sharePhotoBtn) {
         console.log('Share photo button clicked - ready for link integration');
     });
 }
+
+// ========== SCROLL DETECTION – PAUSE ANIMATIONS WHILE SCROLLING ==========
+(function() {
+    let scrollTimer;
+    const body = document.body;
+
+    function onScrollStart() {
+        body.classList.add('is-scrolling');
+        // Pause all gallery auto-advance timers
+        galleryTimers.forEach(t => { if (t.isRunning) t.stop(); });
+    }
+
+    function onScrollEnd() {
+        body.classList.remove('is-scrolling');
+        // Resume gallery auto-advance (if they were stopped by scroll)
+        galleryTimers.forEach(t => { if (!t.isRunning) t.start(); });
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!body.classList.contains('is-scrolling')) {
+            onScrollStart();
+        }
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(onScrollEnd, 150); // pause ends 150ms after last scroll movement
+    }, { passive: true });
+
+    // Also pause on touchmove (for mobile)
+    window.addEventListener('touchmove', () => {
+        if (!body.classList.contains('is-scrolling')) {
+            onScrollStart();
+        }
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(onScrollEnd, 150);
+    }, { passive: true });
+})();

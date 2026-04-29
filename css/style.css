@@ -30,16 +30,39 @@ body {
     margin-top: 0;
 }
 
-/* ===== GPU‑COMPOSITED ROOT – THE PERMANENT FIX ===== */
+/* ===== FIX: REMOVED GLOBAL GPU LAYER – SECTIONS GET THEIR OWN SMALL LAYERS ===== */
 #content-root {
     position: relative;
     z-index: 20;
-    transform: translate3d(0,0,0);       /* creates its own compositor layer */
+    overflow: visible;
+}
+
+/* ===== GPU LAYER FOR EACH MAJOR SECTION ===== */
+.hero-section,
+.wedding-banner,
+.countdown-banner,
+.std-section,
+.proposal-gallery-section,
+.video-section,
+.new-love-story,
+.prenup-gallery-section,
+.prenup-fullwidth-video,
+.venue-section,
+.attire-guide-section,
+.faq-boxed,
+.rsvp-section,
+footer {
+    transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    will-change: transform;             /* hint for smoother scrolling */
-    -webkit-overflow-scrolling: touch;  /* iOS momentum scroll */
-    overflow: visible;                  /* ensure nothing gets clipped inside */
+    will-change: transform;
+}
+
+/* ===== GALLERY STAGES NEED EXPLICIT LAYERS FOR ANIMATIONS ===== */
+.proposal-gallery-section .main-stage,
+.prenup-gallery-section .main-stage {
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -62,6 +85,7 @@ h1, h2, h3, h4, h5, h6,
     border-bottom: 1px solid rgba(255,240,241,0.2);
     position: relative;
     z-index: 30;
+    /* already gets layer from section list above */
 }
 .nav-links-container {
     display: flex;
@@ -155,6 +179,8 @@ h1, h2, h3, h4, h5, h6,
     position: relative;
     z-index: 20;
     border-radius: 16px !important;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .audio-card .audio-controls {
     display: flex; align-items: center; gap: 6px; flex-shrink: 0;
@@ -675,7 +701,8 @@ h1, h2, h3, h4, h5, h6,
 /* ========== SAKURA PETALS ========== */
 .sakura-petals { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 10; overflow: hidden; background: transparent; }
 .sakura-petals div { backface-visibility: hidden; transform: translateZ(0); }
-.sakura-petals.paused div { animation-play-state: paused !important; }
+.sakura-petals.paused div,
+body.is-scrolling .sakura-petals div { animation-play-state: paused !important; }
 
 /* ========== LIGHTBOX ========== */
 .love-lightbox { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
