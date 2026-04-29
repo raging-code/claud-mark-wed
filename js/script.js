@@ -187,7 +187,19 @@ document.addEventListener('keydown', (e) => {
 })();
 
 
-// ========== GALLERY BUILDER (opacity-only transitions, eager loading) ==========
+// ========== GALLERY BUILDER (responsive srcset + forced reflow fix) ==========
+
+/**
+ * Tries to load an image and resolves with the loaded image if successful.
+ */
+function tryLoadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
@@ -202,43 +214,62 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         let i = startIndex;
         let consecutiveFailures = 0;
         const MAX_CONSECUTIVE_FAILURES = 3;
+
         while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
-            const webpSrc = `${basePath}${prefix}${i}.webp`;
-            const jpgSrc = `${basePath}${prefix}${i}.jpg`;
+            const webpSrc = `${basePath}${prefix}${i}-800.webp`;
+            const jpgSrc  = `${basePath}${prefix}${i}-800.jpg`;
+
             let img = new Image();
+            let loaded = false;
+
+            // Try WebP first
             try {
                 await new Promise((resolve, reject) => {
-                    img.onload = () => resolve();
-                    img.onerror = () => reject();
+                    img.onload = resolve;
+                    img.onerror = reject;
                     img.src = webpSrc;
                 });
-                images.push({ src: webpSrc, alt: `${prefix} ${i}`, img: img });
-                consecutiveFailures = 0;
+                loaded = true;
             } catch (e) {
+                // Try JPEG fallback
                 try {
                     await new Promise((resolve, reject) => {
-                        img.onload = () => resolve();
-                        img.onerror = () => reject();
+                        img.onload = resolve;
+                        img.onerror = reject;
                         img.src = jpgSrc;
                     });
-                    images.push({ src: jpgSrc, alt: `${prefix} ${i}`, img: img });
-                    consecutiveFailures = 0;
+                    loaded = true;
                 } catch (e2) {
-                    consecutiveFailures++;
+                    // both failed
                 }
+            }
+
+            if (loaded) {
+                images.push({
+                    src: img.src,
+                    alt: `${prefix} ${i}`,
+                    width: 800,
+                    height: 533,       // 3:2 ratio; adjust if your photos have a different aspect ratio
+                    img: img
+                });
+                consecutiveFailures = 0;
+            } else {
+                consecutiveFailures++;
             }
             i++;
         }
+
+        // Fallback if no images found at all
         if (images.length === 0) {
             let fallback = new Image();
-            fallback.src = 'https://picsum.photos/id/42/1200/960';
+            fallback.src = 'https://picsum.photos/id/42/800/533';
             await new Promise((resolve) => { fallback.onload = resolve; });
-            images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
+            images.push({ src: fallback.src, alt: 'Fallback', width: 800, height: 533, img: fallback });
         }
         return images;
     }
 
-    const imagesData = await loadImages();
+       const imagesData = await loadImages();
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
@@ -250,15 +281,20 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const slideDiv = document.createElement('div');
         slideDiv.className = 'slide';
         slideDiv.dataset.index = index;
+
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
         imgEl.loading = 'eager';
+        imgEl.width = imgData.width;
+        imgEl.height = imgData.height;
         imgEl.style.cursor = 'pointer';
+
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
             openLightbox(fullImageSrcs, index);
         });
+
         slideDiv.appendChild(imgEl);
         stage.insertBefore(slideDiv, prevBtn);
         slides.push(slideDiv);
@@ -277,10 +313,18 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     });
 
+
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
+
+    // Thumbnail centering – now uses requestAnimationFrame to avoid forced reflow
+    let rafId;
+    function scheduleThumbUpdate() {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => updateThumbPosition());
+    }
 
     function updateThumbPosition() {
         if (!thumbsTrack || !thumbsRow || thumbElements.length === 0) return;
@@ -300,21 +344,13 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         thumbsTrack.style.transform = `translateX(${clamped}px)`;
     }
 
-    const debouncedUpdateThumb = (() => {
-        let timeout;
-        return () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(updateThumbPosition, 100);
-        };
-    })();
-
     function updateActiveState() {
         slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
         if (thumbsTrack) {
             thumbElements.forEach((thumb, i) => {
                 thumb.classList.toggle('active', i === currentIndex);
             });
-            updateThumbPosition();
+            scheduleThumbUpdate();   // request on next frame
         }
     }
 
@@ -432,7 +468,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
     updateActiveState();
     startAutoAdvance();
-    window.addEventListener('resize', debouncedUpdateThumb);
+    window.addEventListener('resize', scheduleThumbUpdate);   // debounced via rAF
 }
 
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 11);

@@ -11,8 +11,35 @@
     <meta property="og:type" content="website">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Claudine and Mark Wedding — Osaka, Japan proposal, prenup gallery, and wedding details. RSVP by June 1st.">
     <title>Claudine and Mark Wedding</title>
-    
+
+    <!-- ========== CRITICAL CSS (inline) ========== -->
+    <style>
+        *,*::before,*::after{box-sizing:border-box}
+        html,body{width:100%;overflow-x:hidden;margin:0;padding:0;position:relative}
+        body{font-family:'Lato',sans-serif;background-color:#ffb7c5;color:#31231a}
+        h1,h2,h3,h4,h5,h6,.main-title,.section-title,.slide-btn span,.btn-submit{font-family:'EB Garamond',serif;font-weight:700}
+        .top-anchor-nav{background:#31231a;padding:10px 16px;border-bottom:1px solid rgba(255,240,241,0.2);position:relative;z-index:30}
+        .nav-links-container{display:flex;justify-content:center;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto}
+        .anchor-link{font-family:'EB Garamond',serif;font-size:1rem;font-weight:500;color:#fff;text-decoration:none;letter-spacing:.5px;transition:all .2s ease;padding:4px 0;border-bottom:2px solid transparent}
+        .anchor-link:hover{color:#ffb7c5;border-bottom-color:#ffb7c5}
+        .hero-section{width:100%;margin-bottom:-8px;height:auto;position:relative;z-index:20}
+        .hero-image-wrapper{width:100%;line-height:0}
+        .hero-img{width:100%;height:auto;display:block}
+        .sakura-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,transparent 60%,rgba(255,183,197,0.2) 100%);pointer-events:none}
+        .wedding-banner{width:100%;line-height:0;position:relative;z-index:20;background:#fff0f1}
+        .wedding-banner-img{width:100%;height:auto;display:block;object-fit:cover}
+        .countdown-banner{width:100%;background:#31231a;border-top:1px solid rgba(255,240,241,0.1);border-bottom:1px solid rgba(255,240,241,0.1);position:relative;z-index:20}
+        .countdown-inner{max-width:1200px;margin:0 auto;padding:0.5rem 1rem;display:flex;flex-direction:column;align-items:center;gap:0.2rem;text-align:center}
+        .countdown-phrase{font-family:'Playfair Display',serif;font-style:italic;font-weight:300;font-size:0.9rem;color:rgba(255,240,241,0.85)}
+        .countdown-units{display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:center}
+        .countdown-unit{padding:0 0.6rem;text-align:center;border-left:1px solid rgba(255,240,241,0.1)}
+        .countdown-unit:first-child{border-left:none}
+        .countdown-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:500;color:#fff0f1;display:block;line-height:1;min-width:2.2ch;display:inline-block}
+        .countdown-lbl{font-family:'Jost',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:#bfb4a5;display:block;margin-top:0.1rem}
+    </style>
+
     <script>
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
@@ -21,26 +48,27 @@
             window.scrollTo(0, 0);
         });
     </script>
-    
-    <!-- Preconnect only for origins actually used -->
+
+    <!-- Preconnect only for actually used origins (now exactly 4) -->
     <link rel="preconnect" href="https://i.ytimg.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
+
     <!-- Preload hero image (LCP) with high priority -->
-    <link rel="preload" as="image" href="assets/images/hero-couple.webp" fetchpriority="high">
-    
+    <link rel="preload" as="image" href="assets/images/hero-couple-800.webp" fetchpriority="high">
+
     <!-- Deferred non‑critical CSS -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"></noscript>
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Font Awesome now loaded from jsDelivr (no more cdnjs.cloudflare.com preconnect) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    
-    <!-- Your main stylesheet – already synchronous to avoid FOUC -->
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Main stylesheet now asynchronous -->
+    <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
 </head>
 <body>
     <main>
@@ -60,16 +88,13 @@
             </nav>
             <section class="hero-section">
                 <div class="hero-image-wrapper">
-                    <picture>
-                        <source srcset="assets/images/hero-couple.webp" type="image/webp">
-                        <source srcset="assets/images/hero-couple.jpg">
-                        <img src="assets/images/hero-couple.jpg" alt="Bride and Groom" class="hero-img" width="1200" height="800" decoding="async" loading="eager" fetchpriority="high">
-                    </picture>
+                    <img src="assets/images/hero-couple-800.webp" alt="Bride and Groom" class="hero-img" width="800" height="533" decoding="async" loading="eager" fetchpriority="high">
                     <div class="sakura-overlay"></div>
                 </div>
             </section>
             <div class="wedding-banner">
-                <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager">
+                <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager"
+                     srcset="assets/images/header-banner-540.webp 540w, assets/images/header-banner.webp 1080w" sizes="100vw">
             </div>
             <div class="countdown-banner">
                 <div class="countdown-inner">
@@ -150,12 +175,17 @@
                 <header class="love-story-header"><h1 class="love-story-main-title">Our Love Story<br></h1></header>
                 <div class="love-story-container-custom">
                     <div class="story-row">
-                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory.webp" alt="Love story 1" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1.webp" alt="Love story 2" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
-                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2.webp" alt="Love story 3" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3.webp" alt="Love story 4" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
-                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4.webp" alt="Love story 5" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5.webp" alt="Love story 6" width="600" height="600" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory-480.webp" alt="Love story 1" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1-480.webp" alt="Love story 2" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
+
+<div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2-480.webp" alt="Love story 3" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3-480.webp" alt="Love story 4" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+
+<div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4-480.webp" alt="Love story 5" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5-480.webp" alt="Love story 6" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
                     </div>
                 </div>
                 <footer class="love-story-footer-rule"><div class="rule"><span></span><span></span></div></footer>
@@ -211,7 +241,8 @@
                         <div class="attire-inner-bg">
                             <div class="attire-c-inner">
                                 <div class="attire-photo" id="attirePhotoContainer">
-                                    <img src="assets/images/dresscode.webp" alt="Dress Code" class="attire-img" loading="lazy" onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
+                                    <img src="assets/images/dresscode-800.webp" alt="Dress Code" class="attire-img" width="800" height="533" loading="lazy" 
+     onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.photo-placeholder').style.display='flex';">
                                     <div class="photo-placeholder" style="display: none;">
                                         <svg width="55" height="55" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#bba898" stroke-width="1.2" fill="none"/><circle cx="8.5" cy="9.5" r="1.5" stroke="#bba898" stroke-width="1.2"/><path d="M22 14L17 10L9 16L5 13L2 15" stroke="#bba898" stroke-width="1.2"/></svg>
                                         <span>dresscode.webp</span>
@@ -294,8 +325,8 @@
         <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
 
-    <!-- Only the necessary JS – no Bootstrap/Swiper if not used -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS now deferred -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer></script>
     <script src="js/script.js" defer></script>
     <script>
         const WEDDING = new Date(2026, 5, 24, 10, 30, 0);
