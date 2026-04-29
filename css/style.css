@@ -229,7 +229,7 @@ h1, h2, h3, h4, h5, h6,
     font-size: 0.5rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,240,241,0.35);
+    color: #bfb4a5;  /* improved contrast */
     display: block;
     margin-top: 0.1rem;
 }
@@ -474,8 +474,8 @@ h1, h2, h3, h4, h5, h6,
     padding: 0; margin: 0;
 }
 .new-love-story .item {
-    opacity: 1 !important;
-    transform: none !important;
+    opacity: 1;
+    transform: none;
     width: 100%;
 }
 .new-love-story .item.visible {
@@ -533,7 +533,8 @@ h1, h2, h3, h4, h5, h6,
 }
 .proposal-date {
     font-family: 'Lato', sans-serif; font-size: 0.8rem; font-weight: 600;
-    letter-spacing: 2px; color: #b57777; text-align: center; margin-top: 2px;
+    letter-spacing: 2px; color: #9a4a4a; /* improved contrast */
+    text-align: center; margin-top: 2px;
 }
 
 /* ========== PRENUP FULL WIDTH VIDEO ========== */
@@ -561,7 +562,7 @@ h1, h2, h3, h4, h5, h6,
 .venue-row { border-bottom: 1px solid rgba(255,255,255,0.15); padding: 22px 0; transition: background 0.2s; }
 .venue-row:first-of-type { border-top: 1px solid rgba(255,255,255,0.15); }
 .venue-row:hover { background: rgba(255,255,255,0.04); }
-.venue-label { font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 600; margin-bottom: 4px; }
+.venue-label { font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: #c5beb5; /* improved contrast */ font-weight: 600; margin-bottom: 4px; }
 .venue-place { font-family: 'EB Garamond', serif; font-size: 22px; font-weight: 600; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 .venue-address-secondary { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 300; letter-spacing: 0.5px; margin-bottom: 2px; }
 .venue-time { font-size: 14px; color: #ffffff; letter-spacing: 1px; font-weight: 600; margin-top: 4px; margin-bottom: 0; }
@@ -602,7 +603,7 @@ h1, h2, h3, h4, h5, h6,
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
     font-family: 'EB Garamond', serif;
-    font-size: 2px;   /* typo preserved */
+    font-size: 2px;   /* actual size set inline in HTML */
     font-weight: 800;
     color: #31231a;
     display: inline-block;
@@ -791,3 +792,79 @@ footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d
     transition: background 0.15s;
 }
 .dropdown-options li:hover { background: #fdf0f1; }
+
+/* ==============================================
+   NEW SCROLL ENTRANCE ANIMATIONS
+   ============================================== */
+/* ---- love story items ---- */
+.love-anim-item {
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.love-anim-item.love-from-left {
+    transform: translateX(-60px);
+}
+.love-anim-item.love-from-right {
+    transform: translateX(60px);
+}
+.love-anim-item.love-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ---- venue heading (top) ---- */
+.venue-anim-heading {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.venue-anim-heading.venue-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- venue rows ---- */
+.venue-anim-row {
+    opacity: 0;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.venue-anim-row.venue-from-left {
+    transform: translateX(-40px);
+}
+.venue-anim-row.venue-from-right {
+    transform: translateX(40px);
+}
+.venue-anim-row.venue-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ---- share text animations ---- */
+.share-anim {
+    opacity: 0;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.share-anim.share-from-left {
+    transform: translateX(-40px);
+}
+.share-anim.share-from-right {
+    transform: translateX(40px);
+}
+.share-anim.share-fade {
+    transform: none;
+}
+.share-anim.share-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ---- FAQ staggered entrance ---- */
+.faq-anim-row {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.faq-anim-row.faq-visible {
+    opacity: 1;
+    transform: translateY(0);
+}

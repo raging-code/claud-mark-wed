@@ -41,7 +41,6 @@ if (audio) {
         currentTimeSpan.textContent = formatTime(audio.currentTime);
     });
 
-    // Play/Pause
     playPauseBtn?.addEventListener('click', () => {
         if (audio.paused) {
             audio.play().catch(() => {});
@@ -52,14 +51,12 @@ if (audio) {
         }
     });
 
-    // Mute toggle (starts unmuted)
     audio.muted = false;
     muteBtn?.addEventListener('click', () => {
         audio.muted = !audio.muted;
         muteBtn.innerHTML = audio.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     });
 
-    // Seek slider
     seekSlider?.addEventListener('input', () => {
         if (durationReady) {
             isScrubbing = true;
@@ -85,7 +82,6 @@ if (audio) {
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    // ===================== AUTOPLAY (UNMUTED, WITH USER GESTURE FALLBACK) =====================
     function tryUnmutedPlay() {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -238,7 +234,6 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             fallback.src = 'https://picsum.photos/id/42/1200/960';
             await new Promise((resolve) => { fallback.onload = resolve; });
             images.push({ src: 'https://picsum.photos/id/42/1200/960', alt: 'Fallback', img: fallback });
-            window._galleryImageCache.push(fallback);
         }
         return images;
     }
@@ -594,6 +589,130 @@ loveStoryItems.forEach((item, idx) => {
     }, { threshold: 0.2 });
 
     observer.observe(photoRow);
+})();
+
+// ========== NEW SCROLL ANIMATIONS ==========
+// Love story items
+(function() {
+    const items = document.querySelectorAll('.new-love-story .story-col .item');
+    if (!items.length) return;
+    items.forEach((item, index) => {
+        item.classList.add('love-anim-item');
+        if ((index + 1) % 2 === 1) {
+            item.classList.add('love-from-left');
+        } else {
+            item.classList.add('love-from-right');
+        }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('love-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    items.forEach(item => observer.observe(item));
+})();
+
+// Venue heading and rows
+(function() {
+    const venueSection = document.querySelector('.venue-section');
+    if (!venueSection) return;
+
+    const heading = venueSection.querySelector('.venue-main-heading');
+    if (heading) {
+        heading.classList.add('venue-anim-heading');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('venue-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        observer.observe(heading);
+    }
+
+    const rows = venueSection.querySelectorAll('.venue-row');
+    rows.forEach((row, index) => {
+        row.classList.add('venue-anim-row');
+        if (index === 0) {
+            row.classList.add('venue-from-left');
+        } else {
+            row.classList.add('venue-from-right');
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('venue-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        observer.observe(row);
+    });
+})();
+
+// Share text animations
+(function() {
+    const shareBlock = document.querySelector('.share-tagline');
+    if (!shareBlock) return;
+
+    const capture = shareBlock.querySelector('.tagline-share');
+    const dontForget = shareBlock.querySelectorAll('p')[0];
+    const hashtag = shareBlock.querySelector('.hashtag-eb-share');
+    const gotPerfect = shareBlock.querySelectorAll('p')[1];
+    const uploadBtn = document.querySelector('.btn-share-placeholder');
+
+    function animateElement(el, animClass) {
+        if (!el) return;
+        el.classList.add('share-anim', animClass);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('share-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        observer.observe(el);
+    }
+
+    if (capture) animateElement(capture, 'share-from-left');
+    if (dontForget) animateElement(dontForget, 'share-from-left');
+    if (hashtag) animateElement(hashtag, 'share-fade');
+    if (gotPerfect) animateElement(gotPerfect, 'share-from-right');
+    if (uploadBtn) animateElement(uploadBtn, 'share-from-right');
+})();
+
+// FAQ staggered entrance
+(function() {
+    const faqBox = document.querySelector('.faq-boxed');
+    if (!faqBox) return;
+
+    const faqRows = faqBox.querySelectorAll('.faq-row');
+    if (!faqRows.length) return;
+
+    faqRows.forEach((row, index) => {
+        row.classList.add('faq-anim-row');
+        row.style.transitionDelay = `${0.1 * (index + 1)}s`;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.faq-anim-row').forEach(row => {
+                    row.classList.add('faq-visible');
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    observer.observe(faqBox);
 })();
 
 // Custom dropdown logic
