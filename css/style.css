@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6,
     width: 100%;
     height: auto;
     display: block;
-    filter: brightness(0.85) saturate(1.05);
+    /* Removed filter to eliminate permanent GPU layer */
 }
 .sakura-overlay {
     position: absolute;
@@ -296,16 +296,20 @@ h1, h2, h3, h4, h5, h6,
 .prenup-gallery-section .slide {
     position: absolute; inset: 0;
     opacity: 0;
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: none;
+    /* transition only opacity now – no transform */
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex; align-items: center; justify-content: center;
     background: #000;
 }
 .proposal-gallery-section .slide.active,
-.prenup-gallery-section .slide.active { opacity: 1; transform: translateX(0); z-index: 2; }
+.prenup-gallery-section .slide.active {
+    opacity: 1;
+    z-index: 2;
+}
 .proposal-gallery-section .slide.exit-left,
-.prenup-gallery-section .slide.exit-left { opacity: 0; }
+.prenup-gallery-section .slide.exit-left {
+    opacity: 0;
+}
 .proposal-gallery-section .slide img,
 .prenup-gallery-section .slide img {
     position: relative; z-index: 1;
@@ -676,7 +680,6 @@ h1, h2, h3, h4, h5, h6,
     contain: layout style paint;
 }
 
-/* Inner wrapper that clips the falling petals */
 .petal-inner {
     position: absolute;
     top: 0; left: 0;
@@ -684,14 +687,8 @@ h1, h2, h3, h4, h5, h6,
     overflow: hidden;
 }
 
-/* Pause petal animations when page hidden */
 .sakura-petals.paused .petal-inner div {
     animation-play-state: paused !important;
-}
-
-/* ========== CRITICAL FIX: isolate content stacking context ========== */
-#content-root {
-    isolation: isolate;
 }
 
 footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d9; position: relative; z-index: 20; }

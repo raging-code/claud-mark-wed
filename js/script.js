@@ -191,7 +191,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 
-// ========== GALLERY BUILDER ==========
+// ========== GALLERY BUILDER (opacity-only transitions, eager loading) ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -333,36 +333,22 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
-        let exitX, incomingX;
-        if (direction === -1) {
-            exitX = 40;
-            incomingX = -40;
-        } else {
-            exitX = -40;
-            incomingX = 40;
-        }
-
+        // Opacity-only transition – no transform
         slides[previousIndex].classList.remove('active');
         slides[previousIndex].classList.add('exit-left');
-        slides[previousIndex].style.transform = `translateX(${exitX}px)`;
-        slides[previousIndex].style.opacity = '0';
 
         const incomingSlide = slides[currentIndex];
-        incomingSlide.style.transform = `translateX(${incomingX}px)`;
         incomingSlide.style.opacity = '0';
         incomingSlide.classList.add('active');
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                incomingSlide.style.transform = '';
                 incomingSlide.style.opacity = '';
             });
         });
 
         setTimeout(() => {
             slides[previousIndex].classList.remove('exit-left');
-            slides[previousIndex].style.transform = '';
-            slides[previousIndex].style.opacity = '';
             isAnimating = false;
         }, 800);
         updateActiveState();
@@ -526,13 +512,13 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS ==========
+// ========== SAKURA PETALS (reduced count) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals .petal-inner');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 8 : 30;
+    const petalCount = isMobile ? 4 : 10;   // drastically reduced
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
