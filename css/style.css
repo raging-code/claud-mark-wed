@@ -261,14 +261,27 @@ h1, h2, h3, h4, h5, h6,
 .photo-wrap img { transition: transform 0.7s ease; }
 .photo-col:hover .photo-wrap img { transform: scale(1.04); }
 .photo-row { align-items: center !important; }
-.std-photo-left   { opacity: 0; transform: translateX(-100px); transition: all 0.8s ease; }
-.std-photo-mid    { opacity: 0; transform: translateY(60px);   transition: all 0.8s ease; }
-.std-photo-right  { opacity: 0; transform: translateX(100px);  transition: all 0.8s ease; }
+
+/* Base state: fully visible */
+.std-photo-left,
+.std-photo-mid,
+.std-photo-right {
+    opacity: 1;
+    transform: none;
+    transition: all 0.8s ease;
+}
+
+/* Hidden starting state (only when will-animate is present) */
+.will-animate .std-photo-left   { opacity: 0; transform: translateX(-100px); }
+.will-animate .std-photo-mid    { opacity: 0; transform: translateY(60px); }
+.will-animate .std-photo-right  { opacity: 0; transform: translateX(100px); }
+
+/* When slide-in is added, they return to visible, but that's already the base.
+   The transition from the will-animate state to the base state creates the animation. */
 .std-photo-left.slide-in,
 .std-photo-mid.slide-in,
 .std-photo-right.slide-in {
-    opacity: 1;
-    transform: translate(0, 0);
+    /* slide-in merely removes the will-animate class, but we keep this for clarity */
 }
 
 /* ========== SHARED GALLERY STYLES (proposal & prenup) ========== */
@@ -586,10 +599,21 @@ h1, h2, h3, h4, h5, h6,
 .attire-photo {
     width: calc(100% + 50px) !important; margin-left: -25px !important; margin-right: -25px !important;
     aspect-ratio: 3150 / 1950 !important; margin-bottom: 10px; background: #ffffff;
-    border-radius: 0 !important; overflow: hidden; opacity: 0; transform: translateX(-15px);
+    border-radius: 0 !important; overflow: hidden;
+    /* Base state: fully visible */
+    opacity: 1;
+    transform: translateX(0);
+}
+/* Hidden state only when will-animate is present */
+.attire-card-c.will-animate .attire-photo {
+    opacity: 0;
+    transform: translateX(-15px);
 }
 .attire-photo img.attire-img { width: 100%; height: auto; display: block; }
-.attire-card-c.animate-entrance .attire-photo { animation: attireSlideLeftIn 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; animation-delay: 0.2s; }
+.attire-card-c.animate-entrance .attire-photo {
+    animation: attireSlideLeftIn 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    animation-delay: 0.2s;
+}
 @keyframes attireSlideLeftIn { 0% { opacity: 0; transform: translateX(-15px); } 100% { opacity: 1; transform: translateX(0); } }
 .share-moment-wrapper { border-top: none; margin-top: 0.8rem; padding-top: 0.4rem; }
 .hashtag-eb-share {
@@ -676,7 +700,6 @@ h1, h2, h3, h4, h5, h6,
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     pointer-events: none; z-index: 10;
     background: transparent;
-    /* containment boundary */
     contain: layout style paint;
 }
 

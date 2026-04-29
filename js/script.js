@@ -333,20 +333,14 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
-        // Opacity-only transition – no transform
+        // Opacity-only transition via class toggling – no inline style manipulation
         slides[previousIndex].classList.remove('active');
         slides[previousIndex].classList.add('exit-left');
 
         const incomingSlide = slides[currentIndex];
-        incomingSlide.style.opacity = '0';
         incomingSlide.classList.add('active');
 
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                incomingSlide.style.opacity = '';
-            });
-        });
-
+        // Remove exit-left class after transition ends to keep the slide ready for next cycle
         setTimeout(() => {
             slides[previousIndex].classList.remove('exit-left');
             isAnimating = false;
@@ -555,34 +549,54 @@ loveStoryItems.forEach((item, idx) => {
     });
 })();
 
-// ========== ATTIRE CARD ENTRANCE ==========
+// ========== ATTIRE CARD ENTRANCE (fixed) ==========
 (function() {
+    const card = document.querySelector('.attire-card-c');
+    if (!card) return;
+    // Immediately add will-animate so the photo starts hidden
+    card.classList.add('will-animate');
+
     function startAttireAnimation() {
-        const card = document.querySelector('.attire-card-c');
-        if (!card || card.classList.contains('animate-entrance')) return;
+        // Already animated? skip
+        if (card.classList.contains('animate-entrance')) return;
+        // Remove the will-animate class and start the animation
+        card.classList.remove('will-animate');
         card.classList.add('animate-entrance');
     }
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { startAttireAnimation(); observer.unobserve(entry.target); }
-        });
-    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
-    const target = document.querySelector('.attire-card-c');
-    if (target) {
-        observer.observe(target);
-        if (target.getBoundingClientRect().top < window.innerHeight - 80) startAttireAnimation();
-    }
-})();
 
-// ========== SAVE THE DATE SLIDE ANIMATIONS ==========
-(function() {
-    const left = document.querySelector('.std-photo-left');
-    const mid = document.querySelector('.std-photo-mid');
-    const right = document.querySelector('.std-photo-right');
-    if (!left || !mid || !right) return;
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                startAttireAnimation();
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+
+    observer.observe(card);
+
+    // If the card is already in view on load, start immediately
+    if (card.getBoundingClientRect().top < window.innerHeight - 80) {
+        startAttireAnimation();
+    }
+})();
+
+// ========== SAVE THE DATE SLIDE ANIMATIONS (fixed) ==========
+(function() {
+    const photoRow = document.querySelector('.photo-row');
+    const left = document.querySelector('.std-photo-left');
+    const mid = document.querySelector('.std-photo-mid');
+    const right = document.querySelector('.std-photo-right');
+    if (!photoRow || !left || !mid || !right) return;
+
+    // Immediately set will-animate so the photos start hidden
+    photoRow.classList.add('will-animate');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Remove will-animate and add slide-in to trigger transition
+                photoRow.classList.remove('will-animate');
                 left.classList.add('slide-in');
                 mid.classList.add('slide-in');
                 right.classList.add('slide-in');
@@ -590,7 +604,8 @@ loveStoryItems.forEach((item, idx) => {
             }
         });
     }, { threshold: 0.2 });
-    observer.observe(document.querySelector('.photo-row'));
+
+    observer.observe(photoRow);
 })();
 
 // Custom dropdown logic
