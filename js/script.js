@@ -330,14 +330,12 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const previousIndex = currentIndex;
         currentIndex = normalizedIndex;
 
-        // Opacity-only transition via class toggling – no inline style manipulation
         slides[previousIndex].classList.remove('active');
         slides[previousIndex].classList.add('exit-left');
 
         const incomingSlide = slides[currentIndex];
         incomingSlide.classList.add('active');
 
-        // Remove exit-left class after transition ends to keep the slide ready for next cycle
         setTimeout(() => {
             slides[previousIndex].classList.remove('exit-left');
             isAnimating = false;
@@ -509,7 +507,7 @@ loveStoryItems.forEach((item, idx) => {
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
     const sizeFactor = isMobile ? 1 : 1.7;
-    const petalCount = isMobile ? 15 : 20;   // drastically reduced
+    const petalCount = isMobile ? 15 : 20;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
         const petal = document.createElement('div');
@@ -547,7 +545,6 @@ loveStoryItems.forEach((item, idx) => {
 })();
 
 // ========== ATTIRE CARD ENTRANCE (fixed) ==========
-// ========== ATTIRE CARD ENTRANCE ==========
 (function() {
     const card = document.querySelector('.attire-card-c');
     if (!card) return;
@@ -573,6 +570,7 @@ loveStoryItems.forEach((item, idx) => {
         startAttireAnimation();
     }
 })();
+
 // ========== SAVE THE DATE SLIDE ANIMATIONS (fixed) ==========
 (function() {
     const photoRow = document.querySelector('.photo-row');
@@ -581,13 +579,11 @@ loveStoryItems.forEach((item, idx) => {
     const right = document.querySelector('.std-photo-right');
     if (!photoRow || !left || !mid || !right) return;
 
-    // Immediately set will-animate so the photos start hidden
     photoRow.classList.add('will-animate');
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Remove will-animate and add slide-in to trigger transition
                 photoRow.classList.remove('will-animate');
                 left.classList.add('slide-in');
                 mid.classList.add('slide-in');
