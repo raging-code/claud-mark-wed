@@ -90,11 +90,9 @@ if (audio) {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                // Success! Unmuted playback started automatically.
                 if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 if (muteBtn) muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }).catch(() => {
-                // Unmuted autoplay blocked. We'll wait for the first user interaction.
                 const playOnInteraction = () => {
                     audio.play().then(() => {
                         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -121,7 +119,7 @@ if (audio) {
     }, 2000);
 }
 
-// ========== GLOBAL LIGHTBOX (unchanged) ==========
+// ========== GLOBAL LIGHTBOX ==========
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -166,7 +164,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES (unchanged) ==========
+// ========== VIDEO FACADES ==========
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -193,7 +191,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 
-// ========== GALLERY BUILDER (now with eager loading) ==========
+// ========== GALLERY BUILDER ==========
 window._galleryImageCache = window._galleryImageCache || [];
 
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
@@ -263,7 +261,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.alt;
-        imgEl.loading = 'eager';   // <-- changed from 'lazy' to 'eager'
+        imgEl.loading = 'eager';
         imgEl.style.cursor = 'pointer';
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -280,14 +278,13 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             const thumbImg = document.createElement('img');
             thumbImg.src = imgData.src;
             thumbImg.alt = 'thumb ' + (index + 1);
-            thumbImg.loading = 'eager';   // eager thumbs too
+            thumbImg.loading = 'eager';
             thumbDiv.appendChild(thumbImg);
             thumbsTrack.appendChild(thumbDiv);
             thumbElements.push(thumbDiv);
         }
     });
 
-    // ... rest of gallery logic remains identical (no changes needed) ...
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
@@ -531,7 +528,6 @@ loveStoryItems.forEach((item, idx) => {
 
 // ========== SAKURA PETALS ==========
 (function() {
-    // Target the inner wrapper now, not the fixed container directly
     const petalContainer = document.querySelector('.sakura-petals .petal-inner');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
@@ -559,7 +555,6 @@ loveStoryItems.forEach((item, idx) => {
         petal.style.animation = `fall ${dur}s ${e} infinite`;
         petal.style.animationDelay = `${del}s`;
         petal.style.opacity = 0.3 + Math.random() * 0.5;
-        // will-change removed to prevent forced GPU promotion
         petalContainer.appendChild(petal);
     }
     if (!document.querySelector('#petal-keyframes')) {
@@ -569,7 +564,6 @@ loveStoryItems.forEach((item, idx) => {
         document.head.appendChild(style);
     }
     document.addEventListener('visibilitychange', () => {
-        // Toggle paused class on the outer fixed container, which will pause all inner petals
         const outer = document.querySelector('.sakura-petals');
         if (outer) outer.classList.toggle('paused', document.hidden);
     });

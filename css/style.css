@@ -672,7 +672,7 @@ h1, h2, h3, h4, h5, h6,
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     pointer-events: none; z-index: 10;
     background: transparent;
-    /* NEW: containment boundary breaks implicit compositing cascade */
+    /* containment boundary */
     contain: layout style paint;
 }
 
@@ -687,6 +687,11 @@ h1, h2, h3, h4, h5, h6,
 /* Pause petal animations when page hidden */
 .sakura-petals.paused .petal-inner div {
     animation-play-state: paused !important;
+}
+
+/* ========== CRITICAL FIX: isolate content stacking context ========== */
+#content-root {
+    isolation: isolate;
 }
 
 footer { background-color: #fce4e4; color: #9b6b6b; border-top: 1px solid #ffd9d9; position: relative; z-index: 20; }
