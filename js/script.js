@@ -187,7 +187,11 @@ document.addEventListener('keydown', (e) => {
 })();
 
 
-// ========== GALLERY BUILDER (now with data URI fallback) ==========
+// ========== GALLERY BUILDER (responsive srcset + forced reflow fix) ==========
+
+/**
+ * Tries to load an image and resolves with the loaded image if successful.
+ */
 function tryLoadImage(src) {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -245,7 +249,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                     src: img.src,
                     alt: `${prefix} ${i}`,
                     width: 800,
-                    height: 533,
+                    height: 533,       // 3:2 ratio; adjust if your photos have a different aspect ratio
                     img: img
                 });
                 consecutiveFailures = 0;
@@ -255,18 +259,17 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             i++;
         }
 
-        // Fallback: tiny transparent PNG (data URI – CSP safe)
+        // Fallback if no images found at all
         if (images.length === 0) {
-            const placeholderSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
             let fallback = new Image();
-            fallback.src = placeholderSrc;
+            fallback.src = 'https://picsum.photos/id/42/800/533';
             await new Promise((resolve) => { fallback.onload = resolve; });
-            images.push({ src: fallback.src, alt: 'No images', width: 800, height: 533, img: fallback });
+            images.push({ src: fallback.src, alt: 'Fallback', width: 800, height: 533, img: fallback });
         }
         return images;
     }
 
-    const imagesData = await loadImages();
+       const imagesData = await loadImages();
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
@@ -310,11 +313,13 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     });
 
+
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
 
+    // Thumbnail centering – now uses requestAnimationFrame to avoid forced reflow
     let rafId;
     function scheduleThumbUpdate() {
         cancelAnimationFrame(rafId);
@@ -345,7 +350,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
             thumbElements.forEach((thumb, i) => {
                 thumb.classList.toggle('active', i === currentIndex);
             });
-            scheduleThumbUpdate();
+            scheduleThumbUpdate();   // request on next frame
         }
     }
 
@@ -463,7 +468,7 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
 
     updateActiveState();
     startAutoAdvance();
-    window.addEventListener('resize', scheduleThumbUpdate);
+    window.addEventListener('resize', scheduleThumbUpdate);   // debounced via rAF
 }
 
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 11);
@@ -527,7 +532,7 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS ==========
+// ========== SAKURA PETALS (reduced count) ==========
 (function() {
     const petalContainer = document.querySelector('.sakura-petals .petal-inner');
     if (!petalContainer) return;
