@@ -137,18 +137,28 @@ if (audio) {
         }
     }, 2000);
 }
-
-function pauseAllYouTubeVideos() {
-    const youtubeIframes = document.querySelectorAll('iframe[src*="youtube.com"]');
-    youtubeIframes.forEach(iframe => {
-        if (iframe.contentWindow) {
-            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+function pauseAllYouTubeIframes() {
+    // Pause all YouTube embeds on the page
+    document.querySelectorAll('iframe').forEach(iframe => {
+        if (iframe.src && iframe.src.includes('youtube.com/embed/')) {
+            iframe.contentWindow?.postMessage(
+                '{"event":"command","func":"pauseVideo","args":""}',
+                'https://www.youtube.com'  // secure origin
+            );
         }
     });
 }
-// When background music is played (either by button or autoplay), pause any YouTube video
+
+function pauseBackgroundMusic() {
+    if (audio && !audio.paused) {
+        audio.pause();
+        if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+}
+
+// When background music starts, stop any YouTube video
 audio.addEventListener('play', () => {
-    pauseAllYouTubeVideos();
+    pauseAllYouTubeIframes();
 });
 
 // ---------- LIGHTBOX ----------
@@ -198,14 +208,15 @@ document.addEventListener('keydown', (e) => {
 
 // ---------- VIDEO FACADES ----------
 // ---------- VIDEO FACADES (pause previous on new play) ----------
+// ---------- VIDEO FACADES (only one player at a time) ----------
 (function() {
-    let activeYouTubeIframe = null;  // holds the iframe that is currently playing
+    let activeYouTubeIframe = null;
 
     function pauseActiveYouTubeVideo() {
         if (activeYouTubeIframe && activeYouTubeIframe.contentWindow) {
             activeYouTubeIframe.contentWindow.postMessage(
                 '{"event":"command","func":"pauseVideo","args":""}',
-                'https://www.youtube.com'  // secure, matches embed origin
+                'https://www.youtube.com'
             );
         }
     }
@@ -217,9 +228,15 @@ document.addEventListener('keydown', (e) => {
         if (!playBtn) return;
 
         playBtn.addEventListener('click', () => {
-            // Pause any currently playing YouTube video
-            pauseActiveYouTubeVideo();
+            // 1. Pause the background music
+            pauseBackgroundMusic();
 
+            // 2. Pause any previously playing YouTube video
+            if (activeYouTubeIframe) {
+                pauseActiveYouTubeVideo();
+            }
+
+            // 3. Create the new YouTube iframe
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
             iframe.style.top = '0';
@@ -233,11 +250,10 @@ document.addEventListener('keydown', (e) => {
             iframe.setAttribute('allowfullscreen', '');
             iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
 
-            // Clear the facade and insert the new iframe
             facade.innerHTML = '';
             facade.appendChild(iframe);
 
-            // Update the reference to the new iframe
+            // 4. Remember the new iframe as the active one
             activeYouTubeIframe = iframe;
         });
     });
