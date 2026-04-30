@@ -484,12 +484,6 @@ document.querySelectorAll('.new-love-story .item .photo img').forEach((img, idx)
         petal.style.opacity = 0.3 + Math.random() * 0.5;
         petalContainer.appendChild(petal);
     }
-    if (!document.querySelector('#petal-keyframes')) {
-        const style = document.createElement('style');
-        style.id = 'petal-keyframes';
-        style.textContent = `@keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(720deg); } }`;
-        document.head.appendChild(style);
-    }
     document.addEventListener('visibilitychange', () => {
         const outer = document.querySelector('.sakura-petals');
         if (outer) outer.classList.toggle('paused', document.hidden);

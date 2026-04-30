@@ -20,3 +20,7 @@ h1,h2,h3,h4,h5,h6,.main-title,.section-title,.slide-btn span,.btn-submit{font-fa
 .countdown-unit:first-child{border-left:none}
 .countdown-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:500;color:#fff0f1;display:block;line-height:1;min-width:2.2ch;display:inline-block}
 .countdown-lbl{font-family:'Jost',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:#bfb4a5;display:block;margin-top:0.1rem}
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(720deg); }
+}
