@@ -1,0 +1,22 @@
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;overflow-x:hidden;margin:0;padding:0;position:relative}
+body{font-family:'Lato',sans-serif;background-color:#ffb7c5;color:#31231a}
+h1,h2,h3,h4,h5,h6,.main-title,.section-title,.slide-btn span,.btn-submit{font-family:'EB Garamond',serif;font-weight:700}
+.top-anchor-nav{background:#31231a;padding:10px 16px;border-bottom:1px solid rgba(255,240,241,0.2);position:relative;z-index:30}
+.nav-links-container{display:flex;justify-content:center;flex-wrap:wrap;gap:48px;max-width:1200px;margin:0 auto}
+.anchor-link{font-family:'EB Garamond',serif;font-size:1rem;font-weight:500;color:#fff;text-decoration:none;letter-spacing:.5px;transition:all .2s ease;padding:4px 0;border-bottom:2px solid transparent}
+.anchor-link:hover{color:#ffb7c5;border-bottom-color:#ffb7c5}
+.hero-section{width:100%;margin-bottom:-8px;height:auto;position:relative;z-index:20}
+.hero-image-wrapper{width:100%;line-height:0}
+.hero-img{width:100%;height:auto;display:block}
+.sakura-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,transparent 60%,rgba(255,183,197,0.2) 100%);pointer-events:none}
+.wedding-banner{width:100%;line-height:0;position:relative;z-index:20;background:#fff0f1}
+.wedding-banner-img{width:100%;height:auto;display:block;object-fit:cover}
+.countdown-banner{width:100%;background:#31231a;border-top:1px solid rgba(255,240,241,0.1);border-bottom:1px solid rgba(255,240,241,0.1);position:relative;z-index:20}
+.countdown-inner{max-width:1200px;margin:0 auto;padding:0.5rem 1rem;display:flex;flex-direction:column;align-items:center;gap:0.2rem;text-align:center}
+.countdown-phrase{font-family:'Playfair Display',serif;font-style:italic;font-weight:300;font-size:0.9rem;color:rgba(255,240,241,0.85)}
+.countdown-units{display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:center}
+.countdown-unit{padding:0 0.6rem;text-align:center;border-left:1px solid rgba(255,240,241,0.1)}
+.countdown-unit:first-child{border-left:none}
+.countdown-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:500;color:#fff0f1;display:block;line-height:1;min-width:2.2ch;display:inline-block}
+.countdown-lbl{font-family:'Jost',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:#bfb4a5;display:block;margin-top:0.1rem}

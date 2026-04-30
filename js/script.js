@@ -1,3 +1,26 @@
+// ---------- COUNTDOWN TIMER ----------
+(function() {
+    const WEDDING = new Date(2026, 5, 24, 10, 30, 0);
+    const pad = n => String(n).padStart(2, '0');
+    function updateCountdown() {
+        const diff = WEDDING - new Date();
+        if (diff <= 0) {
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('mins').textContent = '00';
+            document.getElementById('secs').textContent = '00';
+            return;
+        }
+        document.getElementById('days').textContent  = pad(Math.floor(diff / 86400000));
+        document.getElementById('hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        document.getElementById('mins').textContent  = pad(Math.floor((diff % 3600000) / 60000));
+        document.getElementById('secs').textContent  = pad(Math.floor((diff % 60000) / 1000));
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+})();
+
+// ---------- AUDIO PLAYER ----------
 const audio = document.getElementById('themeAudio');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const muteBtn = document.getElementById('muteBtn');
@@ -115,14 +138,14 @@ if (audio) {
     }, 2000);
 }
 
-// ========== GLOBAL LIGHTBOX ==========
+// ---------- LIGHTBOX ----------
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
 
-function openLightbox(imagesArray, startIndex, captionsArray = []) {
+function openLightbox(imagesArray, startIndex) {
     currentLightboxImages = imagesArray;
     currentLightboxIndex = startIndex;
     updateLightbox();
@@ -160,7 +183,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevImage();
 });
 
-// ========== VIDEO FACADES ==========
+// ---------- VIDEO FACADES ----------
 (function() {
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
@@ -175,7 +198,7 @@ document.addEventListener('keydown', (e) => {
             iframe.style.width = '100%';
             iframe.style.height = '100%';
             iframe.style.border = 'none';
-            iframe.style.borderRadius = facade.parentElement.classList.contains('video-sakura-frame') ? '12px' : '0';
+            iframe.style.borderRadius = facade.classList.contains('vertical-facade') ? '12px' : '0';
             iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`;
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
             iframe.setAttribute('allowfullscreen', '');
@@ -186,21 +209,7 @@ document.addEventListener('keydown', (e) => {
     });
 })();
 
-
-// ========== GALLERY BUILDER (responsive srcset + forced reflow fix) ==========
-
-/**
- * Tries to load an image and resolves with the loaded image if successful.
- */
-function tryLoadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-    });
-}
-
+// ---------- GALLERIES (Proposal & Prenup) ----------
 async function createSequentialGallery(galleryId, basePath, prefix, startIndex = 1, maxAttempts = 20) {
     const stage = document.getElementById(galleryId + 'Stage');
     const prevBtn = document.getElementById(galleryId + 'PrevBtn');
@@ -214,62 +223,38 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         let i = startIndex;
         let consecutiveFailures = 0;
         const MAX_CONSECUTIVE_FAILURES = 3;
-
         while (i < startIndex + maxAttempts && consecutiveFailures < MAX_CONSECUTIVE_FAILURES) {
             const webpSrc = `${basePath}${prefix}${i}-800.webp`;
             const jpgSrc  = `${basePath}${prefix}${i}-800.jpg`;
-
             let img = new Image();
             let loaded = false;
-
-            // Try WebP first
             try {
-                await new Promise((resolve, reject) => {
-                    img.onload = resolve;
-                    img.onerror = reject;
-                    img.src = webpSrc;
-                });
+                await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; img.src = webpSrc; });
                 loaded = true;
             } catch (e) {
-                // Try JPEG fallback
                 try {
-                    await new Promise((resolve, reject) => {
-                        img.onload = resolve;
-                        img.onerror = reject;
-                        img.src = jpgSrc;
-                    });
+                    await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; img.src = jpgSrc; });
                     loaded = true;
-                } catch (e2) {
-                    // both failed
-                }
+                } catch (e2) {}
             }
-
             if (loaded) {
-                images.push({
-                    src: img.src,
-                    alt: `${prefix} ${i}`,
-                    width: 800,
-                    height: 533,       // 3:2 ratio; adjust if your photos have a different aspect ratio
-                    img: img
-                });
+                images.push({ src: img.src, alt: `${prefix} ${i}`, width: 800, height: 533, img: img });
                 consecutiveFailures = 0;
             } else {
                 consecutiveFailures++;
             }
             i++;
         }
-
-        // Fallback if no images found at all
         if (images.length === 0) {
             let fallback = new Image();
             fallback.src = 'https://picsum.photos/id/42/800/533';
-            await new Promise((resolve) => { fallback.onload = resolve; });
+            await new Promise(resolve => { fallback.onload = resolve; });
             images.push({ src: fallback.src, alt: 'Fallback', width: 800, height: 533, img: fallback });
         }
         return images;
     }
 
-       const imagesData = await loadImages();
+    const imagesData = await loadImages();
     stage.querySelectorAll('.slide').forEach(el => el.remove());
     if (thumbsTrack) thumbsTrack.innerHTML = '';
 
@@ -289,12 +274,10 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         imgEl.width = imgData.width;
         imgEl.height = imgData.height;
         imgEl.style.cursor = 'pointer';
-
         imgEl.addEventListener('click', (e) => {
             e.stopPropagation();
             openLightbox(fullImageSrcs, index);
         });
-
         slideDiv.appendChild(imgEl);
         stage.insertBefore(slideDiv, prevBtn);
         slides.push(slideDiv);
@@ -313,18 +296,10 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
         }
     });
 
-
     let currentIndex = 0;
     let isAnimating = false;
     let autoTimer = null;
     const AUTO_ADVANCE_DELAY = 5500;
-
-    // Thumbnail centering – now uses requestAnimationFrame to avoid forced reflow
-    let rafId;
-    function scheduleThumbUpdate() {
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => updateThumbPosition());
-    }
 
     function updateThumbPosition() {
         if (!thumbsTrack || !thumbsRow || thumbElements.length === 0) return;
@@ -347,35 +322,24 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
     function updateActiveState() {
         slides.forEach((s, i) => s.classList.toggle('active', i === currentIndex));
         if (thumbsTrack) {
-            thumbElements.forEach((thumb, i) => {
-                thumb.classList.toggle('active', i === currentIndex);
-            });
-            scheduleThumbUpdate();   // request on next frame
+            thumbElements.forEach((thumb, i) => thumb.classList.toggle('active', i === currentIndex));
+            requestAnimationFrame(updateThumbPosition);
         }
     }
 
-    function navigateTo(targetIndex, direction) {
+    function navigateTo(targetIndex) {
         const normalizedIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
         if (isAnimating || normalizedIndex === currentIndex) return;
         isAnimating = true;
-        const previousIndex = currentIndex;
+        slides[currentIndex].classList.remove('active');
         currentIndex = normalizedIndex;
-
-        slides[previousIndex].classList.remove('active');
-        slides[previousIndex].classList.add('exit-left');
-
-        const incomingSlide = slides[currentIndex];
-        incomingSlide.classList.add('active');
-
-        setTimeout(() => {
-            slides[previousIndex].classList.remove('exit-left');
-            isAnimating = false;
-        }, 800);
+        slides[currentIndex].classList.add('active');
         updateActiveState();
+        setTimeout(() => { isAnimating = false; }, 600);
     }
 
-    function goToPrevious() { navigateTo(currentIndex - 1, -1); }
-    function goToNext() { navigateTo(currentIndex + 1, 1); }
+    function goToPrevious() { navigateTo(currentIndex - 1); }
+    function goToNext() { navigateTo(currentIndex + 1); }
     function startAutoAdvance() { stopAutoAdvance(); autoTimer = setInterval(goToNext, AUTO_ADVANCE_DELAY); }
     function stopAutoAdvance() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
 
@@ -389,107 +353,64 @@ async function createSequentialGallery(galleryId, basePath, prefix, startIndex =
                 const idx = parseInt(thumb.dataset.index, 10);
                 if (!isNaN(idx) && idx !== currentIndex) {
                     stopAutoAdvance();
-                    const dir = idx > currentIndex ? 1 : -1;
-                    navigateTo(idx, dir);
+                    navigateTo(idx);
                     startAutoAdvance();
                 }
             }
         });
     }
 
+    // Keyboard and touch/drag handlers
     document.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft') { e.preventDefault(); stopAutoAdvance(); goToPrevious(); startAutoAdvance(); }
         if (e.key === 'ArrowRight') { e.preventDefault(); stopAutoAdvance(); goToNext(); startAutoAdvance(); }
     });
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchActive = false;
-
-    stage.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchActive = true;
-        stopAutoAdvance();
-    }, { passive: true });
-
-    stage.addEventListener('touchmove', (e) => {
-        if (!touchActive) return;
-        const deltaX = e.touches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > 20) {
-            e.preventDefault();
-        }
-    }, { passive: false });
-
-    stage.addEventListener('touchend', (e) => {
+    let touchStartX = 0, touchActive = false;
+    stage.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchActive = true; stopAutoAdvance(); }, { passive: true });
+    stage.addEventListener('touchmove', e => { if (touchActive && Math.abs(e.touches[0].clientX - touchStartX) > 20) e.preventDefault(); }, { passive: false });
+    stage.addEventListener('touchend', e => {
         if (!touchActive) return;
         touchActive = false;
-        touchEndX = e.changedTouches[0].clientX;
-        const deltaX = touchEndX - touchStartX;
-        if (Math.abs(deltaX) > 40) {
-            if (deltaX < 0) goToNext();
-            else goToPrevious();
-        }
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(deltaX) > 40) deltaX < 0 ? goToNext() : goToPrevious();
         clearTimeout(stage._resumeTimeout);
         stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
     });
 
-    stage.addEventListener('touchcancel', () => {
-        touchActive = false;
-        clearTimeout(stage._resumeTimeout);
-        stage._resumeTimeout = setTimeout(startAutoAdvance, 4000);
-    });
-
-    let mouseStartX = 0;
-    let isDragging = false;
-
-    stage.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.nav-arrow')) return;
-        mouseStartX = e.clientX;
-        isDragging = true;
-        stopAutoAdvance();
-    });
-
-    window.addEventListener('mouseup', (e) => {
+    let mouseStartX = 0, isDragging = false;
+    stage.addEventListener('mousedown', e => { if (e.target.closest('.nav-arrow')) return; mouseStartX = e.clientX; isDragging = true; stopAutoAdvance(); });
+    window.addEventListener('mouseup', e => {
         if (!isDragging) return;
         isDragging = false;
         const deltaX = e.clientX - mouseStartX;
-        if (Math.abs(deltaX) > 50) {
-            if (deltaX < 0) goToNext();
-            else goToPrevious();
-        }
+        if (Math.abs(deltaX) > 50) deltaX < 0 ? goToNext() : goToPrevious();
         startAutoAdvance();
     });
-
-    stage.addEventListener('mouseleave', () => {
-        if (isDragging) { isDragging = false; startAutoAdvance(); }
-    });
+    stage.addEventListener('mouseleave', () => { if (isDragging) { isDragging = false; startAutoAdvance(); } });
     stage.addEventListener('mouseenter', stopAutoAdvance);
     stage.addEventListener('mouseleave', () => { if (!isDragging) startAutoAdvance(); });
 
     updateActiveState();
     startAutoAdvance();
-    window.addEventListener('resize', scheduleThumbUpdate);   // debounced via rAF
+    window.addEventListener('resize', () => requestAnimationFrame(updateThumbPosition));
 }
 
 createSequentialGallery('proposal', 'assets/images/proposal/', 'pro', 1, 11);
 createSequentialGallery('prenup', 'assets/images/prenup/', 'pren', 1, 20);
 
-// ========== LOVE STORY LIGHTBOX ==========
+// ---------- LOVE STORY LIGHTBOX ----------
 const loveStoryImages = [];
-const loveStoryItems = document.querySelectorAll('.new-love-story .item');
-loveStoryItems.forEach((item, idx) => {
-    const img = item.querySelector('.photo img');
-    if (img) {
-        loveStoryImages.push(img.src);
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openLightbox(loveStoryImages, idx);
-        });
-    }
+document.querySelectorAll('.new-love-story .item .photo img').forEach((img, idx) => {
+    loveStoryImages.push(img.src);
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openLightbox(loveStoryImages, idx);
+    });
 });
 
-// ========== RSVP FORM ==========
+// ---------- RSVP FORM ----------
 (function() {
     const rsvpForm = document.getElementById('rsvpForm');
     const submitBtn = document.getElementById('rsvpSubmitBtn');
@@ -499,13 +420,13 @@ loveStoryItems.forEach((item, idx) => {
             e.preventDefault();
             const nameInput = document.getElementById('name');
             const emailInput = document.getElementById('email');
-            const attendingSelect = document.getElementById('attending');
+            const attendingHidden = document.getElementById('attending');
             if (msgDiv) msgDiv.innerHTML = '';
             let error = '';
             if (!nameInput.value.trim()) error = 'Please enter your name.';
             else if (!emailInput.value.trim()) error = 'Please enter your email address.';
             else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) error = 'Please enter a valid email address.';
-            else if (!attendingSelect.value) error = 'Please select whether you are attending.';
+            else if (!attendingHidden.value) error = 'Please select whether you are attending.';
             if (error) { msgDiv.innerHTML = `<div class="alert alert-danger">${error}</div>`; return; }
             const originalBtnText = submitBtn.textContent;
             submitBtn.disabled = true;
@@ -532,12 +453,12 @@ loveStoryItems.forEach((item, idx) => {
     }
 })();
 
-// ========== SAKURA PETALS (reduced count) ==========
+// ---------- SAKURA PETALS ----------
 (function() {
     const petalContainer = document.querySelector('.sakura-petals .petal-inner');
     if (!petalContainer) return;
     const isMobile = window.innerWidth <= 768;
-    const sizeFactor = isMobile ? 1 : 1.7;
+    const sizeFactor = isMobile ? 0.8 : 1.2;
     const petalCount = isMobile ? 15 : 20;
     const petalImages = ['assets/images/sakura-petal.webp','assets/images/sakura-petal1.webp','assets/images/sakura-petal2.webp'];
     for (let i = 0; i < petalCount; i++) {
@@ -575,183 +496,15 @@ loveStoryItems.forEach((item, idx) => {
     });
 })();
 
-// ========== ATTIRE CARD ENTRANCE (fixed) ==========
-(function() {
-    const card = document.querySelector('.attire-card-c');
-    if (!card) return;
-    card.classList.add('will-animate');
+// ---------- FAQ TOGGLE (delegated) ----------
+document.getElementById('faq3-list')?.addEventListener('click', (e) => {
+    const toggle = e.target.closest('.faq-toggle');
+    if (!toggle) return;
+    const row = toggle.closest('.faq-row');
+    row.classList.toggle('active');
+});
 
-    function startAttireAnimation() {
-        if (!card.classList.contains('will-animate')) return;
-        card.classList.remove('will-animate');
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                startAttireAnimation();
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
-
-    observer.observe(card);
-
-    if (card.getBoundingClientRect().top < window.innerHeight - 80) {
-        startAttireAnimation();
-    }
-})();
-
-// ========== SAVE THE DATE SLIDE ANIMATIONS (fixed) ==========
-(function() {
-    const photoRow = document.querySelector('.photo-row');
-    const left = document.querySelector('.std-photo-left');
-    const mid = document.querySelector('.std-photo-mid');
-    const right = document.querySelector('.std-photo-right');
-    if (!photoRow || !left || !mid || !right) return;
-
-    photoRow.classList.add('will-animate');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                photoRow.classList.remove('will-animate');
-                left.classList.add('slide-in');
-                mid.classList.add('slide-in');
-                right.classList.add('slide-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-
-    observer.observe(photoRow);
-})();
-
-// ========== NEW SCROLL ANIMATIONS ==========
-// Love story items
-(function() {
-    const items = document.querySelectorAll('.new-love-story .story-col .item');
-    if (!items.length) return;
-    items.forEach((item, index) => {
-        item.classList.add('love-anim-item');
-        if ((index + 1) % 2 === 1) {
-            item.classList.add('love-from-left');
-        } else {
-            item.classList.add('love-from-right');
-        }
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('love-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.2 });
-
-    items.forEach(item => observer.observe(item));
-})();
-
-// Venue heading and rows
-(function() {
-    const venueSection = document.querySelector('.venue-section');
-    if (!venueSection) return;
-
-    const heading = venueSection.querySelector('.venue-main-heading');
-    if (heading) {
-        heading.classList.add('venue-anim-heading');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('venue-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-        observer.observe(heading);
-    }
-
-    const rows = venueSection.querySelectorAll('.venue-row');
-    rows.forEach((row, index) => {
-        row.classList.add('venue-anim-row');
-        if (index === 0) {
-            row.classList.add('venue-from-left');
-        } else {
-            row.classList.add('venue-from-right');
-        }
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('venue-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-        observer.observe(row);
-    });
-})();
-
-// Share text animations
-(function() {
-    const shareBlock = document.querySelector('.share-tagline');
-    if (!shareBlock) return;
-
-    const capture = shareBlock.querySelector('.tagline-share');
-    const dontForget = shareBlock.querySelectorAll('p')[0];
-    const hashtag = shareBlock.querySelector('.hashtag-eb-share');
-    const gotPerfect = shareBlock.querySelectorAll('p')[1];
-    const uploadBtn = document.querySelector('.btn-share-placeholder');
-
-    function animateElement(el, animClass) {
-        if (!el) return;
-        el.classList.add('share-anim', animClass);
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('share-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-        observer.observe(el);
-    }
-
-    if (capture) animateElement(capture, 'share-from-left');
-    if (dontForget) animateElement(dontForget, 'share-from-left');
-    if (hashtag) animateElement(hashtag, 'share-fade');
-    if (gotPerfect) animateElement(gotPerfect, 'share-from-right');
-    if (uploadBtn) animateElement(uploadBtn, 'share-from-right');
-})();
-
-// FAQ staggered entrance
-(function() {
-    const faqBox = document.querySelector('.faq-boxed');
-    if (!faqBox) return;
-
-    const faqRows = faqBox.querySelectorAll('.faq-row');
-    if (!faqRows.length) return;
-
-    faqRows.forEach((row, index) => {
-        row.classList.add('faq-anim-row');
-        row.style.transitionDelay = `${0.1 * (index + 1)}s`;
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.querySelectorAll('.faq-anim-row').forEach(row => {
-                    row.classList.add('faq-visible');
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.15 });
-
-    observer.observe(faqBox);
-})();
-
-// Custom dropdown logic
+// ---------- CUSTOM DROPDOWN ----------
 (function () {
     const dropdown = document.getElementById('attendingDropdown');
     if (!dropdown) return;
@@ -773,16 +526,107 @@ loveStoryItems.forEach((item, idx) => {
         });
     });
     document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            dropdown.classList.remove('open');
-        }
+        if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
     });
 })();
 
-// ========== SHARE PHOTO PLACEHOLDER ==========
-const sharePhotoBtn = document.getElementById('sharePhotoPlaceholderBtn');
-if (sharePhotoBtn) {
-    sharePhotoBtn.addEventListener('click', () => {
-        console.log('Share photo button clicked - ready for link integration');
+// ---------- SHARE PHOTO BTN ----------
+document.getElementById('sharePhotoPlaceholderBtn')?.addEventListener('click', () => {
+    console.log('Share photo button clicked');
+});
+
+// ---------- SCROLL ANIMATIONS ----------
+// Love story items
+(function() {
+    const items = document.querySelectorAll('.new-love-story .story-col .item');
+    if (!items.length) return;
+    items.forEach((item, index) => {
+        item.classList.add('love-anim-item');
+        item.classList.add((index % 2 === 0) ? 'love-from-left' : 'love-from-right');
     });
-}
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('love-visible'); observer.unobserve(entry.target); } });
+    }, { threshold: 0.2 });
+    items.forEach(item => observer.observe(item));
+})();
+
+// Venue section
+(function() {
+    const venueSection = document.querySelector('.venue-section');
+    if (!venueSection) return;
+    const heading = venueSection.querySelector('.venue-main-heading');
+    if (heading) {
+        heading.classList.add('venue-anim-heading');
+        new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('venue-visible'); } });
+        }, { threshold: 0.3 }).observe(heading);
+    }
+    const rows = venueSection.querySelectorAll('.venue-row');
+    rows.forEach((row, index) => {
+        row.classList.add('venue-anim-row');
+        row.classList.add(index === 0 ? 'venue-from-left' : 'venue-from-right');
+        new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('venue-visible'); } });
+        }, { threshold: 0.2 }).observe(row);
+    });
+})();
+
+// Share tagline animations
+(function() {
+    const shareBlock = document.querySelector('.share-tagline');
+    if (!shareBlock) return;
+    const elements = [
+        { el: shareBlock.querySelector('.capture-text'), cls: 'share-from-left' },
+        { el: shareBlock.querySelector('.dont-forget'), cls: 'share-from-left' },
+        { el: shareBlock.querySelector('.hashtag-eb-share'), cls: 'share-fade' },
+        { el: shareBlock.querySelector('.got-perfect'), cls: 'share-from-right' },
+        { el: document.querySelector('.btn-share-placeholder'), cls: 'share-from-right' }
+    ];
+    elements.forEach(({el, cls}) => {
+        if (!el) return;
+        el.classList.add('share-anim', cls);
+        new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('share-visible'); } });
+        }, { threshold: 0.2 }).observe(el);
+    });
+})();
+
+// FAQ staggered entrance
+(function() {
+    const faqBox = document.querySelector('.faq-boxed');
+    if (!faqBox) return;
+    const faqRows = faqBox.querySelectorAll('.faq-row');
+    faqRows.forEach((row, index) => {
+        row.classList.add('faq-anim-row');
+        row.style.transitionDelay = `${0.1 * (index + 1)}s`;
+    });
+    new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.faq-anim-row').forEach(row => row.classList.add('faq-visible'));
+            }
+        });
+    }, { threshold: 0.15 }).observe(faqBox);
+})();
+
+// Attire card entrance
+(function() {
+    const card = document.querySelector('.attire-card-c');
+    if (!card) return;
+    card.classList.add('will-animate');
+    function start() { card.classList.remove('will-animate'); }
+    new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { start(); } });
+    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }).observe(card);
+    if (card.getBoundingClientRect().top < window.innerHeight - 80) start();
+})();
+
+// Save the date slide animations
+(function() {
+    const photoRow = document.querySelector('.photo-row');
+    if (!photoRow) return;
+    photoRow.classList.add('will-animate');
+    new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { photoRow.classList.remove('will-animate'); } });
+    }, { threshold: 0.2 }).observe(photoRow);
+})();

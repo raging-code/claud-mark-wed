@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Claudine and Mark Wedding — Osaka, Japan proposal, prenup gallery, and wedding details. RSVP by June 1st.">
-    <title>Claudine and Mark Wedding</title>
-
-    <!-- Open Graph (unchanged) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src 'self' https://www.youtube.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' https://uziyzioqazqznjsvhxky.supabase.co https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https://i.ytimg.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta property="og:title" content="Claudine and Mark Wedding">
     <meta property="og:description" content="OSAKA, JAPAN — APRIL 9, 2025 · The Surprise Proposal">
     <meta property="og:image" content="https://claudineandmarkwedding2026.pages.dev/assets/images/thumbnail.jpeg">
@@ -14,21 +9,25 @@
     <meta property="og:image:height" content="1080">
     <meta property="og:url" content="https://claudineandmarkwedding2026.pages.dev">
     <meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Claudine and Mark Wedding — Osaka, Japan proposal, prenup gallery, and wedding details. RSVP by June 1st.">
+    <title>Claudine and Mark Wedding</title>
 
-    <!-- Preconnects -->
+    <!-- Critical CSS as external file (no 'unsafe-inline') -->
+    <link rel="stylesheet" href="css/critical.css">
+
+    <!-- Scroll restoration script (external, loaded early) -->
+    <script src="js/scroll-restore.js"></script>
+
+    <!-- Preconnect only for actually used origins -->
     <link rel="preconnect" href="https://i.ytimg.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
-    <!-- Preload hero (LCP) -->
+    <!-- Preload hero image (LCP) with high priority -->
     <link rel="preload" as="image" href="assets/images/hero-couple-800.webp" fetchpriority="high">
-
-    <!-- Critical CSS (external, no 'unsafe-inline') -->
-    <link rel="stylesheet" href="css/critical.css">
-
-    <!-- Scroll restore (external, early) -->
-    <script src="js/scroll-restore.js"></script>
 
     <!-- Deferred non‑critical CSS -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -37,19 +36,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
-    <!-- Main stylesheet (async) -->
+    <!-- Main stylesheet now asynchronous -->
     <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="css/style.css"></noscript>
 </head>
 <body>
     <main>
-        <!-- Sakura petals -->
+        <!-- The outer fixed container with containment boundary -->
         <div class="sakura-petals">
             <div class="petal-inner"></div>
         </div>
 
         <div id="content-root">
-            <!-- Nav -->
             <nav class="top-anchor-nav">
                 <div class="nav-links-container">
                     <a href="#prenup-gallery-section" class="anchor-link">Prenup Gallery</a>
@@ -58,22 +56,16 @@
                     <a href="#rsvp-section" class="anchor-link">RSVP</a>
                 </div>
             </nav>
-
-            <!-- Hero -->
             <section class="hero-section">
                 <div class="hero-image-wrapper">
-                    <img src="assets/images/hero-couple-1201.webp" alt="Bride and Groom" class="hero-img" width="1201" height="800" decoding="async" loading="eager" fetchpriority="high">
+                    <img src="assets/images/hero-couple-800.webp" alt="Bride and Groom" class="hero-img" width="800" height="533" decoding="async" loading="eager" fetchpriority="high">
                     <div class="sakura-overlay"></div>
                 </div>
             </section>
-
-            <!-- Banner -->
             <div class="wedding-banner">
                 <img src="assets/images/header-banner.webp" alt="Wedding Banner" class="wedding-banner-img" width="1080" height="239" loading="eager"
                      srcset="assets/images/header-banner-540.webp 540w, assets/images/header-banner.webp 1080w" sizes="100vw">
             </div>
-
-            <!-- Countdown -->
             <div class="countdown-banner">
                 <div class="countdown-inner">
                     <span class="countdown-phrase">The beginning of forever starts in...</span>
@@ -85,8 +77,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Audio player -->
             <div class="container mt-2 mb-3">
                 <div class="audio-card shadow-sm rounded-3 mx-auto">
                     <div class="audio-controls d-flex gap-2">
@@ -105,22 +95,18 @@
                     <audio id="themeAudio" src="assets/audio/theme-song.mp3" preload="metadata"></audio>
                 </div>
             </div>
-
-            <!-- Save the Date -->
             <section class="std-section">
                 <div class="text-center mb-2">
                     <h3 class="save-the-date-heading">SAVE THE DATE!</h3>
                 </div>
                 <div class="photo-row-wrapper">
                     <div class="d-flex flex-row flex-nowrap gap-2 align-items-end justify-content-center w-100 photo-row">
-                        <div class="photo-col std-photo-left"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/06.webp" alt="Save the date left" width="150" height="225" loading="eager"></div></div>
-                        <div class="photo-col photo-col--mid std-photo-mid"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/25.webp" alt="Save the date center" width="220" height="330" loading="eager"></div></div>
-                        <div class="photo-col std-photo-right"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/26.webp" alt="Save the date right" width="150" height="225" loading="eager"></div></div>
+                        <div class="photo-col std-photo-left"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/06.webp" alt="Save the date left" width="150" height="225" loading="eager" /></div></div>
+                        <div class="photo-col photo-col--mid std-photo-mid"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/25.webp" alt="Save the date center" width="220" height="330" loading="eager" /></div></div>
+                        <div class="photo-col std-photo-right"><div class="photo-wrap ratio ratio-photo"><img src="assets/images/26.webp" alt="Save the date right" width="150" height="225" loading="eager" /></div></div>
                     </div>
                 </div>
             </section>
-
-            <!-- Proposal gallery -->
             <section class="proposal-gallery-section py-2" id="proposal-gallery-section">
                 <div class="container">
                     <div class="gallery-card">
@@ -142,8 +128,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Vertical video -->
             <section class="video-section py-3">
                 <div class="container text-center">
                     <div class="video-frame-wrapper mx-auto">
@@ -158,26 +142,26 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Love Story -->
             <section class="new-love-story">
                 <div class="love-story-bg"></div>
                 <header class="love-story-header"><h1 class="love-story-main-title">Our Love Story<br></h1></header>
                 <div class="love-story-container-custom">
                     <div class="story-row">
-                        <!-- All love story items exactly as before, but removed onclick/onerror, now handled by JS -->
                         <div class="story-col odd"><div class="item" data-img="assets/images/lovestory.webp" data-caption="The Beginning — Year 2011"><div class="photo"><img src="assets/images/lovestory-480.webp" alt="Love story 1" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2011</span></div><p class="body">One photo, two strangers… with no idea that our story had just begun.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1-480.webp" alt="Love story 2" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
-                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2-480.webp" alt="Love story 3" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3-480.webp" alt="Love story 4" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
-                        <div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4-480.webp" alt="Love story 5" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
-                        <div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5-480.webp" alt="Love story 6" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory1.webp" data-caption="Two Lovebirds — Year 2014"><div class="photo"><img src="assets/images/lovestory1-480.webp" alt="Love story 2" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2014</span></div><p class="body">Same school, sharing meals and laughter during our break times—slowly becoming each other’s constant.</p></div></div></div>
+
+<div class="story-col odd"><div class="item" data-img="assets/images/lovestory2.webp" data-caption="Our Sports — Year 2015"><div class="photo"><img src="assets/images/lovestory2-480.webp" alt="Love story 3" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2015</span></div><p class="body">Our 3rd year as a couple. Supporting her in her first UAAP season.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory3.webp" data-caption="Our Life — Years 2018 & 2022"><div class="photo"><img src="assets/images/lovestory3-480.webp" alt="Love story 4" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2018 & 2022</span></div><p class="body">She earned her degree, he took his oath, and together, we are building our dreams.</p></div></div></div>
+
+<div class="story-col odd"><div class="item" data-img="assets/images/lovestory4.webp" data-caption="Under the Sakura — Year 2025"><div class="photo"><img src="assets/images/lovestory4-480.webp" alt="Love story 5" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2025</span></div><p class="body">The day she said “Yes”.</p></div></div></div>
+
+<div class="story-col even"><div class="item" data-img="assets/images/lovestory5.webp" data-caption="Beginning of Forever — Year 2026"><div class="photo"><img src="assets/images/lovestory5-480.webp" alt="Love story 6" width="480" height="480" loading="lazy"></div><div class="text"><div class="meta"><span class="date">Year 2026</span></div><p class="body">Our prenup and the year we had been preparing for.</p></div></div></div>
                     </div>
                 </div>
                 <footer class="love-story-footer-rule"><div class="rule"><span></span><span></span></div></footer>
             </section>
-
-            <!-- Prenup Gallery -->
             <section class="prenup-gallery-section py-2" id="prenup-gallery-section">
                 <div class="container">
                     <div class="gallery-card">
@@ -197,13 +181,13 @@
                                 <button class="nav-arrow prev" id="prenupPrevBtn" aria-label="Previous slide"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
                                 <button class="nav-arrow next" id="prenupNextBtn" aria-label="Next slide"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></button>
                             </div>
-                            <div class="thumbs-row" id="prenupThumbsRow"><div class="thumbs-track" id="prenupThumbsTrack"></div></div>
+                            <div class="thumbs-row" id="prenupThumbsRow">
+                                <div class="thumbs-track" id="prenupThumbsTrack"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <!-- Full‑width prenup video -->
             <section class="prenup-fullwidth-video">
                 <div class="prenup-video-container">
                     <div class="video-ratio-18-9">
@@ -216,8 +200,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Venue -->
             <div class="venue-section" id="details-section">
                 <div class="venue-container">
                     <div class="venue-header-block"><h2 class="venue-main-heading"><em>The Venue</em></h2></div>
@@ -225,8 +207,6 @@
                     <div class="venue-row"><div class="row align-items-center"><div class="col-8"><p class="venue-label">Reception</p><h3 class="venue-place">City Garden Grand Hotel Makati</h3><p class="venue-address-secondary">Terrace 33, 8008 Makati Ave, Kalayaan Ave, Makati City</p><p class="venue-time">4:30pm-8:00pm</p></div><div class="col-4 text-end"><a href="https://maps.google.com/?q=City+Garden+Grand+Hotel,+8008+Makati+Ave,+Makati+City" target="_blank" class="venue-map-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Maps</a></div></div></div>
                 </div>
             </div>
-
-            <!-- Attire / Dress Code -->
             <section class="attire-guide-section py-2">
                 <div class="container">
                     <div class="attire-card-c">
@@ -234,7 +214,6 @@
                             <div class="attire-c-inner">
                                 <div class="attire-photo" id="attirePhotoContainer">
                                     <img src="assets/images/dresscode-800.webp" alt="Dress Code" class="attire-img" width="800" height="533" loading="lazy">
-                                    <!-- Fallback placeholder (hidden by class d-none) -->
                                     <div class="photo-placeholder d-none">
                                         <svg width="55" height="55" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#bba898" stroke-width="1.2" fill="none"/><circle cx="8.5" cy="9.5" r="1.5" stroke="#bba898" stroke-width="1.2"/><path d="M22 14L17 10L9 16L5 13L2 15" stroke="#bba898" stroke-width="1.2"/></svg>
                                         <span>dresscode.webp</span>
@@ -256,13 +235,10 @@
                     </div>
                 </div>
             </section>
-
-            <!-- FAQ -->
             <section class="faq-boxed">
                 <div class="box-wrap">
                     <div class="header-wrap"><h2 class="main-title">What You Need To Know</h2></div>
                     <div id="faq3-list">
-                        <!-- No onclick; JS delegation handles toggling -->
                         <div class="faq-row"><div class="faq-toggle"><span>Parking – Where can I park my car?</span><div class="toggle-icon">+</div></div><div class="faq-answer">Valet parking is available—please inform the couple of your plate number. If the valet is full, paid parking is available beside the hotel.</div></div>
                         <div class="faq-row"><div class="faq-toggle"><span>Can I bring a guest?</span><div class="toggle-icon">+</div></div><div class="faq-answer">We would love to celebrate with everyone, but due to limited capacity, we can only accommodate guests invited by the couple and listed on the invitation. We truly appreciate your understanding.</div></div>
                         <div class="faq-row"><div class="faq-toggle"><span>Is an RSVP required?</span><div class="toggle-icon">+</div></div><div class="faq-answer">Yes, we kindly ask each guest to submit their own RSVP. If there are any changes, please let the couple know as soon as possible.</div></div>
@@ -271,8 +247,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- RSVP -->
             <section class="rsvp-section py-3" id="rsvp-section">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -307,12 +281,11 @@
                     </div>
                 </div>
             </section>
-
             <footer class="text-center py-3 mt-3"></footer>
         </div>
     </main>
 
-    <!-- Lightbox -->
+    <!-- Lightbox outside -->
     <div id="globalLightbox" class="love-lightbox">
         <span class="lightbox-close">&times;</span>
         <span class="lightbox-prev"><i class="fas fa-chevron-left"></i></span>
@@ -321,9 +294,46 @@
         <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS now deferred -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer></script>
-    <!-- Main script (all interactivity, countdown, etc.) -->
     <script src="js/script.js" defer></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
