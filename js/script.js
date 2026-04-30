@@ -197,18 +197,17 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------- VIDEO FACADES ----------
+// ---------- VIDEO FACADES (pause previous on new play) ----------
 (function() {
-    // Helper to pause any YouTube iframe
-    function pauseAllYouTubeIframes() {
-        document.querySelectorAll('iframe').forEach(iframe => {
-            // Only target YouTube iframes
-            if (iframe.src && iframe.src.includes('youtube.com/embed/')) {
-                iframe.contentWindow.postMessage(
-                    '{"event":"command","func":"pauseVideo","args":""}',
-                    'https://www.youtube.com'
-                );
-            }
-        });
+    let activeYouTubeIframe = null;  // holds the iframe that is currently playing
+
+    function pauseActiveYouTubeVideo() {
+        if (activeYouTubeIframe && activeYouTubeIframe.contentWindow) {
+            activeYouTubeIframe.contentWindow.postMessage(
+                '{"event":"command","func":"pauseVideo","args":""}',
+                'https://www.youtube.com'  // secure, matches embed origin
+            );
+        }
     }
 
     document.querySelectorAll('.video-facade').forEach(facade => {
@@ -219,7 +218,7 @@ document.addEventListener('keydown', (e) => {
 
         playBtn.addEventListener('click', () => {
             // Pause any currently playing YouTube video
-            pauseAllYouTubeIframes();
+            pauseActiveYouTubeVideo();
 
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
@@ -233,8 +232,13 @@ document.addEventListener('keydown', (e) => {
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
             iframe.setAttribute('allowfullscreen', '');
             iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+
+            // Clear the facade and insert the new iframe
             facade.innerHTML = '';
             facade.appendChild(iframe);
+
+            // Update the reference to the new iframe
+            activeYouTubeIframe = iframe;
         });
     });
 })();
