@@ -198,19 +198,29 @@ document.addEventListener('keydown', (e) => {
 
 // ---------- VIDEO FACADES ----------
 (function() {
+    // Helper to pause any YouTube iframe
+    function pauseAllYouTubeIframes() {
+        document.querySelectorAll('iframe').forEach(iframe => {
+            // Only target YouTube iframes
+            if (iframe.src && iframe.src.includes('youtube.com/embed/')) {
+                iframe.contentWindow.postMessage(
+                    '{"event":"command","func":"pauseVideo","args":""}',
+                    'https://www.youtube.com'
+                );
+            }
+        });
+    }
+
     document.querySelectorAll('.video-facade').forEach(facade => {
         const videoId = facade.dataset.videoId;
         if (!videoId) return;
         const playBtn = facade.querySelector('.video-play-btn');
         if (!playBtn) return;
-        
+
         playBtn.addEventListener('click', () => {
-            // Pause background music BEFORE video starts
-            if (audio && !audio.paused) {
-                audio.pause();
-                if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            }
-            
+            // Pause any currently playing YouTube video
+            pauseAllYouTubeIframes();
+
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
             iframe.style.top = '0';
@@ -219,8 +229,7 @@ document.addEventListener('keydown', (e) => {
             iframe.style.height = '100%';
             iframe.style.border = 'none';
             iframe.style.borderRadius = facade.classList.contains('vertical-facade') ? '12px' : '0';
-            // IMPORTANT: enable js api and add modest branding
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&modestbranding=1&rel=0&showinfo=0`;
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`;
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
             iframe.setAttribute('allowfullscreen', '');
             iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
