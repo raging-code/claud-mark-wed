@@ -149,12 +149,85 @@ function pauseAllYouTubeIframes() {
     });
 }
 
+const originalFacadeContents = new Map();
+
 function pauseBackgroundMusic() {
     if (audio && !audio.paused) {
         audio.pause();
         if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     }
 }
+
+function restoreAllFacades() {
+    document.querySelectorAll('.video-facade').forEach(f => {
+        if (originalFacadeContents.has(f)) {
+            f.innerHTML = originalFacadeContents.get(f);
+            // Re‑bind the play button event
+            const btn = f.querySelector('.video-play-btn');
+            if (btn) {
+                btn.addEventListener('click', videoFacadeClickHandler);
+            }
+        }
+    });
+}
+
+// When background music plays, remove all YouTube iframes
+audio.addEventListener('play', () => {
+    restoreAllFacades();
+});
+
+// ---------- VIDEO FACADES (with mutual exclusion) ----------
+(function() {
+    document.querySelectorAll('.video-facade').forEach(facade => {
+        // Save original content
+        originalFacadeContents.set(facade, facade.innerHTML);
+
+        const playBtn = facade.querySelector('.video-play-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', videoFacadeClickHandler);
+        }
+    });
+})();
+
+function videoFacadeClickHandler(e) {
+    const facade = e.currentTarget.closest('.video-facade');
+    if (!facade) return;
+
+    const videoId = facade.dataset.videoId;
+    if (!videoId) return;
+
+    // 1. Pause background music
+    pauseBackgroundMusic();
+
+    // 2. Restore all OTHER facades (destroy their iframes)
+    document.querySelectorAll('.video-facade').forEach(f => {
+        if (f !== facade && originalFacadeContents.has(f)) {
+            f.innerHTML = originalFacadeContents.get(f);
+            const btn = f.querySelector('.video-play-btn');
+            if (btn) {
+                btn.addEventListener('click', videoFacadeClickHandler);
+            }
+        }
+    });
+
+    // 3. Create the new YouTube iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.borderRadius = facade.classList.contains('vertical-facade') ? '12px' : '0';
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`;
+    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+
+    facade.innerHTML = '';
+    facade.appendChild(iframe);
+}
+
 
 // When background music starts, stop any YouTube video
 audio.addEventListener('play', () => {
@@ -207,36 +280,38 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------- VIDEO FACADES ----------
-// ---------- VIDEO FACADES (pause previous on new play) ----------
-// ---------- VIDEO FACADES (only one player at a time) ----------
 (function() {
-    let activeYouTubeIframe = null;
-
-    function pauseActiveYouTubeVideo() {
-        if (activeYouTubeIframe && activeYouTubeIframe.contentWindow) {
-            activeYouTubeIframe.contentWindow.postMessage(
-                '{"event":"command","func":"pauseVideo","args":""}',
-                'https://www.youtube.com'
-            );
-        }
-    }
+    // Save the original content of every facade so we can restore it
+    const originalContents = new Map();
 
     document.querySelectorAll('.video-facade').forEach(facade => {
+        // Remember the original inner HTML (the thumbnail + play button)
+        originalContents.set(facade, facade.innerHTML);
+
         const videoId = facade.dataset.videoId;
         if (!videoId) return;
         const playBtn = facade.querySelector('.video-play-btn');
         if (!playBtn) return;
 
         playBtn.addEventListener('click', () => {
-            // 1. Pause the background music
+            // 1. Pause background music
             pauseBackgroundMusic();
 
-            // 2. Pause any previously playing YouTube video
-            if (activeYouTubeIframe) {
-                pauseActiveYouTubeVideo();
-            }
+            // 2. Destroy any existing YouTube iframe in all facades
+            document.querySelectorAll('.video-facade').forEach(f => {
+                if (f !== facade) {
+                    // Restore to the original thumbnail + play button
+                    f.innerHTML = originalContents.get(f);
 
-            // 3. Create the new YouTube iframe
+                    // Re‑attach the click handler to the new play button
+                    const restoredBtn = f.querySelector('.video-play-btn');
+                    if (restoredBtn) {
+                        restoredBtn.addEventListener('click', playBtnClickHandler);
+                    }
+                }
+            });
+
+            // 3. Create the new YouTube iframe inside the clicked facade
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
             iframe.style.top = '0';
@@ -252,9 +327,6 @@ document.addEventListener('keydown', (e) => {
 
             facade.innerHTML = '';
             facade.appendChild(iframe);
-
-            // 4. Remember the new iframe as the active one
-            activeYouTubeIframe = iframe;
         });
     });
 })();
