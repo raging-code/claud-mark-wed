@@ -138,6 +138,19 @@ if (audio) {
     }, 2000);
 }
 
+function pauseAllYouTubeVideos() {
+    const youtubeIframes = document.querySelectorAll('iframe[src*="youtube.com"]');
+    youtubeIframes.forEach(iframe => {
+        if (iframe.contentWindow) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
+    });
+}
+// When background music is played (either by button or autoplay), pause any YouTube video
+audio.addEventListener('play', () => {
+    pauseAllYouTubeVideos();
+});
+
 // ---------- LIGHTBOX ----------
 const lightbox = document.getElementById('globalLightbox');
 const lightboxImg = document.getElementById('lightboxImg');
@@ -190,7 +203,14 @@ document.addEventListener('keydown', (e) => {
         if (!videoId) return;
         const playBtn = facade.querySelector('.video-play-btn');
         if (!playBtn) return;
+        
         playBtn.addEventListener('click', () => {
+            // Pause background music BEFORE video starts
+            if (audio && !audio.paused) {
+                audio.pause();
+                if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+            
             const iframe = document.createElement('iframe');
             iframe.style.position = 'absolute';
             iframe.style.top = '0';
@@ -199,7 +219,8 @@ document.addEventListener('keydown', (e) => {
             iframe.style.height = '100%';
             iframe.style.border = 'none';
             iframe.style.borderRadius = facade.classList.contains('vertical-facade') ? '12px' : '0';
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&showinfo=0`;
+            // IMPORTANT: enable js api and add modest branding
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&modestbranding=1&rel=0&showinfo=0`;
             iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
             iframe.setAttribute('allowfullscreen', '');
             iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
