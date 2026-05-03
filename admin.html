@@ -28,6 +28,7 @@
         .status { margin-top: 15px; padding: 8px; border-radius: 8px; }
         .status.success { background: #d1fae5; color: #065f46; }
         .status.error { background: #fee2e2; color: #991b1b; }
+        .uuid-box { background: #fef3c7; padding: 12px; margin-top: 15px; border-radius: 8px; font-family: monospace; word-break: break-all; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
 </head>
@@ -35,25 +36,23 @@
 <div id="root"></div>
 
 <script>
-    // ===== COMPLETE FIXED ADMIN PANEL =====
-    const APP_VERSION = '2026-05-03-fixed';
+    const APP_VERSION = '2026-05-04-fixed';
     console.log('Admin panel version:', APP_VERSION);
     
     const SUPABASE_URL = 'https://uziyzioqazqznjsvhxky.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6aXl6aW9xYXpxem5qc3ZoeGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzYyNzgsImV4cCI6MjA5MjM1MjI3OH0.w57BWU-mUK8qBrqJODNv3OZdvZa57_Ql4iz-P3KbUZQ';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function normalizeAttending(val) {
-        if (val === true || val === false) return val;
-        if (typeof val === 'string') return val.toLowerCase().trim() === 'true' || val === 't' || val === '1' || val === 'yes';
-        if (typeof val === 'number') return val === 1;
-        return false;
+    // Helper: clean up session and show login
+    async function forceLogoutAndShowLogin() {
+        try { await supabase.auth.signOut({ scope: 'local' }); } catch (e) {}
+        localStorage.removeItem('supabase.auth.token');
+        renderLogin();
     }
 
-    // Force check session on every load – if token expired, redirect to login
     async function checkSession() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (session && !error) {
             renderAdminPanel(session);
         } else {
             renderLogin();
@@ -71,17 +70,20 @@
             </div>
         `;
         document.getElementById('loginBtn').onclick = async () => {
-            const { error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value
             });
             if (error) {
-                const s = document.getElementById('loginStatus');
-                s.textContent = '❌ ' + error.message;
-                s.className = 'status error';
+                showStatus('loginStatus', '❌ ' + error.message, 'error');
             } else {
-                // Login succeeded – refresh session and show panel
-                checkSession();
+                // Show the UUID – copy it and paste into your SQL policy
+                const uuid = data.user?.id || 'unknown';
+                const statusDiv = document.getElementById('loginStatus');
+                statusDiv.innerHTML = `✅ Logged in!<br><div class="uuid-box">Your UUID:<br><strong>${uuid}</strong><br><small>Copy this and replace the placeholder in your SQL policy.</small></div>`;
+                statusDiv.className = 'status success';
+                // Wait 2 seconds then go to admin panel
+                setTimeout(() => checkSession(), 2000);
             }
         };
     }
@@ -109,28 +111,17 @@
                 <div class="table-wrapper">
                     <table id="rsvpTable">
                         <thead>
-                            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Attending</th><th>Raw Value (debug)</th><th>Submitted</th><th>Action</th></tr>
+                            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Attending</th><th>Submitted</th><th>Action</th></tr>
                         </thead>
-                        <tbody id="rsvpTableBody"><tr><td colspan="9" class="loading">Loading...</td></tr></tbody>
+                        <tbody id="rsvpTableBody"><tr><td colspan="8">Loading...</td></tr></tbody>
                     </table>
                 </div>
                 <div id="adminStatus" class="status"></div>
             </div>
         `;
         
-        // Logout button – gracefully handle dead sessions
-        document.getElementById('logoutBtn').onclick = async () => {
-            try {
-                await supabase.auth.signOut();
-            } catch (e) {
-                console.warn('Logout failed (session already invalid):', e.message);
-            }
-            // Always clear local storage and go back to login
-            localStorage.removeItem('supabase.auth.token');
-            checkSession();
-        };
+        document.getElementById('logoutBtn').onclick = forceLogoutAndShowLogin;
         
-        // Add RSVP button
         document.getElementById('addRsvpBtn').onclick = async () => {
             const name = document.getElementById('addName').value.trim();
             const email = document.getElementById('addEmail').value.trim();
@@ -138,21 +129,17 @@
             const message = document.getElementById('addMessage').value.trim();
             const attending = document.getElementById('addAttending').value === 'true';
             if (!name || !email) return showStatus('adminStatus', 'Name and email required', 'error');
+            
             const { error } = await supabase.from('rsvp').insert([{ name, email, phone, message, attending }]);
             if (error) {
                 if (error.code === '401' || error.status === 401) {
-                    // Token expired mid-action – force re‑login
-                    localStorage.removeItem('supabase.auth.token');
-                    checkSession();
+                    forceLogoutAndShowLogin();
                     return;
                 }
                 showStatus('adminStatus', 'Error: ' + error.message, 'error');
             } else {
                 showStatus('adminStatus', '✅ Added', 'success');
-                document.getElementById('addName').value = '';
-                document.getElementById('addEmail').value = '';
-                document.getElementById('addPhone').value = '';
-                document.getElementById('addMessage').value = '';
+                document.querySelectorAll('#addName,#addEmail,#addPhone,#addMessage').forEach(el => el.value = '');
                 await loadRsvps();
             }
         };
@@ -163,26 +150,24 @@
     async function loadRsvps() {
         const tbody = document.getElementById('rsvpTableBody');
         if (!tbody) return;
+        
         const { data, error } = await supabase.from('rsvp').select('*').order('created_at', { ascending: false });
         if (error) {
-            // 401 or other auth error → token expired, go back to login
             if (error.code === '401' || error.status === 401 || error.message?.includes('JWT')) {
-                localStorage.removeItem('supabase.auth.token');
-                checkSession();
+                forceLogoutAndShowLogin();
                 return;
             }
-            tbody.innerHTML = `<tr><td colspan="9">❌ ${escapeHtml(error.message)}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="8">❌ ${escapeHtml(error.message)}</td></tr>`;
             return;
         }
         if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9">📭 No RSVPs</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8">📭 No RSVPs</td></tr>';
             return;
         }
         
         tbody.innerHTML = '';
         for (const row of data) {
-            const isAttending = normalizeAttending(row.attending);
-            const rawJson = JSON.stringify(row.attending);
+            const isAttending = row.attending === true || row.attending === 'true';
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${row.id}</td>
@@ -191,12 +176,12 @@
                 <td>${escapeHtml(row.phone || '—')}</td>
                 <td>${escapeHtml(row.message || '—')}</td>
                 <td>${isAttending ? '✅ Yes' : '❌ No'}</td>
-                <td style="font-family:monospace; font-size:0.8rem;">${escapeHtml(rawJson)}</td>
-                <td>${new Date(row.created_at).toLocaleString()}</td>
+                <td>${row.created_at ? new Date(row.created_at).toLocaleString() : '—'}</td>
                 <td><button class="delete-btn" data-id="${row.id}">Delete</button></td>
             `;
             tbody.appendChild(tr);
         }
+        
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.onclick = async () => {
                 if (!confirm('Delete?')) return;
@@ -204,8 +189,7 @@
                 const { error } = await supabase.from('rsvp').delete().eq('id', id);
                 if (error) {
                     if (error.code === '401' || error.status === 401) {
-                        localStorage.removeItem('supabase.auth.token');
-                        checkSession();
+                        forceLogoutAndShowLogin();
                         return;
                     }
                     showStatus('adminStatus', 'Delete failed: ' + error.message, 'error');
@@ -222,8 +206,8 @@
         if (el) { el.textContent = msg; el.className = `status ${type}`; setTimeout(() => el.textContent = '', 3000); }
     }
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
-    
-    // Kick off the app
+
+    // Start
     checkSession();
 </script>
 </body>
