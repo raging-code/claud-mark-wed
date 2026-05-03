@@ -103,7 +103,7 @@ In admin.html, replace the placeholder lines:
 const SUPABASE_URL = 'https://<your-project-id>.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJh...'; (your public anon key)
 
-Map Links
+Map Linksa
 Update the onclick attributes of the “Open in Maps” buttons in index.html:
 onclick="window.open('https://maps.app.goo.gl/YOUR_LINK', '_blank')"
 
