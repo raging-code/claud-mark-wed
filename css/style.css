@@ -269,12 +269,12 @@ h1, h2, h3, h4, h5, h6, .main-title, .section-title, .slide-btn span, .btn-submi
 @media (max-width: 768px) {
     .proposal-gallery-section .section-title { font-size: 1.3rem !important; }
     .proposal-date { font-size: 0.65rem !important; letter-spacing: 1px; }
-    .hashtag-eb-share + p { font-size: 1rem !important; }
+    .hashtag-eb-share + p { font-size: 0.7rem !important; }
     .share-tagline p:first-of-type { font-size: 1rem !important; }
     .share-moment-wrapper .share-tagline p:last-of-type { font-size: 1rem !important; }
     .tagline-share { font-size: 1rem !important; }
     .btn-share-placeholder { font-size: 0.8rem !important; }
-    .hashtag-eb-share { font-size: 1.5rem !important; }
+    .hashtag-eb-share { font-size: 1.3rem !important; }
     .venue-section { padding: 0px 0; margin-top: 20px; margin-bottom: -5px; }
     .venue-main-heading { font-size: 18px; }
     .venue-row { padding: 12px 0; }
